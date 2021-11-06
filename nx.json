@@ -23,5 +23,16 @@
       }
     }
   },
-  "projects": {}
+  "projects": {
+    "desktop": {
+      "tags": []
+    },
+    "ui": {
+      "tags": []
+    },
+    "ui-e2e": {
+      "tags": [],
+      "implicitDependencies": ["ui"]
+    }
+  }
 }

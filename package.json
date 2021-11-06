@@ -1,6 +1,6 @@
 {
   "name": "zon",
-  "version": "0.0.0",
+  "version": "0.0.2-debug.0",
   "license": "MIT",
   "scripts": {
     "nx": "nx",
@@ -23,7 +23,8 @@
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
-    "help": "nx help"
+    "help": "nx help",
+    "postinstall": "exitzero electron-builder install-app-deps"
   },
   "private": true,
   "dependencies": {
@@ -32,6 +33,7 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-is": "17.0.1",
+    "react-router-dom": "5.2.0",
     "regenerator-runtime": "0.13.7",
     "styled-components": "5.2.1",
     "tslib": "^2.0.0"
@@ -57,6 +59,7 @@
     "@types/react": "16.9.56",
     "@types/react-dom": "16.9.9",
     "@types/react-is": "16.7.1",
+    "@types/react-router-dom": "5.1.6",
     "@types/styled-components": "5.1.4",
     "@typescript-eslint/eslint-plugin": "4.3.0",
     "@typescript-eslint/parser": "4.3.0",
@@ -64,6 +67,7 @@
     "babel-plugin-styled-components": "1.10.7",
     "cypress": "^6.0.1",
     "dotenv": "8.2.0",
+    "electron": "^11.3.0",
     "eslint": "7.10.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-cypress": "^2.10.3",
@@ -71,7 +75,9 @@
     "eslint-plugin-jsx-a11y": "6.4.1",
     "eslint-plugin-react": "7.21.5",
     "eslint-plugin-react-hooks": "4.2.0",
+    "exitzero": "^1.0.1",
     "jest": "26.2.2",
+    "nx-electron": "^11.4.0",
     "prettier": "2.2.1",
     "ts-jest": "26.4.0",
     "ts-node": "~9.1.1",

@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../../../node_modules/nx-electron/src/validation/maker.schema.json",
+  "productName": "ZonExecutive Client",
+  "copyright": "Copyright © 2021 Di Zou",
+  "asar": true,
+  "win": {
+    "target": "nsis"
+  },
+  "mac": {
+    "target": "dmg"
+  },
+  "linux": {
+    "target": ["deb", "rpm"]
+  }
+}
