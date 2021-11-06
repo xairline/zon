@@ -1,7 +1,11 @@
 {
   "name": "zon",
-  "version": "0.0.1-debug.2",
+  "version": "0.0.1-debug.3",
   "license": "MIT",
+  "author": {
+    "name": "Di Zou",
+    "email": "admin@xairline.org"
+  },
   "scripts": {
     "nx": "nx",
     "start": "nx serve",
