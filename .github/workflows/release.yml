@@ -43,10 +43,10 @@ jobs:
       - name: make
         run: yarn make
 
-      - run: mv dist/executables/*.exe dist/executables/X.Airline.exe
-      - run: mv dist/executables/*.dmg dist/executables/X.Airline.dmg
-      - run: mv dist/executables/*.deb dist/executables/X.Airline.deb
-      - run: mv dist/executables/*.rpm dist/executables/X.Airline.rpm
+      - run: mv dist/executables/*.exe dist/executables/ZonExecutive.exe
+      - run: mv dist/executables/*.dmg dist/executables/ZonExecutive.dmg
+      - run: mv dist/executables/*.deb dist/executables/ZonExecutive.deb
+      - run: mv dist/executables/*.rpm dist/executables/ZonExecutive.rpm
       
       - name: Release
         uses: softprops/action-gh-release@v1
