@@ -1,8 +1,9 @@
-#### 0.0.1-debug.4 (2021-11-08)
+#### 0.0.1-debug.5 (2021-11-08)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-debug.4 (11561293)
   *  bump up version: 0.0.1-debug.3 (aafc5be0)
   *  bump up version: 0.0.1-debug.2 (acf54eec)
   *  bump up version: 0.0.1-debug.1 (9f9f7b9d)
@@ -10,6 +11,7 @@
 
 ##### New Features
 
+* **docs:**  add dev setup instruction (cadd95c2)
 *  skeleton UI (956b7fe1)
 
 ##### Bug Fixes
