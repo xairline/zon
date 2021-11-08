@@ -1,8 +1,9 @@
-#### 0.0.1-debug.5 (2021-11-08)
+#### 0.0.1-debug.6 (2021-11-08)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-debug.5 (00be6ab7)
   *  bump up version: 0.0.1-debug.4 (11561293)
   *  bump up version: 0.0.1-debug.3 (aafc5be0)
   *  bump up version: 0.0.1-debug.2 (acf54eec)
@@ -16,6 +17,7 @@
 
 ##### Bug Fixes
 
+* **packing:**  temporarily disable preload script (fb79defb)
 * **ci:**
   *  build script is not defined for release build (280c9a9f)
   *  build should run on PR against master (9e642cb2)
