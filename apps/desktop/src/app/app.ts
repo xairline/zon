@@ -72,6 +72,23 @@ export default class App {
         //preload: join(__dirname, 'preload.js'),
       },
     });
+    App.mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
+      (details, callback) => {
+        callback({
+          requestHeaders: { Origin: '*', ...details.requestHeaders },
+        });
+      }
+    );
+    App.mainWindow.webContents.session.webRequest.onHeadersReceived(
+      (details, callback) => {
+        callback({
+          responseHeaders: {
+            'Access-Control-Allow-Origin': ['*'],
+            ...details.responseHeaders,
+          },
+        });
+      }
+    );
     App.mainWindow.setMenu(null);
     App.mainWindow.center();
 
