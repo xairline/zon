@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'antd/dist/antd.dark.css';
 
 import { BrowserRouter } from 'react-router-dom';
 

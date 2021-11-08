@@ -1,271 +1,214 @@
+import {
+  faBook,
+  faPlaneDeparture,
+  faTachometerAlt,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Avatar, Button, Form, Layout, Menu, Row, Col } from 'antd';
+import { useLocalObservable, useObserver } from 'mobx-react-lite';
 import React from 'react';
-
+import { Link, Route } from 'react-router-dom';
 import styled from 'styled-components';
-
-import { ReactComponent as Logo } from './logo.svg';
-import star from './star.svg';
-
-import { Route, Link } from 'react-router-dom';
-
+import { FlightLog } from '../components/flight-log/flight-log';
+import { FlyNow } from '../components/fly-now/fly-now';
+import { Home } from '../components/home/home';
+import { Login } from '../components/login/login';
+import { useGlobalStores } from '../stores';
+import { IRoute } from './app.interface';
+const { Header, Footer, Sider, Content } = Layout;
+const MenuItem = Menu.Item;
 const StyledApp = styled.div`
-  font-family: sans-serif;
-  min-width: 300px;
-  max-width: 600px;
-  margin: 50px auto;
-
-  .gutter-left {
-    margin-left: 9px;
+  background-color: rgb(30, 30, 30);
+  min-height: 100vh;
+  min-width: 100vw;
+  .ant-layout-sider {
+    background-color: rgb(37, 37, 38);
   }
 
-  .col-span-2 {
-    grid-column: span 2;
+  .user {
+    vertical-align: middle;
   }
 
-  .flex {
-    display: flex;
+  .logo {
+    border-radius: 6px;
+    margin: 8px;
+    transition: all 0.5s;
+    overflow: hidden;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.3);
+    height: 8vh;
     align-items: center;
     justify-content: center;
+    display: flex;
+    padding: 8px;
+    img {
+      border-radius: 50%;
+      max-width: 60px;
+      max-height: 60px;
+      width: 100%;
+      height: 100%;
+    }
   }
 
-  header {
-    background-color: #143055;
-    color: white;
-    padding: 5px;
-    border-radius: 3px;
+  .ant-menu {
+    .ant-menu-item {
+      font-size: 18px;
+      height: 55px;
+      line-height: 50px;
+      margin-top: 16px;
+      margin-bottom: 16px;
+      &.ant-menu-item-selected {
+        background: #931300;
+        a {
+          color: #fff;
+        }
+      }
+    }
   }
 
-  main {
-    padding: 0 36px;
+  .ant-menu-title-content {
+    height: 75px;
   }
 
-  p {
-    text-align: center;
-  }
-
-  h1 {
-    text-align: center;
-    margin-left: 18px;
-    font-size: 24px;
-  }
-
-  h2 {
-    text-align: center;
+  .nav-text {
     font-size: 20px;
-    margin: 40px 0 10px 0;
-  }
-
-  .resources {
-    text-align: center;
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-gap: 9px;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .resource {
-    color: #0094ba;
-    height: 36px;
-    background-color: rgba(0, 0, 0, 0);
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    border-radius: 4px;
-    padding: 3px 9px;
-    text-decoration: none;
-  }
-
-  .resource:hover {
-    background-color: rgba(68, 138, 255, 0.04);
-  }
-
-  pre {
-    padding: 9px;
-    border-radius: 4px;
-    background-color: black;
-    color: #eee;
-  }
-
-  details {
-    border-radius: 4px;
-    color: #333;
-    background-color: rgba(0, 0, 0, 0);
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    padding: 3px 9px;
-    margin-bottom: 9px;
-  }
-
-  summary {
-    outline: none;
-    height: 36px;
-    line-height: 36px;
-  }
-
-  .github-star-container {
-    margin-top: 12px;
-    line-height: 20px;
-  }
-
-  .github-star-container a {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: #333;
-  }
-
-  .github-star-badge {
-    color: #24292e;
-    display: flex;
-    align-items: center;
-    font-size: 12px;
-    padding: 3px 10px;
-    border: 1px solid rgba(27, 31, 35, 0.2);
-    border-radius: 3px;
-    background-image: linear-gradient(-180deg, #fafbfc, #eff3f6 90%);
-    margin-left: 4px;
-    font-weight: 600;
-  }
-
-  .github-star-badge:hover {
-    background-image: linear-gradient(-180deg, #f0f3f6, #e6ebf1 90%);
-    border-color: rgba(27, 31, 35, 0.35);
-    background-position: -0.5em;
-  }
-  .github-star-badge .material-icons {
-    height: 16px;
-    width: 16px;
-    margin-right: 4px;
   }
 `;
 
+export const routes: Array<IRoute> = [
+  {
+    path: '/',
+    exact: true,
+    name: 'Home',
+    icon: (
+      <FontAwesomeIcon
+        icon={faTachometerAlt}
+        style={{ marginLeft: '20px', marginRight: '14px' }}
+        size={'1x'}
+      />
+    ),
+    comp: () => <Home />,
+  },
+  {
+    path: '/fly-now',
+    name: 'Fly Now!',
+    icon: (
+      <FontAwesomeIcon
+        icon={faPlaneDeparture}
+        style={{ marginLeft: '18px', marginRight: '14px' }}
+        size={'1x'}
+      />
+    ),
+    comp: () => <FlyNow />,
+  },
+  {
+    path: '/flight-log',
+    name: 'Flight Log',
+    icon: (
+      <FontAwesomeIcon
+        icon={faBook}
+        style={{ marginLeft: '22px', marginRight: '18px' }}
+        size={'1x'}
+      />
+    ),
+    comp: () => <FlightLog />,
+  },
+];
+
 export function App() {
-  return (
+  const { PilotStore, RouterStore } = useGlobalStores();
+  const [form] = Form.useForm();
+  const localStore = useLocalObservable(() => ({
+    showDrawer: false,
+    toggleDrawer() {
+      localStore.showDrawer = !localStore.showDrawer;
+      form.resetFields();
+    },
+  }));
+  return useObserver(() => (
     <StyledApp>
-      <header className="flex">
-        <Logo width="75" height="75" />
-        <h1>Welcome to ui!</h1>
-      </header>
-      <main>
-        <h2>Resources &amp; Tools</h2>
-        <p>Thank you for using and showing some ♥ for Nx.</p>
-        <div className="flex github-star-container">
-          <a
-            href="https://github.com/nrwl/nx"
-            target="_blank"
-            rel="noopener noreferrer"
+      {PilotStore.isLoggedIn ? (
+        <Layout style={{ minHeight: '100vh' }}>
+          <Sider
+            style={{
+              minHeight: '100vh',
+            }}
+            collapsible={false}
           >
-            {' '}
-            If you like Nx, please give it a star:
-            <div className="github-star-badge">
-              <img src={star} className="material-icons" alt="" />
-              Star
-            </div>
-          </a>
-        </div>
-        <p>Here are some links to help you get started.</p>
-        <ul className="resources">
-          <li className="col-span-2">
-            <a
-              className="resource flex"
-              href="https://egghead.io/playlists/scale-react-development-with-nx-4038"
-            >
-              Scale React Development with Nx (Course)
-            </a>
-          </li>
-          <li className="col-span-2">
-            <a
-              className="resource flex"
-              href="https://nx.dev/latest/react/tutorial/01-create-application"
-            >
-              Interactive tutorial
-            </a>
-          </li>
-          <li className="col-span-2">
-            <a className="resource flex" href="https://nx.app/">
-              <svg
-                width="36"
-                height="36"
-                viewBox="0 0 120 120"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+            <Row className="logo">
+              <Button
+                onClick={localStore.toggleDrawer}
+                type="text"
+                style={{ height: '100%', width: '100%' }}
               >
-                <path
-                  d="M120 15V30C103.44 30 90 43.44 90 60C90 76.56 76.56 90 60 90C43.44 90 30 103.44 30 120H15C6.72 120 0 113.28 0 105V15C0 6.72 6.72 0 15 0H105C113.28 0 120 6.72 120 15Z"
-                  fill="#0E2039"
+                <Avatar
+                  style={{ marginRight: '16px' }}
+                  src="https://cdn.discordapp.com/icons/692812210686394368/1ce67acb9365e44fee9cd036ed6c849d.png?size=240"
+                  size={32}
                 />
-                <path
-                  d="M120 30V105C120 113.28 113.28 120 105 120H30C30 103.44 43.44 90 60 90C76.56 90 90 76.56 90 60C90 43.44 103.44 30 120 30Z"
-                  fill="white"
-                />
-              </svg>
-              <span className="gutter-left">Nx Cloud</span>
-            </a>
-          </li>
-        </ul>
-        <h2>Next Steps</h2>
-        <p>Here are some things you can do with Nx.</p>
-        <details open>
-          <summary>Add UI library</summary>
-          <pre>{`# Generate UI lib
-nx g @nrwl/react:lib ui
+                <span className="user">
+                  <strong style={{ fontSize: '20px' }}>
+                    {PilotStore.username}
+                  </strong>
+                </span>
+              </Button>
+            </Row>
+            <Menu
+              theme="dark"
+              defaultSelectedKeys={[RouterStore.getDefaultSelectedKeys()]}
+              onSelect={(info) => {
+                RouterStore.selectedMenuKey = parseInt(info.key);
+              }}
+            >
+              {routes.map((route, index) => {
+                if (route.name === 'divider') {
+                  return <Menu.Divider key={index} />;
+                }
+                return (
+                  <MenuItem key={index}>
+                    <Link to={route.path}>
+                      {route.icon || ''}
+                      <span className="nav-text">{route.name}</span>
+                    </Link>
+                  </MenuItem>
+                );
+              })}
+            </Menu>
+          </Sider>
+          <Layout style={{ height: '100vh' }}>
+            <Content className="main-content">
+              {routes.map((route: IRoute, index) => {
+                return (
+                  <Route
+                    key={index}
+                    exact={route.exact}
+                    path={route.path}
+                    component={route.comp}
+                  />
+                );
+              })}
+            </Content>
 
-# Add a component
-nx g @nrwl/react:component xyz --project ui`}</pre>
-        </details>
-        <details>
-          <summary>View dependency graph</summary>
-          <pre>{`nx dep-graph`}</pre>
-        </details>
-        <details>
-          <summary>Run affected commands</summary>
-          <pre>{`# see what's been affected by changes
-nx affected:dep-graph
-
-# run tests for current changes
-nx affected:test
-
-# run e2e tests for current changes
-nx affected:e2e
-  `}</pre>
-        </details>
-      </main>
-
-      {/* START: routes */}
-      {/* These routes and navigation have been generated for you */}
-      {/* Feel free to move and update them to fit your needs */}
-      <br />
-      <hr />
-      <br />
-      <div role="navigation">
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/page-2">Page 2</Link>
-          </li>
-        </ul>
-      </div>
-      <Route
-        path="/"
-        exact
-        render={() => (
-          <div>
-            This is the generated root route.{' '}
-            <Link to="/page-2">Click here for page 2.</Link>
-          </div>
-        )}
-      />
-      <Route
-        path="/page-2"
-        exact
-        render={() => (
-          <div>
-            <Link to="/">Click here to go back to root page.</Link>
-          </div>
-        )}
-      />
-      {/* END: routes */}
+            <Footer
+              style={{
+                textAlign: 'center',
+                background: '#931300',
+                fontSize: '16px',
+                padding: 0,
+                height: '28px',
+              }}
+            >
+              <Col span={12} offset={6}>
+                OpenFDR Client for ZonExecutive©2021 Created by ZE1356
+              </Col>
+            </Footer>
+          </Layout>
+        </Layout>
+      ) : (
+        <Login />
+      )}
     </StyledApp>
-  );
+  ));
 }
 
 export default App;
