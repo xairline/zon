@@ -94,7 +94,7 @@
     "jest": "26.2.2",
     "mobx": "^6.3.6",
     "mobx-react-lite": "^3.2.2",
-    "nx-electron": "^11.4.0",
+    "nx-electron": "^11.4.1",
     "prettier": "2.2.1",
     "reflect-metadata": "^0.1.13",
     "ts-jest": "26.4.0",

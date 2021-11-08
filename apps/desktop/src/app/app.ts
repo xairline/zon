@@ -69,7 +69,7 @@ export default class App {
       webPreferences: {
         contextIsolation: true,
         backgroundThrottling: false,
-        //preload: join(__dirname, 'preload.js'),
+        preload: join(__dirname, 'preload.js'),
       },
     });
     App.mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
