@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, Col, Form, Input, Layout, Row } from 'antd';
+import { Button, Card, Col, Form, Input, Layout, Row, message } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
 import { useObserver } from 'mobx-react-lite';
 import styled from 'styled-components';
@@ -14,6 +14,8 @@ const StyledLogin = styled.div`
 
 export function Login(props: LoginProps) {
   const { PilotStore } = useGlobalStores();
+  const username = localStorage.getItem('username') || '';
+  const password = localStorage.getItem('password') || '';
   return useObserver(() => (
     <StyledLogin>
       <Layout style={{ minHeight: '100vh' }}>
@@ -27,11 +29,15 @@ export function Login(props: LoginProps) {
                   name="basic"
                   labelCol={{ span: 6 }}
                   wrapperCol={{ span: 16 }}
-                  initialValues={{ remember: true }}
+                  initialValues={{ username, password }}
                   onFinish={async (values) => {
-                    await PilotStore.login(values.username, values.password);
+                    await PilotStore.login(
+                      values.username,
+                      values.password
+                    ).catch((e) => {
+                      message.error(`Login Failed: ${e.message}`);
+                    });
                   }}
-                  //onFinishFailed={onFinishFailed}
                   autoComplete="off"
                   style={{ margin: '5vh' }}
                 >
@@ -45,7 +51,7 @@ export function Login(props: LoginProps) {
                       },
                     ]}
                   >
-                    <Input />
+                    <Input defaultValue={username} />
                   </Form.Item>
                   <Form.Item
                     label="Password"
@@ -57,12 +63,12 @@ export function Login(props: LoginProps) {
                       },
                     ]}
                   >
-                    <Input.Password />
+                    <Input.Password defaultValue={password} />
                   </Form.Item>
 
                   <Form.Item wrapperCol={{ offset: 10, span: 8 }}>
                     <Button type="primary" htmlType="submit">
-                      Submit
+                      Login
                     </Button>
                   </Form.Item>
                 </Form>

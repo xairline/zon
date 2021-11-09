@@ -1,6 +1,6 @@
 import { action, makeObservable, observable, runInAction } from 'mobx';
 import 'reflect-metadata';
-const axios = require('axios').default;
+const axios = require('axios');
 
 export class PilotStore {
   @observable
@@ -10,30 +10,32 @@ export class PilotStore {
 
   constructor() {
     this.isLoggedIn = false;
-    this.username = 'Not Logged In';
+    this.username = localStorage.getItem('username') as string;
+    if (this.username?.length > 0) {
+      this.login(this.username, localStorage.getItem('password') as string);
+    }
     makeObservable(this);
   }
 
   public async login(username: string, password: string) {
-    const bodyFormData = new FormData();
-    bodyFormData.append('email', username);
-    bodyFormData.append('password', password);
-    bodyFormData.append('redir', 'index.php/crew/profile/private');
-    bodyFormData.append('action', 'login');
-    bodyFormData.append('submit', 'Log In');
-    const res = await axios({
-      method: 'post',
-      url: 'https://zonexecutive.com/index.php/login',
-      data: bodyFormData,
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
-    if (
-      res.request.responseURL ===
-      'https://zonexecutive.com/index.php/crew/profile/private'
-    ) {
+    const res = await axios
+      .get('https://zonexecutive.com/action.php/acars/openfdr/booking', {
+        headers: {
+          'X-openFDR-Username': username,
+          'X-openFDR-Password': password,
+        },
+      })
+      .catch((e: Error) => {
+        throw e;
+      });
+    if (res.status === 200) {
       runInAction(() => {
         this.isLoggedIn = true;
         this.username = username;
+        axios.defaults.headers.common['X-openFDR-Username'] = username;
+        axios.defaults.headers.common['X-openFDR-Password'] = password;
+        localStorage.setItem('username', username);
+        localStorage.setItem('password', password);
       });
     }
   }

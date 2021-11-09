@@ -70,25 +70,10 @@ export default class App {
         contextIsolation: true,
         backgroundThrottling: false,
         preload: join(__dirname, 'preload.js'),
+        webSecurity: false,
+        allowRunningInsecureContent: false,
       },
     });
-    App.mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
-      (details, callback) => {
-        callback({
-          requestHeaders: { Origin: '*', ...details.requestHeaders },
-        });
-      }
-    );
-    App.mainWindow.webContents.session.webRequest.onHeadersReceived(
-      (details, callback) => {
-        callback({
-          responseHeaders: {
-            'Access-Control-Allow-Origin': ['*'],
-            ...details.responseHeaders,
-          },
-        });
-      }
-    );
     App.mainWindow.setMenu(null);
     App.mainWindow.center();
 
