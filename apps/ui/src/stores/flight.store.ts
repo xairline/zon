@@ -33,7 +33,7 @@ export class FlightStore {
 
   public async loadScheduledFlights() {
     const res = await axios
-      .get('https://zonexecutive.com/action.php/acars/openfdr/schedule')
+      .get('https://zonexecutive.com/action.php/acars/openfdr/schedule?offset=0&limit=300')
       .catch((e: any) => {
         throw e;
       });

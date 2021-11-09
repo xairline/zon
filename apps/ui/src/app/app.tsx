@@ -2,6 +2,7 @@ import {
   faBook,
   faPlaneDeparture,
   faTachometerAlt,
+  faRecordVinyl
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, Button, Form, Layout, Menu, Row, Col } from 'antd';
@@ -13,6 +14,7 @@ import { FlightLog } from '../components/flight-log/flight-log';
 import { FlyNow } from '../components/fly-now/fly-now';
 import { Home } from '../components/home/home';
 import { Login } from '../components/login/login';
+import { Schedules } from '../components/schedules/schedules';
 import { useGlobalStores } from '../stores';
 import { IRoute } from './app.interface';
 const { Header, Footer, Sider, Content } = Layout;
@@ -91,7 +93,19 @@ export const routes: Array<IRoute> = [
   },
   {
     path: '/fly-now',
-    name: 'Fly Now!',
+    name: 'Recorder',
+    icon: (
+      <FontAwesomeIcon
+        icon={faRecordVinyl}
+        style={{ marginLeft: '20px', marginRight: '16px' }}
+        size={'1x'}
+      />
+    ),
+    comp: () => <FlyNow />,
+  },
+  {
+    path: '/schedules',
+    name: 'Schedules',
     icon: (
       <FontAwesomeIcon
         icon={faPlaneDeparture}
@@ -99,11 +113,11 @@ export const routes: Array<IRoute> = [
         size={'1x'}
       />
     ),
-    comp: () => <FlyNow />,
+    comp: () => <Schedules />,
   },
   {
     path: '/flight-log',
-    name: 'Flight Log',
+    name: 'Flights',
     icon: (
       <FontAwesomeIcon
         icon={faBook}
