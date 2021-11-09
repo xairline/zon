@@ -1,8 +1,9 @@
-#### 0.0.1-debug.10 (2021-11-09)
+#### 0.0.1-debug.11 (2021-11-09)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-debug.10 (eab9e377)
   *  bump up version: 0.0.1-debug.9 (0240c777)
   *  bump up version: 0.0.1-debug.8 (6a62cb79)
   *  bump up version: 0.0.1-debug.7 (b24a1dee)
@@ -16,6 +17,7 @@
 
 ##### New Features
 
+*  reorgnaize UI based on suggestions (04fa94eb)
 *  add simple booked flight (88dbfe7f)
 *  implement login (448aa75f)
 *  skeleton UI (956b7fe1)
