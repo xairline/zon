@@ -93,6 +93,7 @@
     "eslint-plugin-react-hooks": "4.2.0",
     "exitzero": "^1.0.1",
     "jest": "26.2.2",
+    "json-rules-engine": "^6.1.2",
     "mobx": "^6.3.6",
     "mobx-react-lite": "^3.2.2",
     "nx-electron": "^11.4.1",

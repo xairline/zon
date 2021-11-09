@@ -31,9 +31,7 @@
         },
         "serve": {
           "executor": "nx-electron:execute",
-          "options": {
-            "buildTarget": "desktop:build"
-          }
+          "options": { "buildTarget": "desktop:build" }
         },
         "package": {
           "executor": "nx-electron:package",
@@ -54,9 +52,7 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/desktop/**/*.ts"]
-          }
+          "options": { "lintFilePatterns": ["apps/desktop/**/*.ts"] }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -114,20 +110,14 @@
         },
         "serve": {
           "executor": "@nrwl/web:dev-server",
-          "options": {
-            "buildTarget": "ui:build"
-          },
+          "options": { "buildTarget": "ui:build" },
           "configurations": {
-            "production": {
-              "buildTarget": "ui:build:production"
-            }
+            "production": { "buildTarget": "ui:build:production" }
           }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/ui/**/*.{ts,tsx,js,jsx}"]
-          }
+          "options": { "lintFilePatterns": ["apps/ui/**/*.{ts,tsx,js,jsx}"] }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
@@ -152,15 +142,30 @@
             "devServerTarget": "ui:serve"
           },
           "configurations": {
-            "production": {
-              "devServerTarget": "ui:serve:production"
-            }
+            "production": { "devServerTarget": "ui:serve:production" }
           }
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
+          "options": { "lintFilePatterns": ["apps/ui-e2e/**/*.{js,ts}"] }
+        }
+      }
+    },
+    "xplane-data": {
+      "root": "libs/xplane-data",
+      "sourceRoot": "libs/xplane-data/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": { "lintFilePatterns": ["libs/xplane-data/**/*.ts"] }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/xplane-data"],
           "options": {
-            "lintFilePatterns": ["apps/ui-e2e/**/*.{js,ts}"]
+            "jestConfig": "libs/xplane-data/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }

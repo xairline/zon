@@ -1,18 +1,13 @@
 {
   "implicitDependencies": {
     "workspace.json": "*",
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
-    },
+    "package.json": { "dependencies": "*", "devDependencies": "*" },
     "tsconfig.base.json": "*",
     "tslint.json": "*",
     ".eslintrc.json": "*",
     "nx.json": "*"
   },
-  "affected": {
-    "defaultBase": "master"
-  },
+  "affected": { "defaultBase": "master" },
   "npmScope": "zon",
   "tasksRunnerOptions": {
     "default": {
@@ -24,20 +19,12 @@
     }
   },
   "projects": {
-    "desktop": {
-      "tags": []
-    },
-    "ui": {
-      "tags": []
-    },
-    "ui-e2e": {
-      "tags": [],
-      "implicitDependencies": ["ui"]
-    }
+    "desktop": { "tags": [] },
+    "ui": { "tags": [] },
+    "ui-e2e": { "tags": [], "implicitDependencies": ["ui"] },
+    "xplane-data": { "tags": [] }
   },
-  "cli": {
-    "defaultCollection": "@nrwl/react"
-  },
+  "cli": { "defaultCollection": "@nrwl/react" },
   "generators": {
     "@nrwl/react": {
       "application": {
@@ -45,13 +32,8 @@
         "linter": "eslint",
         "babel": true
       },
-      "component": {
-        "style": "styled-components"
-      },
-      "library": {
-        "style": "styled-components",
-        "linter": "eslint"
-      }
+      "component": { "style": "styled-components" },
+      "library": { "style": "styled-components", "linter": "eslint" }
     }
   },
   "defaultProject": "desktop"
