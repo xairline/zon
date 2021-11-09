@@ -47,7 +47,7 @@ Main.bootstrapAppEvents();
 // ws
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocket.Server({ noServer: true });
 server.on('upgrade', function upgrade(request, socket, head) {
   wss.handleUpgrade(request, socket, head, function done(ws) {
     wss.emit('connection', ws, request);
@@ -82,7 +82,9 @@ wss.on('connection', function connection(ws, request) {
     xPlane.requestDataRef(DATAREF_STR.LAT, freq);
     xPlane.requestDataRef(DATAREF_STR.LNG, freq);
     xPlane.requestDataRef(DATAREF_STR.TS, freq);
-    console.log(`set dataref freq: ${freq}`);
+    if (connected) {
+      console.log(`set dataref freq: ${freq}`);
+    }
   };
 
   setInterval(function () {
@@ -94,11 +96,15 @@ wss.on('connection', function connection(ws, request) {
       xPlane.initConnection();
       requestDataRef(0);
       requestDataRef(DATAREF_FEQ);
+      console.log('reconnect to xplane ...');
     }
   }, 3000);
 
   // Handle all messages from users.
   ws.on('message', function (msgStr) {
+    if (msgStr === 'ping') {
+      ws.send('pong');
+    }
     requestDataRef(DATAREF_FEQ_LANDING);
   });
   // What to do when client disconnect?
@@ -109,4 +115,8 @@ wss.on('connection', function connection(ws, request) {
       xPlane.client = null;
     }
   });
+});
+//start our server
+server.listen(port, () => {
+  console.log(`Data stream server started on port ${port}`);
 });

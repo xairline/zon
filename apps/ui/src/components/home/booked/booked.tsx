@@ -11,7 +11,7 @@ import {
   Divider,
 } from 'antd';
 import styled from '@emotion/styled';
-import { useGlobalStores } from 'apps/ui/src/stores';
+import { useGlobalStores } from '../../../stores';
 
 /* eslint-disable-next-line */
 export interface BookedProps {}
