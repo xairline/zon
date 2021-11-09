@@ -1,8 +1,9 @@
-#### 0.0.1-debug.11 (2021-11-09)
+#### 0.0.1-debug.12 (2021-11-09)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-debug.11 (0f2fdda6)
   *  bump up version: 0.0.1-debug.10 (eab9e377)
   *  bump up version: 0.0.1-debug.9 (0240c777)
   *  bump up version: 0.0.1-debug.8 (6a62cb79)
@@ -17,6 +18,8 @@
 
 ##### New Features
 
+*  initiial integration from xairline UDP client (4f25165a)
+*  add skeleton ws service for xplane udp client (e0dcb4c6)
 *  reorgnaize UI based on suggestions (04fa94eb)
 *  add simple booked flight (88dbfe7f)
 *  implement login (448aa75f)
