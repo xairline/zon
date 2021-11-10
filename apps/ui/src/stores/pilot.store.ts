@@ -1,6 +1,6 @@
-import { action, makeObservable, observable, runInAction } from 'mobx';
+import axios from 'axios';
+import { makeObservable, observable, runInAction } from 'mobx';
 import 'reflect-metadata';
-const axios = require('axios');
 
 export class PilotStore {
   @observable

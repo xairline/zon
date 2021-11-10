@@ -1,16 +1,8 @@
 import styled from '@emotion/styled';
-import {
-  Button,
-  Col,
-  PageHeader,
-  Row,
-  Divider,
-  Descriptions,
-  Badge,
-} from 'antd';
-import { useGlobalStores } from '../../../stores';
+import { Badge, PageHeader, Row } from 'antd';
 import { useObserver } from 'mobx-react-lite';
 import React from 'react';
+import { useGlobalStores } from '../../../stores';
 
 /* eslint-disable-next-line */
 export interface RecorderProps {}
@@ -30,14 +22,6 @@ export function Recorder(props: RecorderProps) {
           title="Recorder Status"
           subTitle={
             <>
-            TODO: only flip to green is last ts is within 10s?
-              {DatarefStore.isDatarefWsConnected ? (
-                <Badge status="success" />
-              ) : (
-                <Badge status="error" />
-              )}{' '}
-              Web Scoket
-              <Divider type="vertical" />
               {DatarefStore.isXPlaneConnected ? (
                 <Badge status="success" />
               ) : (
@@ -51,9 +35,9 @@ export function Recorder(props: RecorderProps) {
             marginLeft: '2%',
           }}
         >
-          {DatarefStore.isDatarefWsConnected
+          {DatarefStore.isXPlaneConnected
             ? JSON.stringify(DatarefStore.flightData)
-            : 'NO'}
+            : ''}
         </PageHeader>
       </Row>
     </StyledRecorder>

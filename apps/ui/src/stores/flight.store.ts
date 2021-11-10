@@ -1,7 +1,6 @@
-import { action, makeObservable, observable, runInAction } from 'mobx';
+import axios from 'axios';
+import { makeObservable, observable, runInAction } from 'mobx';
 import 'reflect-metadata';
-import { PilotStore, pilotStore } from './pilot.store';
-const axios = require('axios');
 
 export class FlightStore {
   @observable
@@ -33,7 +32,9 @@ export class FlightStore {
 
   public async loadScheduledFlights() {
     const res = await axios
-      .get('https://zonexecutive.com/action.php/acars/openfdr/schedule?offset=0&limit=300')
+      .get(
+        'https://zonexecutive.com/action.php/acars/openfdr/schedule?offset=0&limit=300'
+      )
       .catch((e: any) => {
         throw e;
       });

@@ -4,8 +4,6 @@ import { DATAREF_FEQ, FlightData, XPlaneData } from '@zon/xplane-data';
 
 class DatarefStore {
   @observable
-  public isDatarefWsConnected: boolean;
-  @observable
   public isXPlaneConnected: boolean;
   @observable
   public flightData!: FlightData;
@@ -14,7 +12,6 @@ class DatarefStore {
   private engine!: Engine;
 
   constructor() {
-    this.isDatarefWsConnected = false;
     this.isXPlaneConnected = false;
     this?.ws?.close();
     console.log('websocket closed');
@@ -71,10 +68,6 @@ class DatarefStore {
     ws.onmessage = (msg) => {
       runInAction(async () => {
         try {
-          if (msg.data === 'pong') {
-            this.isDatarefWsConnected = true;
-            return;
-          }
           this.isXPlaneConnected = true;
           if (!this.flightData) {
             this.flightData = XPlaneData.initFlightData();
