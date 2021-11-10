@@ -276,39 +276,16 @@ export const COMMON_DESCEND_RULES = [
   },
 ];
 export class Rules {
-  aircraftType: string;
   rules: IRules;
-  constructor(aircraftType: string, flightData: FlightData) {
-    this.aircraftType = aircraftType;
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const tmp = require(`./${this.aircraftType}`);
-    this.rules = tmp.RULES;
+  constructor(flightData: FlightData) {
+    this.rules = { defaultRules: [] };
     this.setDefaultRules(flightData);
-    this.setRules(flightData);
   }
 
   public getRules() {
     let res: RuleProperties[] = [];
     if (this.rules.defaultRules) {
       res = [...res, ...(this.rules?.defaultRules || [])];
-    }
-    if (this.rules.taxiRules) {
-      res = [...res, ...(this.rules?.taxiRules || [])];
-    }
-    if (this.rules.takeoffRules) {
-      res = [...res, ...(this.rules?.takeoffRules || [])];
-    }
-    if (this.rules.climbRules) {
-      res = [...res, ...(this.rules?.climbRules || [])];
-    }
-    if (this.rules.cruiseRules) {
-      res = [...res, ...(this.rules?.cruiseRules || [])];
-    }
-    if (this.rules.descendRules) {
-      res = [...res, ...(this.rules?.descendRules || [])];
-    }
-    if (this.rules.landingRules) {
-      res = [...res, ...(this.rules?.landingRules || [])];
     }
 
     return res;
@@ -319,71 +296,8 @@ export class Rules {
   }
 
   private setDefaultRules(flightData: FlightData) {
-    const onSuccess: EventHandler = (
-      event: Event,
-      almanac: Almanac,
-      ruleResult: RuleResult
-    ) => {
-      const result: any = (ruleResult.conditions as AllConditions).all.filter(
-        (condition: any) => condition.path === '$.ts'
-      );
-      XPlaneData.changeStateTo(
-        flightData,
-        event.type as FlightState,
-        result[0].factResult
-      );
-    };
-    this.rules.defaultRules = this.rules.defaultRules?.map((rule) => {
-      return { ...rule, onSuccess };
+    this.rules.defaultRules = DEFAULT_RULES?.map((rule) => {
+      return { ...rule };
     });
-  }
-
-  private setRules(flightData: FlightData) {
-    const onSuccess: EventHandler = (
-      event: Event,
-      almanac: Almanac,
-      ruleResult: RuleResult
-    ) => {
-      const result: any = (ruleResult.conditions as AllConditions).all.filter(
-        (condition: any) => condition.path === '$.ts'
-      );
-      flightData.violationEvents.push(
-        `${new Date(result[0].factResult).toISOString()} - ${
-          event?.params?.event
-        }`
-      );
-      console.log(JSON.stringify(event));
-      console.log(JSON.stringify(ruleResult));
-    };
-    if (this.rules.taxiRules) {
-      this.rules.taxiRules = this.rules.taxiRules.map((rule) => {
-        return { ...rule, onSuccess };
-      });
-    }
-    if (this.rules.takeoffRules) {
-      this.rules.takeoffRules = this.rules.takeoffRules.map((rule) => {
-        return { ...rule, onSuccess };
-      });
-    }
-    if (this.rules.climbRules) {
-      this.rules.climbRules = this.rules.climbRules.map((rule) => {
-        return { ...rule, onSuccess };
-      });
-    }
-    if (this.rules.cruiseRules) {
-      this.rules.cruiseRules = this.rules.cruiseRules.map((rule) => {
-        return { ...rule, onSuccess };
-      });
-    }
-    if (this.rules.descendRules) {
-      this.rules.descendRules = this.rules.descendRules.map((rule) => {
-        return { ...rule, onSuccess };
-      });
-    }
-    if (this.rules.landingRules) {
-      this.rules.landingRules = this.rules.landingRules.map((rule) => {
-        return { ...rule, onSuccess };
-      });
-    }
   }
 }

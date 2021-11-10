@@ -1,15 +1,30 @@
 import { makeObservable, observable, runInAction } from 'mobx';
-import { Engine } from 'json-rules-engine';
-import { DATAREF_FEQ, FlightData, XPlaneData } from '@zon/xplane-data';
+import { AllConditions, Engine } from 'json-rules-engine';
+import {
+  DATAREF_FEQ,
+  FlightData,
+  FlightState,
+  Rules,
+  XPlaneData,
+} from '@zon/xplane-data';
 
 class DatarefStore {
   @observable
   public isXPlaneConnected: boolean;
   @observable
   public flightData!: FlightData;
+  @observable
+  public trackingFlight!: {
+    flightNumber: string;
+    departure: string;
+    destination: string;
+  };
+  @observable
+  public dataref!: any;
 
   private ws: WebSocket;
   private engine!: Engine;
+  public rules!: Rules;
 
   constructor() {
     this.isXPlaneConnected = false;
@@ -17,89 +32,57 @@ class DatarefStore {
     console.log('websocket closed');
     this?.engine?.stop();
     console.log('rules engine stopped');
-    this.ws = this.connect();
 
+    this.trackingFlight = {
+      flightNumber: 'ZE999',
+      departure: 'TBD',
+      destination: 'TBD',
+    };
+    this.flightData = XPlaneData.initFlightData();
+    this.dataref = {};
+    this.dataref.vs = 0;
+    this.dataref.gs = 0;
+    this.dataref.ias = 0;
+    this.dataref.elevation = 0;
+    this.ws = this.connect();
     makeObservable(this);
   }
 
   private connect() {
-    // this.rules = new Rules(this.selectedFlight.aircraft, this.flightData);
-    // this.engine = new Engine(this.rules.getRules());
+    this.rules = new Rules(this.flightData);
+    this.engine = new Engine(this.rules.getRules());
     const ws = new WebSocket('ws://localhost:4444');
-    setInterval(function () {
-      ws.send('ping');
-    }, 5000);
     let cruiseCounter = 0;
     let climbCounter = 0;
     let descendCounter = 0;
     let landingDataFeq = false;
     let timeDelta = 0;
-    // const currentFlight = this.selectedFlight as RemoteFlight;
-    // const livemapData = {
-    //   airline: airlineStore.activeAirline?.id as string,
-    //   flight_number: currentFlight.name,
-    //   route: `${currentFlight.departure} - ${currentFlight.arrival}`,
-    //   latitude: 0,
-    //   longitude: 0,
-    // };
-    // let livemapId = 0;
-    // livemapApi
-    //   .getManyBaseLivemapControllerLivemap(undefined, undefined, [
-    //     `airline||$eq||${airlineStore.pilotId as string}`,
-    //   ])
-    //   .then((res) => {
-    //     const livemaps: Livemap[] = res.data as Livemap[];
-    //     if (livemaps.length === 0) {
-    //       livemapApi
-    //         .createOneBaseLivemapControllerLivemap(livemapData)
-    //         .then(({ data }) => {
-    //           livemapId = data.id as number;
-    //           console.log('created live flight');
-    //         })
-    //         .catch((e) => {
-    //           console.log(e);
-    //         });
-    //     } else {
-    //       livemapId = livemaps[0].id as number;
-    //       console.log(`livemap id: ${livemapId}`);
-    //     }
-    //   });
 
     ws.onmessage = (msg) => {
       runInAction(async () => {
         try {
           this.isXPlaneConnected = true;
-          if (!this.flightData) {
-            this.flightData = XPlaneData.initFlightData();
-          }
-          if (!this.flightData?.state) {
+          const flightDataArray: any[] = XPlaneData.processRawData(msg.data);
+
+          const { vs, gs, ias, elevation } = flightDataArray[
+            flightDataArray.length - 1
+          ];
+          this.dataref.vs = vs;
+          this.dataref.gs = gs;
+          this.dataref.ias = ias;
+          this.dataref.elevation = elevation;
+
+          if (!this.flightData.state && flightDataArray[0].n1 === 0) {
             XPlaneData.changeStateTo(this.flightData, 'parked', Date.now());
             this.flightData.startTime = Date.now();
-          }
-          const flightDataArray: any[] = XPlaneData.processRawData(msg.data);
-          if (timeDelta === 0) {
             timeDelta =
               parseInt(`${this.flightData.startTime}`) -
               parseInt(flightDataArray[0].ts);
           }
-          // // update lat and lat
-          // if (livemapId !== 0) {
-          //   const { lat, lng, ias, gs, vs, elevation } = flightDataArray[
-          //     flightDataArray.length - 1
-          //   ];
-          //   livemapApi
-          //     .updateOneBaseLivemapControllerLivemap(livemapId, {
-          //       ...livemapData,
-          //       latitude: lat,
-          //       longitude: lng,
-          //       flight_data: JSON.stringify({ ias, gs, vs, elevation }),
-          //     })
-          //     .then(() => {
-          //       console.log('live flight updated');
-          //     })
-          //     .catch((e) => logger.error(e));
-          // }
 
+          if (timeDelta === 0) {
+            return;
+          }
           for (let i = 0; i < flightDataArray.length; i++) {
             const {
               ts,
@@ -129,10 +112,16 @@ class DatarefStore {
                 state: this.flightData.state,
               },
             });
+            // eslint-disable-next-line no-loop-func
             results.forEach((result) => {
-              if (result.name) {
-                this.engine.removeRule(result.name);
-              }
+              const myResult: any = (result.conditions as AllConditions).all.filter(
+                (condition: any) => condition.path === '$.ts'
+              );
+              XPlaneData.changeStateTo(
+                this.flightData,
+                result.event.type as FlightState,
+                myResult[0].factResult
+              );
             });
 
             if (this.flightData.state === 'climb') {
@@ -195,13 +184,19 @@ class DatarefStore {
                 this.flightData
               );
               if (gs < 30 / 1.9438 && gearForce > 0) {
-                this.ws?.close();
-                console.log('websocket closed');
-                this.engine.stop();
-                console.log('rules engine stopped');
                 //await this.createReport();
                 XPlaneData.changeStateTo(this.flightData, 'stop', timestamp);
                 this.flightData = XPlaneData.initFlightData();
+                this.trackingFlight = {
+                  flightNumber: 'ZE999',
+                  departure: 'TBD',
+                  destination: 'TBD',
+                };
+                this.dataref = {};
+                this.dataref.vs = 0;
+                this.dataref.gs = 0;
+                this.dataref.ias = 0;
+                this.dataref.elevation = 0;
               }
             }
           }
