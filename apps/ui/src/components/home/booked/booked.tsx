@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useObserver } from 'mobx-react-lite';
+import { useLocalObservable, useObserver } from 'mobx-react-lite';
 import { runInAction } from 'mobx';
 import {
   Table,
@@ -9,9 +9,11 @@ import {
   Button,
   Descriptions,
   Divider,
+  Modal,
 } from 'antd';
 import styled from '@emotion/styled';
 import { useGlobalStores } from '../../../stores';
+import FlightDetails from '../../flight-details/flight-details';
 
 /* eslint-disable-next-line */
 export interface BookedProps {}
@@ -19,7 +21,14 @@ export interface BookedProps {}
 const StyledBooked = styled.div``;
 
 export function Booked(props: BookedProps) {
-  const { FlightStore } = useGlobalStores();
+  const { FlightStore, DatarefStore } = useGlobalStores();
+  const localStore = useLocalObservable(() => ({
+    showModal: false,
+    dataBefore: {},
+    toggleModal() {
+      localStore.showModal = !localStore.showModal;
+    },
+  }));
   const columns = [
     {
       title: 'Flight #',
@@ -142,7 +151,16 @@ export function Booked(props: BookedProps) {
             rowSelection={{
               type: 'radio',
               onSelect: (record, selected, rows, nativeEvent) => {
-                message.info(JSON.stringify(record));
+                runInAction(() => {
+                  localStore.dataBefore = DatarefStore.trackingFlight;
+                  DatarefStore.trackingFlight = {
+                    flightNumber: record.flightNumber,
+                    departure: record.departure,
+                    destination: record.destination,
+                    route: record.route,
+                  };
+                  localStore.toggleModal();
+                });
               },
             }}
             columns={columns}
@@ -154,6 +172,48 @@ export function Booked(props: BookedProps) {
           />
         </PageHeader>
       </Row>
+      <Modal
+        title={null}
+        visible={localStore.showModal}
+        onCancel={localStore.toggleModal}
+        footer={[
+          <Button
+            key="Cancel"
+            type="primary"
+            danger
+            onClick={() => {
+              DatarefStore.trackingFlight = localStore.dataBefore as any;
+              localStore.toggleModal();
+            }}
+          >
+            Cancel
+          </Button>,
+          <Button
+            key="track"
+            type="primary"
+            onClick={() => {
+              localStore.toggleModal();
+            }}
+          >
+            Track
+          </Button>,
+        ]}
+        centered
+        width={'85vw'}
+        bodyStyle={{ height: '100%', overflowY: 'auto' }}
+      >
+        <PageHeader
+          ghost={false}
+          title="Booked Flights"
+          style={{
+            width: '98%',
+            marginLeft: '1%',
+          }}
+          backIcon={false}
+        >
+          <FlightDetails size="default" />
+        </PageHeader>
+      </Modal>
     </StyledBooked>
   ));
 }

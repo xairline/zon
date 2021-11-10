@@ -18,6 +18,7 @@ class DatarefStore {
     flightNumber: string;
     departure: string;
     destination: string;
+    route: string;
   };
   @observable
   public dataref!: any;
@@ -37,6 +38,7 @@ class DatarefStore {
       flightNumber: 'ZE999',
       departure: 'TBD',
       destination: 'TBD',
+      route: 'DCT',
     };
     this.flightData = XPlaneData.initFlightData();
     this.dataref = {};
@@ -191,6 +193,7 @@ class DatarefStore {
                   flightNumber: 'ZE999',
                   departure: 'TBD',
                   destination: 'TBD',
+                  route: 'DCT',
                 };
                 this.dataref = {};
                 this.dataref.vs = 0;
