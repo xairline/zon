@@ -1,8 +1,9 @@
-#### 0.0.1-debug.14 (2021-11-10)
+#### 0.0.1-debug.15 (2021-11-10)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-debug.14 (59f2c369)
   *  bump up version: 0.0.1-debug.13 (29d8b5c4)
   *  bump up version: 0.0.1-debug.12 (3cbd4e80)
   *  bump up version: 0.0.1-debug.11 (0f2fdda6)
@@ -20,6 +21,7 @@
 
 ##### New Features
 
+*  set tracking flight in book/schedule view (613f81a9)
 *  track flight (e93c80d3)
 *  initiial integration from xairline UDP client (4f25165a)
 *  add skeleton ws service for xplane udp client (e0dcb4c6)
