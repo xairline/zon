@@ -85,6 +85,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "./",
               "fileReplacements": [
                 {
                   "replace": "apps/ui/src/environments/environment.ts",
