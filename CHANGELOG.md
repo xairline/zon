@@ -1,8 +1,9 @@
-#### 0.0.1-debug.13 (2021-11-10)
+#### 0.0.1-debug.14 (2021-11-10)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-debug.13 (29d8b5c4)
   *  bump up version: 0.0.1-debug.12 (3cbd4e80)
   *  bump up version: 0.0.1-debug.11 (0f2fdda6)
   *  bump up version: 0.0.1-debug.10 (eab9e377)
@@ -31,6 +32,7 @@
 ##### Bug Fixes
 
 * **ci:**
+  *  base href is messed up (a517cef2)
   *  production build is broken (f3e9a25a)
   *  binary fixes (3906d58c)
   *  build script is not defined for release build (280c9a9f)
