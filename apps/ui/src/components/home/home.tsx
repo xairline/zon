@@ -1,20 +1,9 @@
 import styled from '@emotion/styled';
+import { Divider } from 'antd';
 import { useObserver } from 'mobx-react-lite';
-import { runInAction } from 'mobx';
-import React, { useEffect } from 'react';
-import { useGlobalStores } from '../../stores';
-import {
-  Table,
-  message,
-  Row,
-  PageHeader,
-  Button,
-  Descriptions,
-  Divider,
-} from 'antd';
-import { Stats } from './stats/stats';
-import Recorder from './recorder/recorder';
+import React from 'react';
 import { Booked } from './booked/booked';
+import Recorder from './recorder/recorder';
 
 /* eslint-disable-next-line */
 export interface HomeProps {}
@@ -22,15 +11,12 @@ export interface HomeProps {}
 const StyledHome = styled.div``;
 
 export function Home(props: HomeProps) {
-
   return useObserver(() => (
     <StyledHome>
       {' '}
       <Booked />
       <Divider />
       <Recorder />
-      <Divider />
-      <Stats />
     </StyledHome>
   ));
 }

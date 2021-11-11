@@ -46,6 +46,12 @@ export function FlightDetails(props: FlightDetailsProps) {
         <Descriptions.Item label="Arrival">
           {DatarefStore.trackingFlight.destination}
         </Descriptions.Item>
+        <Descriptions.Item label="Aircraft Type">
+          {DatarefStore?.dataref?.aircraftType || ''}
+        </Descriptions.Item>
+        <Descriptions.Item label="Aircraft Registeration">
+          {DatarefStore?.dataref?.aircraftRegistration || ''}
+        </Descriptions.Item>
         <Descriptions.Item label="Route">
           {DatarefStore.trackingFlight.route}
         </Descriptions.Item>

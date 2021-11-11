@@ -70,18 +70,9 @@ wss.on('connection', function connection(ws, request) {
     debug: false,
   });
   const requestDataRef = (freq: number) => {
-    xPlane.requestDataRef(DATAREF_STR.N1, freq);
-    xPlane.requestDataRef(DATAREF_STR.ELEVATION, freq);
-    xPlane.requestDataRef(DATAREF_STR.GS, freq);
-    xPlane.requestDataRef(DATAREF_STR.AGL, freq);
-    xPlane.requestDataRef(DATAREF_STR.G_FORCE, freq);
-    xPlane.requestDataRef(DATAREF_STR.VS, freq);
-    xPlane.requestDataRef(DATAREF_STR.GEAR_FORCE, freq);
-    xPlane.requestDataRef(DATAREF_STR.PITCH, freq);
-    xPlane.requestDataRef(DATAREF_STR.IAS, freq);
-    xPlane.requestDataRef(DATAREF_STR.LAT, freq);
-    xPlane.requestDataRef(DATAREF_STR.LNG, freq);
-    xPlane.requestDataRef(DATAREF_STR.TS, freq);
+    Object.keys(DATAREF_STR).forEach((key) => {
+      xPlane.requestDataRef(DATAREF_STR[key], freq);
+    });
     if (connected) {
       console.log(`set dataref freq: ${freq}`);
     }

@@ -146,6 +146,7 @@ export function Schedules(props: SchedulesProps) {
                 flightNumber: record.flightNumber,
                 departure: record.departure,
                 destination: record.destination,
+                aircraftType: record.aircraftType,
                 route: record.route,
               };
               localStore.toggleModal();

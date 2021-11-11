@@ -7,7 +7,7 @@ import {
   Rules,
   XPlaneData,
 } from '@zon/xplane-data';
-
+import axios from 'axios';
 class DatarefStore {
   @observable
   public isXPlaneConnected: boolean;
@@ -19,6 +19,7 @@ class DatarefStore {
     departure: string;
     destination: string;
     route: string;
+    aircraftType: string;
   };
   @observable
   public dataref!: any;
@@ -38,14 +39,19 @@ class DatarefStore {
       flightNumber: 'ZE999',
       departure: 'TBD',
       destination: 'TBD',
+      aircraftType: 'TBD',
       route: 'DCT',
     };
     this.flightData = XPlaneData.initFlightData();
-    this.dataref = {};
-    this.dataref.vs = 0;
-    this.dataref.gs = 0;
-    this.dataref.ias = 0;
-    this.dataref.elevation = 0;
+    this.dataref = {
+      vs: 0,
+      gs: 0,
+      ias: 0,
+      elevation: 0,
+      aircraftRegistration: '',
+      aircraftType: '',
+    };
+
     this.ws = this.connect();
     makeObservable(this);
   }
@@ -66,13 +72,20 @@ class DatarefStore {
           this.isXPlaneConnected = true;
           const flightDataArray: any[] = XPlaneData.processRawData(msg.data);
 
-          const { vs, gs, ias, elevation } = flightDataArray[
-            flightDataArray.length - 1
-          ];
+          const {
+            aircraftRegistration,
+            aircraftType,
+            vs,
+            gs,
+            ias,
+            elevation,
+          } = flightDataArray[flightDataArray.length - 1];
           this.dataref.vs = vs;
           this.dataref.gs = gs;
           this.dataref.ias = ias;
           this.dataref.elevation = elevation;
+          this.dataref.aircraftRegistration = aircraftRegistration;
+          this.dataref.aircraftType = aircraftType;
 
           if (!this.flightData.state && flightDataArray[0].n1 === 0) {
             XPlaneData.changeStateTo(this.flightData, 'parked', Date.now());
@@ -81,7 +94,6 @@ class DatarefStore {
               parseInt(`${this.flightData.startTime}`) -
               parseInt(flightDataArray[0].ts);
           }
-
           if (timeDelta === 0) {
             return;
           }
@@ -186,20 +198,24 @@ class DatarefStore {
                 this.flightData
               );
               if (gs < 30 / 1.9438 && gearForce > 0) {
-                //await this.createReport();
+                await this.createReport();
                 XPlaneData.changeStateTo(this.flightData, 'stop', timestamp);
                 this.flightData = XPlaneData.initFlightData();
                 this.trackingFlight = {
                   flightNumber: 'ZE999',
                   departure: 'TBD',
                   destination: 'TBD',
+                  aircraftType: 'TBD',
                   route: 'DCT',
                 };
-                this.dataref = {};
-                this.dataref.vs = 0;
-                this.dataref.gs = 0;
-                this.dataref.ias = 0;
-                this.dataref.elevation = 0;
+                this.dataref = {
+                  vs: 0,
+                  gs: 0,
+                  ias: 0,
+                  elevation: 0,
+                  aircraftRegistration: '',
+                  aircraftType: '',
+                };
               }
             }
           }
@@ -210,6 +226,37 @@ class DatarefStore {
     };
 
     return ws;
+  }
+
+  private async createReport() {
+    const flightReqTemplate = {
+      number: this.trackingFlight.flightNumber,
+      aircraftType: this.dataref.aircraftType,
+      aircraftRegistration: this.dataref.aircraftRegistration,
+      departure: this.trackingFlight.departure,
+      destination: this.trackingFlight.destination,
+      route: this.trackingFlight.route,
+      timeOut: '2012-01-18T11:45:00+01:00', // engine start
+      timeOff: '2012-01-18T11:50:00+01:00', // takeoff
+      timeOn: '2012-01-18T14:30:00+01:00', // land
+      timeIn: '2012-01-18T14:45:00+01:00', // engine stop
+      totalBlockTime: 2.5, // from engine start to engine stop
+      totalFlightTime: 2.3, // from takeoff to land
+      dryOperatingWeight: 60000, //TODO: read from dataref on initil connect
+      payloadWeight: 12000, //TODO: read from dataref on engine start
+      pax: 123, //TODO: what to do there???
+      fuelOut: 9000, //engine start
+      fuelOff: 8800, // takeoff
+      fuelOn: 3000, // land
+      fuelIn: 2800, // engine shutdown
+    };
+    const res = await axios
+      .post('https://zonexecutive.com/action.php/acars/openfdr/flight', {
+        flight: flightReqTemplate,
+      })
+      .catch((e: any) => {
+        throw e;
+      });
   }
 }
 export const datarefStore = new DatarefStore();

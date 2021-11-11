@@ -91,18 +91,18 @@ export const routes: Array<IRoute> = [
     ),
     comp: () => <Home />,
   },
-  {
-    path: '/fly-now',
-    name: 'Recorder',
-    icon: (
-      <FontAwesomeIcon
-        icon={faRecordVinyl}
-        style={{ marginLeft: '20px', marginRight: '16px' }}
-        size={'1x'}
-      />
-    ),
-    comp: () => <FlyNow />,
-  },
+  // {
+  //   path: '/fly-now',
+  //   name: 'Recorder',
+  //   icon: (
+  //     <FontAwesomeIcon
+  //       icon={faRecordVinyl}
+  //       style={{ marginLeft: '20px', marginRight: '16px' }}
+  //       size={'1x'}
+  //     />
+  //   ),
+  //   comp: () => <FlyNow />,
+  // },
   {
     path: '/schedules',
     name: 'Schedules',

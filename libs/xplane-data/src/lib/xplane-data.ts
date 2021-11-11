@@ -96,7 +96,23 @@ export class XPlaneData {
       const lat = flightDataRaw[DATAREF_STR.LAT];
       const lng = flightDataRaw[DATAREF_STR.LNG];
 
+      let tail_number = '';
+      Object.keys(DATAREF_STR)
+        .filter((d) => d.indexOf('TAIL_NUMBER') === 0)
+        .map((key) => {
+          tail_number += String.fromCharCode(flightDataRaw[DATAREF_STR[key]]);
+        });
+
+      let ICAO = '';
+      Object.keys(DATAREF_STR)
+        .filter((d) => d.indexOf('ICAO') === 0)
+        .map((key) => {
+          ICAO += String.fromCharCode(flightDataRaw[DATAREF_STR[key]]);
+        });
+
       result.push({
+        aircraftType: ICAO,
+        aircraftRegistration: tail_number,
         ts,
         gs,
         vs,
