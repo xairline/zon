@@ -1,8 +1,9 @@
-#### 0.0.1-debug.16 (2021-11-11)
+#### 0.0.1-debug.17 (2021-11-12)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-debug.16 (dffa95b0)
   *  bump up version: 0.0.1-debug.15 (3c286603)
   *  bump up version: 0.0.1-debug.14 (59f2c369)
   *  bump up version: 0.0.1-debug.13 (29d8b5c4)
@@ -22,6 +23,7 @@
 
 ##### New Features
 
+*  load past flights from ZE server (020087fc)
 *  post final flight report to ZE Server (36ef8059)
 *  set tracking flight in book/schedule view (613f81a9)
 *  track flight (e93c80d3)
