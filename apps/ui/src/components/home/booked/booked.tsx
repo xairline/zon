@@ -10,11 +10,13 @@ import {
   Descriptions,
   Divider,
   Modal,
+  Input,
 } from 'antd';
 import styled from '@emotion/styled';
 import { useGlobalStores } from '../../../stores';
 import FlightDetails from '../../flight-details/flight-details';
-
+import axios from 'axios';
+import xml2js from 'xml2js';
 /* eslint-disable-next-line */
 export interface BookedProps {}
 
@@ -25,6 +27,7 @@ export function Booked(props: BookedProps) {
   const localStore = useLocalObservable(() => ({
     showModal: false,
     dataBefore: {},
+    simBriefUsername: 'cfanap',
     toggleModal() {
       localStore.showModal = !localStore.showModal;
     },
@@ -145,6 +148,44 @@ export function Booked(props: BookedProps) {
             width: '96%',
             marginLeft: '2%',
           }}
+          extra={[
+            <Input
+              placeholder="SimBrief Username"
+              onChange={(e) => {
+                localStore.simBriefUsername = e.target.value;
+              }}
+              style={{ width: '12vw' }}
+            ></Input>,
+            <Button
+              type="primary"
+              onClick={async () => {
+                const simBriefResponse = await axios
+                  .get(
+                    `https://www.simbrief.com/api/xml.fetcher.php?username=${localStore.simBriefUsername}`
+                  )
+                  .catch((e: any) => {
+                    throw e;
+                  });
+                const simBriefPlanObj = await xml2js.parseStringPromise(
+                  simBriefResponse.data
+                );
+                runInAction(()=>{
+                  localStore.dataBefore = DatarefStore.trackingFlight;
+                  DatarefStore.trackingFlight = {
+                    flightNumber: simBriefPlanObj.OFP.atc[0].callsign[0],
+                    departure: simBriefPlanObj.OFP.origin[0].icao_code[0],
+                    destination: simBriefPlanObj.OFP.destination[0].icao_code[0],
+                    aircraftType: simBriefPlanObj.OFP.aircraft[0].icaocode[0],
+                    route: simBriefPlanObj.OFP.general[0].route[0],
+                  };
+                  localStore.toggleModal();
+                })
+                
+              }}
+            >
+              Load from SimBrief
+            </Button>,
+          ]}
           backIcon={false}
         >
           <Table
