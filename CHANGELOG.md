@@ -1,8 +1,9 @@
-#### 0.0.1-debug.17 (2021-11-12)
+#### 0.0.1-debug.18 (2021-11-12)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-debug.17 (2554208e)
   *  bump up version: 0.0.1-debug.16 (dffa95b0)
   *  bump up version: 0.0.1-debug.15 (3c286603)
   *  bump up version: 0.0.1-debug.14 (59f2c369)
@@ -37,6 +38,8 @@
 
 ##### Bug Fixes
 
+*  report time correctly (2f6b010f)
+*  fix missing flight phases (1e06999c)
 * **ci:**
   *  base href is messed up (a517cef2)
   *  production build is broken (f3e9a25a)
