@@ -197,7 +197,7 @@ class DatarefStore {
                 ias,
                 this.flightData
               );
-              if (gs < 30 / 1.9438 && gearForce > 0) {
+              if (n1 < 1 && gs < 1) {
                 XPlaneData.changeStateTo(
                   this.flightData,
                   'engine stopped',
@@ -233,6 +233,22 @@ class DatarefStore {
   }
 
   private async createReport() {
+    const timeOut = new Date(
+      this.flightData.events
+        .find((value) => value.indexOf('engine started') !== -1)
+        .split(' -')[0]
+    ).getTime();
+    const timeOff = new Date(
+      this.flightData.events
+        .find((value) => value.indexOf('takeoff') !== -1)
+        .split(' -')[0]
+    ).getTime();
+    const timeOn = this.flightData.endTime;
+    const timeIn = new Date(
+      this.flightData.events
+        .find((value) => value.indexOf('engine stopped') !== -1)
+        .split(' -')[0]
+    ).getTime();
     const flightReqTemplate = {
       number: this.trackingFlight.flightNumber,
       aircraftType: this.dataref.aircraftType,
@@ -240,19 +256,23 @@ class DatarefStore {
       departure: this.trackingFlight.departure,
       destination: this.trackingFlight.destination,
       route: this.trackingFlight.route,
-      timeOut: '2021-11-18T11:45:00+01:00', // engine start
-      timeOff: '2021-11-18T11:50:00+01:00', // takeoff
-      timeOn: '2021-11-18T14:30:00+01:00', // land
-      timeIn: '2021-11-18T14:45:00+01:00', // engine stop
-      totalBlockTime: 2.5, // from engine start to engine stop
-      totalFlightTime: 2.3, // from takeoff to land
+      timeOut: this.toIsoStringWithOffset(timeOut), // engine start
+      timeOff: this.toIsoStringWithOffset(timeOff), // takeoff
+      timeOn: this.toIsoStringWithOffset(timeOn), // land
+      timeIn: this.toIsoStringWithOffset(timeIn), // engine stop
+      totalBlockTime: XPlaneData.dataRoundup(
+        (timeIn - timeOut) / 1000 / 60 / 60
+      ), // from engine start to engine stop
+      totalFlightTime: XPlaneData.dataRoundup(
+        (parseInt(`${timeOn}`) - timeOff) / 1000 / 60 / 60
+      ) * 10, // from takeoff to land
       dryOperatingWeight: 60000, //TODO: read from dataref on initil connect
       payloadWeight: 12000, //TODO: read from dataref on engine start
       pax: 123, //TODO: what to do there???
-      fuelOut: 9000, //engine start
-      fuelOff: 8800, // takeoff
-      fuelOn: 3000, // land
-      fuelIn: 2800, // engine shutdown
+      fuelOut: 9000, //TODO: engine start
+      fuelOff: 8800, //TODO: takeoff
+      fuelOn: 3000, //TODO: land
+      fuelIn: 2800, //TODO: engine shutdown
       landingRate: this.flightData.landingData.vs,
     };
     const res = await axios
@@ -264,6 +284,35 @@ class DatarefStore {
       });
     console.log(res);
     //todo create local landing data
+  }
+
+  private toIsoStringWithOffset(utc) {
+    const date = new Date(0); // The 0 there is the key, which sets the date to the epoch
+    date.setUTCSeconds(parseInt(`${utc}`) / 1000);
+    const tzo = -date.getTimezoneOffset(),
+      dif = tzo >= 0 ? '+' : '-',
+      pad = function (num) {
+        const norm = Math.floor(Math.abs(num));
+        return (norm < 10 ? '0' : '') + norm;
+      };
+
+    return (
+      date.getFullYear() +
+      '-' +
+      pad(date.getMonth() + 1) +
+      '-' +
+      pad(date.getDate()) +
+      'T' +
+      pad(date.getHours()) +
+      ':' +
+      pad(date.getMinutes()) +
+      ':' +
+      pad(date.getSeconds()) +
+      dif +
+      pad(tzo / 60) +
+      ':' +
+      pad(tzo % 60)
+    );
   }
 }
 export const datarefStore = new DatarefStore();
