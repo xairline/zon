@@ -37,15 +37,43 @@ export const DEFAULT_RULES = [
         },
         {
           fact: 'dataref',
-          path: '$.gs',
+          path: '$.state',
+          operator: 'equal',
+          value: 'parked',
+        },
+      ],
+    },
+    event: {
+      type: 'engine started',
+    },
+  },
+  {
+    priority: 999,
+    conditions: {
+      all: [
+        {
+          fact: 'dataref',
+          path: '$.ts',
           operator: 'greaterThan',
           value: 0,
         },
         {
           fact: 'dataref',
+          path: '$.n1',
+          operator: 'greaterThan',
+          value: 20,
+        },
+        {
+          fact: 'dataref',
+          path: '$.gs',
+          operator: 'greaterThan',
+          value: 2,
+        },
+        {
+          fact: 'dataref',
           path: '$.state',
           operator: 'equal',
-          value: 'parked',
+          value: 'engine started',
         },
       ],
     },

@@ -198,8 +198,12 @@ class DatarefStore {
                 this.flightData
               );
               if (gs < 30 / 1.9438 && gearForce > 0) {
+                XPlaneData.changeStateTo(
+                  this.flightData,
+                  'engine stopped',
+                  timestamp
+                );
                 await this.createReport();
-                XPlaneData.changeStateTo(this.flightData, 'stop', timestamp);
                 this.flightData = XPlaneData.initFlightData();
                 this.trackingFlight = {
                   flightNumber: 'ZE999',
@@ -249,6 +253,7 @@ class DatarefStore {
       fuelOff: 8800, // takeoff
       fuelOn: 3000, // land
       fuelIn: 2800, // engine shutdown
+      landingRate: this.flightData.landingData.vs,
     };
     const res = await axios
       .post('https://zonexecutive.com/action.php/acars/openfdr/flight', {
@@ -257,6 +262,8 @@ class DatarefStore {
       .catch((e: any) => {
         throw e;
       });
+    console.log(res);
+    //todo create local landing data
   }
 }
 export const datarefStore = new DatarefStore();

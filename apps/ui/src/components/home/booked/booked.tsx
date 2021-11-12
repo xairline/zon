@@ -169,7 +169,7 @@ export function Booked(props: BookedProps) {
             style={{
               height: '100%',
             }}
-            pagination={{ pageSize: 3, showSizeChanger: false }}
+            pagination={{ pageSize: 2, showSizeChanger: false }}
           />
         </PageHeader>
       </Row>

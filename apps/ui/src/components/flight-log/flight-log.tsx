@@ -141,10 +141,11 @@ export function FlightLog(props: FlightLogProps) {
         rowSelection={{
           type: 'radio',
           onSelect: (record, selected, rows, nativeEvent) => {
-            runInAction(() => {
-              localStore.flightNumber = record.number;
-              localStore.toggleModal();
-            });
+            message.info(JSON.stringify(record));
+            // runInAction(() => {
+            //   localStore.flightNumber = record.number;
+            //   localStore.toggleModal();
+            // });
           },
         }}
         columns={columns}

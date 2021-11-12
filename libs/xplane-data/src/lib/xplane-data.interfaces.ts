@@ -1,12 +1,13 @@
 export type FlightState =
   | 'parked'
+  | 'engine started'
   | 'taxi'
   | 'takeoff'
   | 'climb'
   | 'cruise'
   | 'descend'
   | 'landing'
-  | 'stop'
+  | 'engine stopped'
   | undefined;
 
 export interface LandingData {
