@@ -1,6 +1,8 @@
 /* eslint-disable */
 const dgram = require('dgram');
 
+const INDEX_OFFSET = 5000;
+
 const endianNess = () => {
   const uInt32 = new Uint32Array([0x11223344]);
   const uInt8 = new Uint8Array(uInt32.buffer);
@@ -37,7 +39,7 @@ export class XPlaneClient {
     this.debug = settings.debug || false;
     this.dataRefs = [];
     this.dataRefCallback = settings.dataRefCallback;
-    this.index = 10000;
+    this.index = INDEX_OFFSET;
     this.initialized = false;
 
     this.client = null;
@@ -53,28 +55,25 @@ export class XPlaneClient {
     // sending msg
     // eslint-disable-next-line no-unused-vars
     // console.log('sending:', data);
-    this.client.send(
-      data,
-      this.port,
-      this.host,
-      function cb(error /* , bytes */) {
-        if (error) {
-          this.client.close();
-          this.client = null;
-          console.error(`XPlaneClient failed to send data X-Plane: ${error}`);
-        }
+    this.client.send(data, this.port, this.host, function cb(
+      error /* , bytes */
+    ) {
+      if (error) {
+        this.client.close();
+        this.client = null;
+        console.error(`XPlaneClient failed to send data X-Plane: ${error}`);
       }
-    );
+    });
   }
 
   requestDataRef(dataRef, timesPerSecond, callback = undefined) {
-    let index = this.dataRefs.length + 10000;
+    let index = this.dataRefs.length + INDEX_OFFSET;
 
     // TODO: This prototype needs more work to better maintain
     // what datarefs are being monitored, but the basics work.
 
-    for (let i = 10000; i < this.dataRefs.length; i += 1) {
-      if (this.dataRefs[i-10000].dataRef === dataRef) {
+    for (let i = INDEX_OFFSET; i < this.dataRefs.length; i += 1) {
+      if (this.dataRefs[i - INDEX_OFFSET].dataRef === dataRef) {
         index = i;
         if (this.debug) {
           console.log(
@@ -84,7 +83,7 @@ export class XPlaneClient {
       }
     }
 
-    this.dataRefs[index-10000] = {
+    this.dataRefs[index - INDEX_OFFSET] = {
       dataRef,
       timesPerSecond,
       value: null,
@@ -182,8 +181,8 @@ export class XPlaneClient {
             : msg.readInt32LE(offset);
 
           // eslint-disable-next-line no-prototype-builtins
-          if (self.dataRefs.hasOwnProperty(drefSenderIndex-10000)) {
-            const dataRef = self.dataRefs[drefSenderIndex-10000];
+          if (self.dataRefs.hasOwnProperty(drefSenderIndex - INDEX_OFFSET)) {
+            const dataRef = self.dataRefs[drefSenderIndex - INDEX_OFFSET];
             const drefFltValue = BIG_ENDIAN
               ? msg.readFloatBE(offset + 4)
               : msg.readFloatLE(offset + 4);
