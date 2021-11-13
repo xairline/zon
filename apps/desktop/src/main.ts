@@ -57,8 +57,10 @@ wss.on('connection', function connection(ws, request) {
   // xplane
   let connected = false;
   let results: any[] = [];
+  let timer;
   const xPlane = new XPlaneClient({
     dataRefCallback: (result) => {
+      clearTimeout(timer);
       connected = true;
       results.push(result);
       if (results.length === DATAREF_BATCH_SIZE) {
@@ -66,6 +68,15 @@ wss.on('connection', function connection(ws, request) {
         console.debug(`${results.length} - sent`);
         results = [];
       }
+      timer = setTimeout(() => {
+        connected = false;
+        requestDataRef(0);
+        xPlane.client.close();
+        xPlane.client = null;
+        ws.send('xplane closed');
+        clearTimeout(timer);
+        console.log('X plane is closed');
+      }, 20000);
     },
     debug: false,
   });

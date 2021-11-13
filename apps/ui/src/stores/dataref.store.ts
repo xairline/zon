@@ -68,6 +68,11 @@ class DatarefStore {
 
     ws.onmessage = (msg) => {
       runInAction(async () => {
+        if (msg.data === 'xplane closed') {
+          this.isXPlaneConnected = false;
+          this.resetTracking();
+          return;
+        }
         try {
           this.isXPlaneConnected = true;
           const flightDataArray: any[] = XPlaneData.processRawData(msg.data);
@@ -211,22 +216,7 @@ class DatarefStore {
                   timestamp
                 );
                 await this.createReport();
-                this.flightData = XPlaneData.initFlightData();
-                this.trackingFlight = {
-                  flightNumber: 'ZE999',
-                  departure: 'TBD',
-                  destination: 'TBD',
-                  aircraftType: 'TBD',
-                  route: 'DCT',
-                };
-                this.dataref = {
-                  vs: 0,
-                  gs: 0,
-                  ias: 0,
-                  elevation: 0,
-                  aircraftRegistration: '',
-                  aircraftType: '',
-                };
+                this.resetTracking();
               }
             }
           }
@@ -237,6 +227,24 @@ class DatarefStore {
     };
 
     return ws;
+  }
+  resetTracking() {
+    this.flightData = XPlaneData.initFlightData();
+    this.trackingFlight = {
+      flightNumber: 'ZE999',
+      departure: 'TBD',
+      destination: 'TBD',
+      aircraftType: 'TBD',
+      route: 'DCT',
+    };
+    this.dataref = {
+      vs: 0,
+      gs: 0,
+      ias: 0,
+      elevation: 0,
+      aircraftRegistration: '',
+      aircraftType: '',
+    };
   }
 
   private async createReport() {
