@@ -1,8 +1,9 @@
-#### 0.0.1-alpha.1 (2021-11-13)
+#### 0.0.1-alpha.2 (2021-11-13)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-alpha.1 (2e9603f4)
   *  bump up version: 0.0.1-alpha.0 (985072c1)
   *  bump up version: 0.0.1-debug.18 (63e51242)
   *  bump up version: 0.0.1-debug.17 (2554208e)
@@ -26,6 +27,7 @@
 
 ##### New Features
 
+*  report dry and payload weight (bdb49e46)
 *  sim brief integration (418cfa33)
 *  load past flights from ZE server (020087fc)
 *  post final flight report to ZE Server (36ef8059)
@@ -41,6 +43,7 @@
 
 ##### Bug Fixes
 
+*  dup index with xairline... (322d6f73)
 *  report time correctly (2f6b010f)
 *  fix missing flight phases (1e06999c)
 * **ci:**
