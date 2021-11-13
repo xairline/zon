@@ -79,6 +79,9 @@ class DatarefStore {
             gs,
             ias,
             elevation,
+            fuelWeight,
+            totalWeight,
+            emptyWeight,
           } = flightDataArray[flightDataArray.length - 1];
           this.dataref.vs = vs;
           this.dataref.gs = gs;
@@ -86,6 +89,9 @@ class DatarefStore {
           this.dataref.elevation = elevation;
           this.dataref.aircraftRegistration = aircraftRegistration;
           this.dataref.aircraftType = aircraftType;
+          this.dataref.fuelWeight = fuelWeight;
+          this.dataref.payloadWeight = totalWeight - fuelWeight - emptyWeight;
+          this.dataref.emptyWeight = emptyWeight;
 
           if (!this.flightData.state && flightDataArray[0].n1 === 0) {
             XPlaneData.changeStateTo(this.flightData, 'parked', Date.now());
@@ -108,6 +114,7 @@ class DatarefStore {
               pitch,
               ias,
               n1,
+              fuelWeight,
               elevation,
             } = flightDataArray[i];
             const timestamp = Math.round(ts + timeDelta);
@@ -263,11 +270,12 @@ class DatarefStore {
       totalBlockTime: XPlaneData.dataRoundup(
         (timeIn - timeOut) / 1000 / 60 / 60
       ), // from engine start to engine stop
-      totalFlightTime: XPlaneData.dataRoundup(
-        (parseInt(`${timeOn}`) - timeOff) / 1000 / 60 / 60
-      ) * 10, // from takeoff to land
-      dryOperatingWeight: 60000, //TODO: read from dataref on initil connect
-      payloadWeight: 12000, //TODO: read from dataref on engine start
+      totalFlightTime:
+        XPlaneData.dataRoundup(
+          (parseInt(`${timeOn}`) - timeOff) / 1000 / 60 / 60
+        ) * 10, // from takeoff to land
+      dryOperatingWeight: this.dataref.emptyWeight,
+      payloadWeight: this.dataref.payloadWeight,
       pax: 123, //TODO: what to do there???
       fuelOut: 9000, //TODO: engine start
       fuelOff: 8800, //TODO: takeoff

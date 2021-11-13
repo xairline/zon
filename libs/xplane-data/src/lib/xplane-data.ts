@@ -8,55 +8,6 @@ import { LandingData } from './xplane-data.interfaces';
       totalLandingVs,
  */
 export class XPlaneData {
-  static calcRevenue(
-    numOfPassengers: number,
-    flight_time: number,
-    satisfication = 100
-  ): number {
-    return XPlaneData.dataRoundup(
-      ((6 *
-        numOfPassengers *
-        XPlaneData.dataRoundup(flight_time / 1000 / 60) *
-        satisfication) /
-        100) *
-        50
-    );
-  }
-  static caclSatification(
-    timeDelta: number,
-    landingData: LandingData,
-    data: any
-  ) {
-    let satification = 0;
-    // time
-    if (timeDelta < 20 * 1000 * 60) {
-      satification += parseFloat(data.delayed_flight_penalty_20 || 0);
-    } else if (timeDelta < 60 * 1000 * 60) {
-      satification += parseFloat(data.delayed_flight_penalty_60 || 0);
-    } else {
-      satification += parseFloat(data.delayed_flight_penalty_120 || 0);
-    }
-
-    // g force
-    if (landingData.gForce < 1.5) {
-      satification += parseFloat(data.landing_g_force_penalty_1_5 || 0);
-    } else if (landingData.gForce < 2) {
-      satification += parseFloat(data.landing_g_force_penalty_2_0 || 0);
-    } else {
-      satification += parseFloat(data.landing_g_force_penalty_2_5 || 0);
-    }
-
-    // vs
-    if (landingData.vs * -1 < 150) {
-      satification += parseFloat(data.landing_vs_penalty_1_5 || 0);
-    } else if (landingData.vs * -1 < 250) {
-      satification += parseFloat(data.landing_vs_penalty_2_5 || 0);
-    } else {
-      satification += parseFloat(data.landing_vs_penalty_3_0 || 0);
-    }
-
-    return satification;
-  }
   static initFlightData(): FlightData {
     return {
       state: undefined,
@@ -70,9 +21,6 @@ export class XPlaneData {
   }
   static dataRoundup(value: number): number {
     return Math.round(value * 100) / 100;
-  }
-  static randomGen(v1: number, v2: number): number {
-    return XPlaneData.dataRoundup(Math.random() * (v2 - v1) + v1);
   }
   static processRawData(data: string): any[] {
     const flightDataRawArray: any[] = JSON.parse(data);
@@ -95,6 +43,9 @@ export class XPlaneData {
 
       const lat = flightDataRaw[DATAREF_STR.LAT];
       const lng = flightDataRaw[DATAREF_STR.LNG];
+      const fuelWeight = flightDataRaw[DATAREF_STR.FUEL_WEIGHT];
+      const totalWeight = flightDataRaw[DATAREF_STR.TOTAL_WEIGHT];
+      const emptyWeight = flightDataRaw[DATAREF_STR.EMPTY_WEIGHT];
 
       let tail_number = '';
       Object.keys(DATAREF_STR)
@@ -111,6 +62,9 @@ export class XPlaneData {
         });
 
       result.push({
+        fuelWeight,
+        totalWeight,
+        emptyWeight,
         aircraftType: ICAO,
         aircraftRegistration: tail_number,
         ts,
