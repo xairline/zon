@@ -1,8 +1,9 @@
-#### 0.0.1-alpha.2 (2021-11-13)
+#### 0.0.1-alpha.3 (2021-11-13)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-alpha.2 (1e139566)
   *  bump up version: 0.0.1-alpha.1 (2e9603f4)
   *  bump up version: 0.0.1-alpha.0 (985072c1)
   *  bump up version: 0.0.1-debug.18 (63e51242)
@@ -43,6 +44,7 @@
 
 ##### Bug Fixes
 
+*  zon should automatically reconnect to xplane when it is closed while zon is still open (5d684f27)
 *  dup index with xairline... (322d6f73)
 *  report time correctly (2f6b010f)
 *  fix missing flight phases (1e06999c)
