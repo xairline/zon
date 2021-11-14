@@ -1,8 +1,9 @@
-#### 0.0.1-alpha.3 (2021-11-13)
+#### 0.0.1-alpha.4 (2021-11-14)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-alpha.3 (dfd7f58f)
   *  bump up version: 0.0.1-alpha.2 (1e139566)
   *  bump up version: 0.0.1-alpha.1 (2e9603f4)
   *  bump up version: 0.0.1-alpha.0 (985072c1)
@@ -28,6 +29,7 @@
 
 ##### New Features
 
+*  report fuel as required in openFDR (f10a358e)
 *  report dry and payload weight (bdb49e46)
 *  sim brief integration (418cfa33)
 *  load past flights from ZE server (020087fc)
