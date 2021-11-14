@@ -99,7 +99,12 @@ class DatarefStore {
           this.dataref.emptyWeight = emptyWeight;
 
           if (!this.flightData.state && flightDataArray[0].n1 === 0) {
-            XPlaneData.changeStateTo(this.flightData, 'parked', Date.now());
+            XPlaneData.changeStateTo(
+              this.flightData,
+              'parked',
+              Date.now(),
+              `fuel: ${XPlaneData.dataRoundup(fuelWeight)} kg`
+            );
             this.flightData.startTime = Date.now();
             timeDelta =
               parseInt(`${this.flightData.startTime}`) -
@@ -146,7 +151,8 @@ class DatarefStore {
               XPlaneData.changeStateTo(
                 this.flightData,
                 result.event.type as FlightState,
-                myResult[0].factResult
+                myResult[0].factResult,
+                `fuel: ${XPlaneData.dataRoundup(fuelWeight)} kg`
               );
             });
 
@@ -157,7 +163,8 @@ class DatarefStore {
                   XPlaneData.changeStateTo(
                     this.flightData,
                     'cruise',
-                    timestamp
+                    timestamp,
+                    `fuel: ${XPlaneData.dataRoundup(fuelWeight)} kg`
                   );
                   cruiseCounter = 0;
                 }
@@ -170,7 +177,12 @@ class DatarefStore {
               if (vs > 500 / 196.85) {
                 climbCounter++;
                 if (climbCounter > 30 * DATAREF_FEQ) {
-                  XPlaneData.changeStateTo(this.flightData, 'climb', timestamp);
+                  XPlaneData.changeStateTo(
+                    this.flightData,
+                    'climb',
+                    timestamp,
+                    `fuel: ${XPlaneData.dataRoundup(fuelWeight)} kg`
+                  );
                   climbCounter = 0;
                 }
               } else {
@@ -185,7 +197,8 @@ class DatarefStore {
                   XPlaneData.changeStateTo(
                     this.flightData,
                     'descend',
-                    timestamp
+                    timestamp,
+                    `fuel: ${XPlaneData.dataRoundup(fuelWeight)} kg`
                   );
                   descendCounter = 0;
                 }
@@ -200,6 +213,7 @@ class DatarefStore {
                 landingDataFeq = true;
               }
               XPlaneData.calculateLandingData(
+                gs,
                 timestamp,
                 vs,
                 agl,
@@ -207,13 +221,15 @@ class DatarefStore {
                 gearForce,
                 pitch,
                 ias,
+                fuelWeight,
                 this.flightData
               );
               if (n1 < 1 && gs < 1) {
                 XPlaneData.changeStateTo(
                   this.flightData,
                   'engine stopped',
-                  timestamp
+                  timestamp,
+                  `fuel: ${XPlaneData.dataRoundup(fuelWeight)} kg`
                 );
                 await this.createReport();
                 this.resetTracking();
@@ -264,6 +280,25 @@ class DatarefStore {
         .find((value) => value.indexOf('engine stopped') !== -1)
         .split(' -')[0]
     ).getTime();
+    const fuelOut = XPlaneData.dataRoundup(
+      this.flightData.events
+        .find((value) => value.indexOf('engine started') !== -1)
+        .split('fuel: ')[1]
+        .split(' kg')[0]
+    );
+    const fuelOff = XPlaneData.dataRoundup(
+      this.flightData.events
+        .find((value) => value.indexOf('takeoff') !== -1)
+        .split('fuel: ')[1]
+        .split(' kg')[0]
+    );
+    const fuelOn = XPlaneData.dataRoundup(this.flightData.fuelOn);
+    const fuelIn = XPlaneData.dataRoundup(
+      this.flightData.events
+        .find((value) => value.indexOf('engine stopped') !== -1)
+        .split('fuel: ')[1]
+        .split(' kg')[0]
+    );
     const flightReqTemplate = {
       number: this.trackingFlight.flightNumber,
       aircraftType: this.dataref.aircraftType,
@@ -285,12 +320,13 @@ class DatarefStore {
       dryOperatingWeight: this.dataref.emptyWeight,
       payloadWeight: this.dataref.payloadWeight,
       pax: 123, //TODO: what to do there???
-      fuelOut: 9000, //TODO: engine start
-      fuelOff: 8800, //TODO: takeoff
-      fuelOn: 3000, //TODO: land
-      fuelIn: 2800, //TODO: engine shutdown
+      fuelOut,
+      fuelOff,
+      fuelOn,
+      fuelIn,
       landingRate: this.flightData.landingData.vs,
     };
+    console.log(flightReqTemplate);
     const res = await axios
       .post('https://zonexecutive.com/action.php/acars/openfdr/flight', {
         flight: flightReqTemplate,
@@ -299,7 +335,11 @@ class DatarefStore {
         throw e;
       });
     console.log(res);
-    //todo create local landing data
+    localStorage.setItem('lastFlight', res.data.data.id);
+    localStorage.setItem(
+      'lastFlightLanding',
+      JSON.stringify(this.flightData.landingData)
+    );
   }
 
   private toIsoStringWithOffset(utc) {

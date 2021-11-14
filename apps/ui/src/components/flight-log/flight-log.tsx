@@ -3,9 +3,10 @@ import { useLocalObservable, useObserver } from 'mobx-react-lite';
 import { runInAction } from 'mobx';
 import React, { useEffect } from 'react';
 import { useGlobalStores } from '../../stores';
-import { Table, message, Button, Modal, PageHeader } from 'antd';
+import { Table, message, Button, Modal, PageHeader, Row } from 'antd';
 import FlightDetails from '../flight-details/flight-details';
 import { XPlaneData } from '@zon/xplane-data';
+import { Stats } from './stats/stats';
 
 /* eslint-disable-next-line */
 export interface FlightLogProps {}
@@ -136,29 +137,33 @@ export function FlightLog(props: FlightLogProps) {
   return useObserver(() => (
     <StyledFlightLog>
       {' '}
-      <Table
-        title={() => <h2>Logbook</h2>}
-        rowSelection={{
-          type: 'radio',
-          onSelect: (record, selected, rows, nativeEvent) => {
-            message.info(JSON.stringify(record));
-            // runInAction(() => {
-            //   localStore.flightNumber = record.number;
-            //   localStore.toggleModal();
-            // });
-          },
-        }}
-        columns={columns}
-        dataSource={FlightStore.pastFlights}
-        style={{
-          maxHeight: '95%',
-          width: '96%',
-          marginLeft: '2%',
-          marginTop: '4vh',
-          marginBottom: '4vh',
-        }}
-        pagination={{ pageSize: 10, showSizeChanger: false }}
-      />
+      <Row>
+        <Table
+          title={() => <h2>Logbook</h2>}
+          rowSelection={{
+            type: 'radio',
+            onSelect: (record, selected, rows, nativeEvent) => {
+              //message.info(JSON.stringify(record));
+              // runInAction(() => {
+              //   localStore.flightNumber = record.number;
+              //   localStore.toggleModal();
+              // });
+            },
+          }}
+          columns={columns}
+          dataSource={FlightStore.pastFlights}
+          style={{
+            maxHeight: '95%',
+            width: '96%',
+            marginLeft: '2%',
+            marginTop: '4vh',
+          }}
+          pagination={{ pageSize: 5, showSizeChanger: false }}
+        />
+      </Row>
+      <Row>
+        <Stats />
+      </Row>
       <Modal
         title={null}
         visible={localStore.showModal}

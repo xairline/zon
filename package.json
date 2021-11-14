@@ -48,6 +48,7 @@
     "ws": "^8.2.3"
   },
   "devDependencies": {
+    "@ant-design/charts": "^1.2.14",
     "@babel/core": "7.9.6",
     "@babel/preset-env": "7.9.6",
     "@babel/preset-react": "7.9.4",

@@ -74,7 +74,9 @@ wss.on('connection', function connection(ws, request) {
         xPlane.client.close();
         xPlane.client = null;
         ws.send('xplane closed');
-        clearTimeout(timer);
+        if (timer) {
+          clearTimeout(timer);
+        }
         console.log('X plane is closed');
       }, 20000);
     },

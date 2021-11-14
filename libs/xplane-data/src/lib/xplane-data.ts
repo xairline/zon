@@ -13,6 +13,7 @@ export class XPlaneData {
       state: undefined,
       startTime: 0,
       endTime: 0,
+      fuelOn: 0,
       landingData: { vs: 0, gForce: 0, data: [] },
       events: [],
       violationEvents: [],
@@ -83,13 +84,19 @@ export class XPlaneData {
     });
     return result;
   }
-  static changeStateTo(flightData: FlightData, state: FlightState, ts: number) {
+  static changeStateTo(
+    flightData: FlightData,
+    state: FlightState,
+    ts: number,
+    metadataString: string
+  ) {
     flightData.state = state;
     flightData.events.push(
-      `${new Date(ts).toISOString()} - ${flightData.state}`
+      `${new Date(ts).toISOString()} - ${flightData.state} - ${metadataString}`
     );
   }
   static calculateLandingData(
+    gs: number,
     ts: number,
     vs: number,
     agl: number,
@@ -97,6 +104,7 @@ export class XPlaneData {
     gearForce: number,
     pitch: number,
     ias: number,
+    fuel: number,
     flightData: FlightData
   ) {
     const lastVs =
@@ -114,15 +122,17 @@ export class XPlaneData {
     if (gForce > calculatedGForce) {
       calculatedGForce = gForce;
     }
-    flightData.landingData.data.push({
-      ts,
-      gForce: calculatedGForce,
-      vs,
-      agl,
-      gearForce,
-      pitch,
-      ias,
-    });
+    if (gs >= 30 / 1.9438) {
+      flightData.landingData.data.push({
+        ts,
+        gForce: calculatedGForce,
+        vs,
+        agl,
+        gearForce,
+        pitch,
+        ias,
+      });
+    }
 
     if (
       gearForce > 1000 &&
@@ -140,6 +150,9 @@ export class XPlaneData {
         }}`
       );
       flightData.endTime = ts;
+      if (flightData.fuelOn === 0) {
+        flightData.fuelOn = fuel;
+      }
       // do not use the data at touch down time
       if (flightData.landingData.gForce === 0) {
         flightData.landingData.gForce = 1;

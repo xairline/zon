@@ -21,7 +21,7 @@ export interface FlightData {
   landingData: LandingData;
   startTime: number;
   endTime: number;
-
+  fuelOn: number;
   events: any[];
   violationEvents: any[];
   rules: any[];
