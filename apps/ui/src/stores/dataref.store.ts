@@ -20,6 +20,7 @@ class DatarefStore {
     destination: string;
     route: string;
     aircraftType: string;
+    lastPosReportTs?: number;
   };
   @observable
   public dataref!: any;
@@ -41,6 +42,7 @@ class DatarefStore {
       destination: 'TBD',
       aircraftType: 'TBD',
       route: 'DCT',
+      lastPosReportTs: 0,
     };
     this.flightData = XPlaneData.initFlightData();
     this.dataref = {
@@ -87,6 +89,9 @@ class DatarefStore {
             fuelWeight,
             totalWeight,
             emptyWeight,
+            lat,
+            lng,
+            heading,
           } = flightDataArray[flightDataArray.length - 1];
           this.dataref.vs = vs;
           this.dataref.gs = gs;
@@ -106,12 +111,45 @@ class DatarefStore {
               `fuel: ${XPlaneData.dataRoundup(fuelWeight)} kg`
             );
             this.flightData.startTime = Date.now();
+
             timeDelta =
               parseInt(`${this.flightData.startTime}`) -
               parseInt(flightDataArray[0].ts);
           }
           if (timeDelta === 0) {
             return;
+          }
+
+          // POS report
+          if (
+            Date.now() - this.trackingFlight.lastPosReportTs >
+            3 * 60 * 1000
+          ) {
+            const posReprotTemplate = {
+              latitudeDeg: XPlaneData.dataRoundup(lat),
+              longitudeDeg: XPlaneData.dataRoundup(lng),
+              headingDeg: XPlaneData.dataRoundup(heading),
+              altitudeFt: XPlaneData.dataRoundup(elevation * 3.28),
+              speedGS: XPlaneData.dataRoundup(gs * 1.9438),
+              phase: this.flightData.state,
+            };
+            axios
+              .post(
+                'https://zonexecutive.com/action.php/acars/openfdr/flight',
+                {
+                  flight: {
+                    number: this.trackingFlight.flightNumber,
+                    aircraftType: this.dataref.aircraftType,
+                    departure: this.trackingFlight.departure,
+                    destination: this.trackingFlight.destination,
+                  },
+                  sample: posReprotTemplate,
+                }
+              )
+              .catch((e: any) => {
+                throw e;
+              });
+            this.trackingFlight.lastPosReportTs = Date.now();
           }
           for (let i = 0; i < flightDataArray.length; i++) {
             const {
@@ -252,6 +290,7 @@ class DatarefStore {
       destination: 'TBD',
       aircraftType: 'TBD',
       route: 'DCT',
+      lastPosReportTs: 0,
     };
     this.dataref = {
       vs: 0,

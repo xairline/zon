@@ -27,7 +27,7 @@ export function Booked(props: BookedProps) {
   const localStore = useLocalObservable(() => ({
     showModal: false,
     dataBefore: {},
-    simBriefUsername: 'cfanap',
+    simBriefUsername: '',
     toggleModal() {
       localStore.showModal = !localStore.showModal;
     },
@@ -169,18 +169,19 @@ export function Booked(props: BookedProps) {
                 const simBriefPlanObj = await xml2js.parseStringPromise(
                   simBriefResponse.data
                 );
-                runInAction(()=>{
+                runInAction(() => {
                   localStore.dataBefore = DatarefStore.trackingFlight;
                   DatarefStore.trackingFlight = {
                     flightNumber: simBriefPlanObj.OFP.atc[0].callsign[0],
                     departure: simBriefPlanObj.OFP.origin[0].icao_code[0],
-                    destination: simBriefPlanObj.OFP.destination[0].icao_code[0],
+                    destination:
+                      simBriefPlanObj.OFP.destination[0].icao_code[0],
                     aircraftType: simBriefPlanObj.OFP.aircraft[0].icaocode[0],
                     route: simBriefPlanObj.OFP.general[0].route[0],
+                    lastPosReportTs: 0,
                   };
                   localStore.toggleModal();
-                })
-                
+                });
               }}
             >
               Load from SimBrief
@@ -200,6 +201,7 @@ export function Booked(props: BookedProps) {
                     destination: record.destination,
                     aircraftType: record.aircraftType,
                     route: record.route,
+                    lastPosReportTs: 0,
                   };
                   localStore.toggleModal();
                 });

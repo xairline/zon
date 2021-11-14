@@ -36,6 +36,7 @@ export const DATAREF_STR = {
   FUEL_WEIGHT: 'sim/flightmodel/weight/m_fuel_total',
   TOTAL_WEIGHT: 'sim/flightmodel/weight/m_total',
   EMPTY_WEIGHT: 'sim/aircraft/weight/acf_m_empty',
+  HEADING: 'sim/cockpit2/gauges/indicators/heading_vacuum_deg_mag_pilot',
 };
 export const DATAREF_FEQ = 5; // per second
 export const DATAREF_FEQ_LANDING = 30; // per second
