@@ -1,8 +1,9 @@
-#### 0.0.1-alpha.6 (2021-11-14)
+#### 0.0.1-alpha.7 (2021-11-14)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-alpha.6 (13205e07)
   *  bump up version: 0.0.1-alpha.5 (d1d8a690)
   *  bump up version: 0.0.1-alpha.4 (af13c540)
   *  bump up version: 0.0.1-alpha.3 (dfd7f58f)
@@ -31,6 +32,7 @@
 
 ##### New Features
 
+*  report POS (ee29084d)
 *  report fuel as required in openFDR (f10a358e)
 *  report dry and payload weight (bdb49e46)
 *  sim brief integration (418cfa33)
