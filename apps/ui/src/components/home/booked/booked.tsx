@@ -170,6 +170,7 @@ export function Booked(props: BookedProps) {
                   simBriefResponse.data
                 );
                 runInAction(() => {
+                  DatarefStore.resetTracking();
                   localStore.dataBefore = DatarefStore.trackingFlight;
                   DatarefStore.trackingFlight = {
                     flightNumber: simBriefPlanObj.OFP.atc[0].callsign[0],
@@ -194,6 +195,7 @@ export function Booked(props: BookedProps) {
               type: 'radio',
               onSelect: (record, selected, rows, nativeEvent) => {
                 runInAction(() => {
+                  DatarefStore.resetTracking();
                   localStore.dataBefore = DatarefStore.trackingFlight;
                   DatarefStore.trackingFlight = {
                     flightNumber: record.flightNumber,

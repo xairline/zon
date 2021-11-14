@@ -38,8 +38,8 @@ class DatarefStore {
 
     this.trackingFlight = {
       flightNumber: 'ZE999',
-      departure: 'TBD',
-      destination: 'TBD',
+      departure: 'CYOW',
+      destination: 'CYUL',
       aircraftType: 'TBD',
       route: 'DCT',
       lastPosReportTs: 0,
@@ -120,37 +120,7 @@ class DatarefStore {
             return;
           }
 
-          // POS report
-          if (
-            Date.now() - this.trackingFlight.lastPosReportTs >
-            3 * 60 * 1000
-          ) {
-            const posReprotTemplate = {
-              latitudeDeg: XPlaneData.dataRoundup(lat),
-              longitudeDeg: XPlaneData.dataRoundup(lng),
-              headingDeg: XPlaneData.dataRoundup(heading),
-              altitudeFt: XPlaneData.dataRoundup(elevation * 3.28),
-              speedGS: XPlaneData.dataRoundup(gs * 1.9438),
-              phase: this.flightData.state,
-            };
-            axios
-              .post(
-                'https://zonexecutive.com/action.php/acars/openfdr/flight',
-                {
-                  flight: {
-                    number: this.trackingFlight.flightNumber,
-                    aircraftType: this.dataref.aircraftType,
-                    departure: this.trackingFlight.departure,
-                    destination: this.trackingFlight.destination,
-                  },
-                  sample: posReprotTemplate,
-                }
-              )
-              .catch((e: any) => {
-                throw e;
-              });
-            this.trackingFlight.lastPosReportTs = Date.now();
-          }
+          this.posReport(lat, lng, heading, elevation, gs);
           for (let i = 0; i < flightDataArray.length; i++) {
             const {
               ts,
@@ -192,6 +162,7 @@ class DatarefStore {
                 myResult[0].factResult,
                 `fuel: ${XPlaneData.dataRoundup(fuelWeight)} kg`
               );
+              this.posReport(lat, lng, heading, elevation, gs, true);
             });
 
             if (this.flightData.state === 'climb') {
@@ -204,6 +175,7 @@ class DatarefStore {
                     timestamp,
                     `fuel: ${XPlaneData.dataRoundup(fuelWeight)} kg`
                   );
+                  this.posReport(lat, lng, heading, elevation, gs);
                   cruiseCounter = 0;
                 }
               } else {
@@ -221,6 +193,7 @@ class DatarefStore {
                     timestamp,
                     `fuel: ${XPlaneData.dataRoundup(fuelWeight)} kg`
                   );
+                  this.posReport(lat, lng, heading, elevation, gs);
                   climbCounter = 0;
                 }
               } else {
@@ -238,6 +211,7 @@ class DatarefStore {
                     timestamp,
                     `fuel: ${XPlaneData.dataRoundup(fuelWeight)} kg`
                   );
+                  this.posReport(lat, lng, heading, elevation, gs);
                   descendCounter = 0;
                 }
               } else {
@@ -269,6 +243,7 @@ class DatarefStore {
                   timestamp,
                   `fuel: ${XPlaneData.dataRoundup(fuelWeight)} kg`
                 );
+                this.posReport(lat, lng, heading, elevation, gs);
                 await this.createReport();
                 this.resetTracking();
               }
@@ -282,24 +257,71 @@ class DatarefStore {
 
     return ws;
   }
+  posReport(
+    lat: number,
+    lng: number,
+    heading: number,
+    elevation: number,
+    gs: number,
+    foreeUpdate = false
+  ) {
+    // POS report
+    if (
+      Date.now() - this.trackingFlight.lastPosReportTs > 3 * 60 * 1000 ||
+      foreeUpdate
+    ) {
+      const posReprotTemplate = {
+        latitudeDeg: XPlaneData.dataRoundup(lat),
+        longitudeDeg: XPlaneData.dataRoundup(lng),
+        headingDeg: XPlaneData.dataRoundup(heading),
+        altitudeFt: XPlaneData.dataRoundup(elevation * 3.28),
+        speedGS: XPlaneData.dataRoundup(gs * 1.9438),
+        phase: this.flightData.state,
+      };
+      const req = {
+        flight: {
+          number: this.trackingFlight.flightNumber,
+          aircraftType: this.dataref.aircraftType,
+          departure: this.trackingFlight.departure,
+          destination: this.trackingFlight.destination,
+        },
+        sample: posReprotTemplate,
+      };
+      console.log(req);
+      axios
+        .post('https://zonexecutive.com/action.php/acars/openfdr/flight', req)
+        .catch((e: any) => {
+          throw e;
+        });
+      this.trackingFlight.lastPosReportTs = Date.now();
+    }
+  }
   resetTracking() {
-    this.flightData = XPlaneData.initFlightData();
-    this.trackingFlight = {
-      flightNumber: 'ZE999',
-      departure: 'TBD',
-      destination: 'TBD',
-      aircraftType: 'TBD',
-      route: 'DCT',
-      lastPosReportTs: 0,
-    };
-    this.dataref = {
-      vs: 0,
-      gs: 0,
-      ias: 0,
-      elevation: 0,
-      aircraftRegistration: '',
-      aircraftType: '',
-    };
+    runInAction(() => {
+      this.isXPlaneConnected = false;
+      this?.ws?.close();
+      console.log('websocket closed');
+      this?.engine?.stop();
+      console.log('rules engine stopped');
+      this.flightData = XPlaneData.initFlightData();
+      this.trackingFlight = {
+        flightNumber: 'ZE999',
+        departure: 'CYOW',
+        destination: 'CYUL',
+        aircraftType: 'TBD',
+        route: 'DCT',
+        lastPosReportTs: 0,
+      };
+      this.dataref = {
+        vs: 0,
+        gs: 0,
+        ias: 0,
+        elevation: 0,
+        aircraftRegistration: '',
+        aircraftType: '',
+      };
+      this.ws = this.connect();
+    });
   }
 
   private async createReport() {
