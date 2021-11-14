@@ -10,7 +10,7 @@ export interface StatsProps {}
 export function Stats(props: StatsProps) {
   return useObserver(() => {
     const mylandingData: LandingData = JSON.parse(
-      localStorage.getItem('lastFlightLanding')
+      localStorage.getItem('lastFlightLanding') || '{}'
     );
     let touchDownTs = 0;
     let index = 0;

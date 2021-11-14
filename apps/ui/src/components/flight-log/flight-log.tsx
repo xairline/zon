@@ -161,9 +161,7 @@ export function FlightLog(props: FlightLogProps) {
           pagination={{ pageSize: 5, showSizeChanger: false }}
         />
       </Row>
-      <Row>
-        <Stats />
-      </Row>
+      <Row>{localStorage.getItem('lastFlightLanding') && <Stats />}</Row>
       <Modal
         title={null}
         visible={localStore.showModal}

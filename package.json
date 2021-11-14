@@ -101,6 +101,7 @@
     "nx-electron": "^11.4.1",
     "prettier": "2.2.1",
     "reflect-metadata": "^0.1.13",
+    "stream": "^0.0.2",
     "timers": "^0.1.1",
     "ts-jest": "26.4.0",
     "ts-node": "~9.1.1",
