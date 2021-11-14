@@ -71,8 +71,6 @@ wss.on('connection', function connection(ws, request) {
       timer = setTimeout(() => {
         connected = false;
         requestDataRef(0);
-        xPlane.client.close();
-        xPlane.client = null;
         ws.send('xplane closed');
         if (timer) {
           clearTimeout(timer);
