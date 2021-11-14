@@ -1,8 +1,9 @@
-#### 0.0.1-alpha.8 (2021-11-14)
+#### 0.0.1-beta.0 (2021-11-14)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-alpha.8 (a8cf218d)
   *  bump up version: 0.0.1-alpha.7 (623a7697)
   *  bump up version: 0.0.1-alpha.6 (13205e07)
   *  bump up version: 0.0.1-alpha.5 (d1d8a690)
@@ -52,6 +53,7 @@
 
 ##### Bug Fixes
 
+*  plane type report with end of string characters which caused server side can not detect the type of airplane (ed32619e)
 *  landing analysis crash whole app (532ad4d5)
 *  reopen bug (7f3d8c59)
 *  zon should automatically reconnect to xplane when it is closed while zon is still open (5d684f27)
