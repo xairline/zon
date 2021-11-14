@@ -53,14 +53,20 @@ export class XPlaneData {
       Object.keys(DATAREF_STR)
         .filter((d) => d.indexOf('TAIL_NUMBER') === 0)
         .map((key) => {
-          tail_number += String.fromCharCode(flightDataRaw[DATAREF_STR[key]]);
+          tail_number +=
+            flightDataRaw[DATAREF_STR[key]] !== 0
+              ? String.fromCharCode(flightDataRaw[DATAREF_STR[key]])
+              : '';
         });
 
       let ICAO = '';
       Object.keys(DATAREF_STR)
         .filter((d) => d.indexOf('ICAO') === 0)
         .map((key) => {
-          ICAO += String.fromCharCode(flightDataRaw[DATAREF_STR[key]]);
+          ICAO +=
+            flightDataRaw[DATAREF_STR[key]] !== 0
+              ? String.fromCharCode(flightDataRaw[DATAREF_STR[key]])
+              : '';
         });
 
       result.push({
