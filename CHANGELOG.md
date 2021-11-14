@@ -1,8 +1,9 @@
-#### 0.0.1-alpha.5 (2021-11-14)
+#### 0.0.1-alpha.6 (2021-11-14)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-alpha.5 (d1d8a690)
   *  bump up version: 0.0.1-alpha.4 (af13c540)
   *  bump up version: 0.0.1-alpha.3 (dfd7f58f)
   *  bump up version: 0.0.1-alpha.2 (1e139566)
@@ -47,6 +48,7 @@
 
 ##### Bug Fixes
 
+*  landing analysis crash whole app (532ad4d5)
 *  reopen bug (7f3d8c59)
 *  zon should automatically reconnect to xplane when it is closed while zon is still open (5d684f27)
 *  dup index with xairline... (322d6f73)
