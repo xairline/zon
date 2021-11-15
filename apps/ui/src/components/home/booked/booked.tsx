@@ -30,6 +30,7 @@ export function Booked(props: BookedProps) {
     simBriefUsername: '',
     toggleModal() {
       localStore.showModal = !localStore.showModal;
+      console.log(DatarefStore.trackingFlight);
     },
   }));
   const columns = [
@@ -132,7 +133,8 @@ export function Booked(props: BookedProps) {
       dataIndex: 'totalFlightTime',
       key: 'totalFlightTime',
       sorter: (a: any, b: any) => a.totalFlightTime - b.totalFlightTime,
-      render: (value: number) => `${value} hr`,
+      render: (value: number) =>
+        `${Math.round(value)}h ${Math.round((value % 1) * 100)}m`,
     },
   ];
   useEffect(() => {
@@ -207,7 +209,7 @@ export function Booked(props: BookedProps) {
                     destination: record.destination,
                     aircraftType: record.aircraftType,
                     route: record.route,
-                    passengers: record.passengers || 0,
+                    passengers: 0,
                     lastPosReportTs: 0,
                   };
                   localStore.toggleModal();

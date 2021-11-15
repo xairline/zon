@@ -121,7 +121,7 @@ export function FlightLog(props: FlightLogProps) {
       key: 'totalFlightTime',
       sorter: (a: any, b: any) => a.totalFlightTime - b.totalFlightTime,
       render: (value: number) =>
-        `${Math.round(value)}h ${Math.round((value % 1) * 60)}m`,
+        `${Math.round(value)}h ${Math.round((value % 1) * 100)}m`,
     },
     {
       title: 'Time In',

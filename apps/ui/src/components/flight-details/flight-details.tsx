@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { XPlaneData } from '@zon/xplane-data';
-import { Descriptions } from 'antd';
+import { Descriptions, Input } from 'antd';
+import { runInAction } from 'mobx';
 import { useObserver } from 'mobx-react-lite';
 import React from 'react';
 import { useGlobalStores } from '../../stores';
@@ -18,9 +19,18 @@ export function FlightDetails(props: FlightDetailsProps) {
   const { DatarefStore } = useGlobalStores();
   return useObserver(() => (
     <StyledFlightDetails>
-      <Descriptions size={(props.size as any) || 'small'} column={2}>
+      <Descriptions size={(props.size as any) || 'small'} bordered column={2}>
         <Descriptions.Item label="Flight Number">
-          {DatarefStore.trackingFlight.flightNumber}
+          <Input
+            defaultValue={DatarefStore.trackingFlight.flightNumber}
+            value={DatarefStore.trackingFlight.flightNumber}
+            onChange={(e) => {
+              runInAction(() => {
+                DatarefStore.trackingFlight.flightNumber = e.target.value;
+              });
+            }}
+            style={{ width: '96px' }}
+          />
         </Descriptions.Item>
         <Descriptions.Item label="Speed">
           {DatarefStore.isXPlaneConnected
@@ -41,16 +51,45 @@ export function FlightDetails(props: FlightDetailsProps) {
           ft/min
         </Descriptions.Item>
         <Descriptions.Item label="Departure">
-          {DatarefStore.trackingFlight.departure}
+          <Input
+            defaultValue={DatarefStore.trackingFlight.departure}
+            value={DatarefStore.trackingFlight.departure}
+            onChange={(e) => {
+              runInAction(() => {
+                DatarefStore.trackingFlight.departure = e.target.value;
+              });
+            }}
+            style={{ width: '72px' }}
+          />
         </Descriptions.Item>
         <Descriptions.Item label="Arrival">
-          {DatarefStore.trackingFlight.destination}
+          <Input
+            defaultValue={DatarefStore.trackingFlight.destination}
+            value={DatarefStore.trackingFlight.destination}
+            onChange={(e) => {
+              runInAction(() => {
+                DatarefStore.trackingFlight.destination = e.target.value;
+              });
+            }}
+            style={{ width: '72px' }}
+          />
         </Descriptions.Item>
         <Descriptions.Item label="Aircraft Type">
           {DatarefStore?.dataref?.aircraftType || ''}
         </Descriptions.Item>
         <Descriptions.Item label="Pax">
-          {DatarefStore?.trackingFlight.passengers || ''}
+          <Input
+            defaultValue={DatarefStore?.trackingFlight.passengers || ''}
+            value={DatarefStore?.trackingFlight.passengers || ''}
+            onChange={(e) => {
+              runInAction(() => {
+                DatarefStore.trackingFlight.passengers = parseInt(
+                  e.target.value
+                );
+              });
+            }}
+            style={{ width: '72px' }}
+          />
         </Descriptions.Item>
         <Descriptions.Item label="Fuel">
           {XPlaneData.dataRoundup(DatarefStore?.dataref?.fuelWeight || '')} kg
@@ -60,7 +99,15 @@ export function FlightDetails(props: FlightDetailsProps) {
           kg
         </Descriptions.Item>
         <Descriptions.Item label="Route">
-          {DatarefStore.trackingFlight.route}
+          <Input
+            defaultValue={DatarefStore.trackingFlight.route}
+            value={DatarefStore.trackingFlight.route}
+            onChange={(e) => {
+              runInAction(() => {
+                DatarefStore.trackingFlight.route = e.target.value;
+              });
+            }}
+          />
         </Descriptions.Item>
       </Descriptions>
     </StyledFlightDetails>
