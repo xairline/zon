@@ -1,8 +1,9 @@
-#### 0.0.1-beta.0 (2021-11-14)
+#### 0.0.1-beta.1 (2021-11-15)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-beta.0 (253a6cb2)
   *  bump up version: 0.0.1-alpha.8 (a8cf218d)
   *  bump up version: 0.0.1-alpha.7 (623a7697)
   *  bump up version: 0.0.1-alpha.6 (13205e07)
@@ -53,6 +54,7 @@
 
 ##### Bug Fixes
 
+*  airplane heading is way off, it should not use indicators heading but use real heading from postion dataref (02c9725b)
 *  plane type report with end of string characters which caused server side can not detect the type of airplane (ed32619e)
 *  landing analysis crash whole app (532ad4d5)
 *  reopen bug (7f3d8c59)
