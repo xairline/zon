@@ -1,8 +1,10 @@
-#### 0.0.1-rc.1 (2021-11-15)
+#### 0.0.1-rc.2 (2021-11-15)
 
 ##### Continuous Integration
 
+*  add dependabot.yml (86e6aebf)
 * **release:**
+  *  bump up version: 0.0.1-rc.1 (a1ef9a96)
   *  bump up version: 0.0.1-rc.0 (c8c3bd05)
   *  bump up version: 0.0.1-beta.4 (e7996912)
   *  bump up version: 0.0.1-beta.3 (fc58ea2c)
@@ -61,6 +63,7 @@
 
 ##### Bug Fixes
 
+*  build is broken (36e012a4)
 *  #6 #7 use hhH mmM format (b3967392)
 *  #3 main content should be scrollable (9629a8a5)
 *  #5 (aba022a2)
