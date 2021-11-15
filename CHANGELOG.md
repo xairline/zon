@@ -1,8 +1,9 @@
-#### 0.0.1-rc.0 (2021-11-15)
+#### 0.0.1-rc.1 (2021-11-15)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-rc.0 (c8c3bd05)
   *  bump up version: 0.0.1-beta.4 (e7996912)
   *  bump up version: 0.0.1-beta.3 (fc58ea2c)
   *  bump up version: 0.0.1-beta.2 (46d19dd7)
@@ -39,6 +40,8 @@
 
 ##### New Features
 
+*  allow modify flight info such as Dep/Arr/Pax #9 (2e744c89)
+*  load pax from simbrief (2a2b2018)
 *  livemap and few fixes (ff04cd54)
 *  report POS (ee29084d)
 *  report fuel as required in openFDR (f10a358e)
