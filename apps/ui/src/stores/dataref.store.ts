@@ -160,7 +160,7 @@ class DatarefStore {
                 this.flightData,
                 result.event.type as FlightState,
                 myResult[0].factResult,
-                `fuel: ${XPlaneData.dataRoundup(fuelWeight)} kg`
+                `fuel: ${Math.round(fuelWeight)} kg`
               );
               this.posReport(lat, lng, heading, elevation, gs, true);
             });
@@ -173,7 +173,7 @@ class DatarefStore {
                     this.flightData,
                     'cruise',
                     timestamp,
-                    `fuel: ${XPlaneData.dataRoundup(fuelWeight)} kg`
+                    `fuel: ${Math.round(fuelWeight)} kg`
                   );
                   this.posReport(lat, lng, heading, elevation, gs);
                   cruiseCounter = 0;
@@ -191,7 +191,7 @@ class DatarefStore {
                     this.flightData,
                     'climb',
                     timestamp,
-                    `fuel: ${XPlaneData.dataRoundup(fuelWeight)} kg`
+                    `fuel: ${Math.round(fuelWeight)} kg`
                   );
                   this.posReport(lat, lng, heading, elevation, gs);
                   climbCounter = 0;

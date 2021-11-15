@@ -173,7 +173,7 @@ export class XPlaneData {
           : flightData.landingData.gForce;
       flightData.landingData.vs =
         lastVs < flightData.landingData.vs
-          ? this.dataRoundup(lastVs * 196.85)
+          ? Math.round(lastVs * 196.85)
           : flightData.landingData.vs;
     }
   }

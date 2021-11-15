@@ -24,7 +24,7 @@ export function FlightDetails(props: FlightDetailsProps) {
         </Descriptions.Item>
         <Descriptions.Item label="Speed">
           {DatarefStore.isXPlaneConnected
-            ? XPlaneData.dataRoundup(DatarefStore.dataref.ias)
+            ? Math.round(DatarefStore.dataref.ias)
             : '--'}{' '}
           Knots
         </Descriptions.Item>
