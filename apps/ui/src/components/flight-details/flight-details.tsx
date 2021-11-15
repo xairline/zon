@@ -49,7 +49,7 @@ export function FlightDetails(props: FlightDetailsProps) {
         <Descriptions.Item label="Aircraft Type">
           {DatarefStore?.dataref?.aircraftType || ''}
         </Descriptions.Item>
-        <Descriptions.Item label="Aircraft Registeration">
+        <Descriptions.Item label="Aircraft Registration">
           {DatarefStore?.dataref?.aircraftRegistration || ''}
         </Descriptions.Item>
         <Descriptions.Item label="Fuel">
