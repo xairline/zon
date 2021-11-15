@@ -1,9 +1,9 @@
-#### 0.0.1-rc.2 (2021-11-15)
+#### 0.0.1-rc.3 (2021-11-15)
 
 ##### Continuous Integration
 
-*  add dependabot.yml (86e6aebf)
 * **release:**
+  *  bump up version: 0.0.1-rc.2 (55c9155d)
   *  bump up version: 0.0.1-rc.1 (a1ef9a96)
   *  bump up version: 0.0.1-rc.0 (c8c3bd05)
   *  bump up version: 0.0.1-beta.4 (e7996912)
@@ -39,9 +39,11 @@
   *  bump up version: 0.0.1-debug.2 (acf54eec)
   *  bump up version: 0.0.1-debug.1 (9f9f7b9d)
   *  bump up version: 0.0.1-debug.0 (f6c5df21)
+*  add dependabot.yml (86e6aebf)
 
 ##### New Features
 
+*  #2 auto detect takeoff and landing airport (7ab5f014)
 *  allow modify flight info such as Dep/Arr/Pax #9 (2e744c89)
 *  load pax from simbrief (2a2b2018)
 *  livemap and few fixes (ff04cd54)
