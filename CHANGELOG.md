@@ -1,8 +1,9 @@
-#### 0.0.1-beta.1 (2021-11-15)
+#### 0.0.1-beta.2 (2021-11-15)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-beta.1 (2bc591e3)
   *  bump up version: 0.0.1-beta.0 (253a6cb2)
   *  bump up version: 0.0.1-alpha.8 (a8cf218d)
   *  bump up version: 0.0.1-alpha.7 (623a7697)
@@ -54,6 +55,10 @@
 
 ##### Bug Fixes
 
+*  #5 (aba022a2)
+*  #5 use integer for alt,fuel,speed and vs (68935264)
+*  #4 type (36807d6c)
+*  #1 track flight when starting with engine running (15623d2f)
 *  airplane heading is way off, it should not use indicators heading but use real heading from postion dataref (02c9725b)
 *  plane type report with end of string characters which caused server side can not detect the type of airplane (ed32619e)
 *  landing analysis crash whole app (532ad4d5)
