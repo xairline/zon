@@ -30,8 +30,8 @@ export function Stats(props: StatsProps) {
         touchDownTs = index;
         touchDownCounter = 100;
       }
-      data.vs = Math.round(data.vs * 196.85);
-      data.agl = Math.round(data.agl * 3.28084);
+      data.vs = XPlaneData.dataRoundup(data.vs * 196.85 * -1);
+      data.agl = XPlaneData.dataRoundup(data.agl * 3.28084);
       data.ts = new Date(data.ts).toISOString();
       if (data.agl < 50) {
         mydata.push(data);
