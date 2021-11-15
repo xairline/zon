@@ -8,6 +8,9 @@ import {
   XPlaneData,
 } from '@zon/xplane-data';
 import axios from 'axios';
+import runways from './runways.json';
+// const runwayData: any[] = runways as any[];
+// console.log(runwayData.filter((runway) => runway.airport_ident === 'CYOW'));
 class DatarefStore {
   @observable
   public isXPlaneConnected: boolean;
@@ -39,8 +42,8 @@ class DatarefStore {
 
     this.trackingFlight = {
       flightNumber: 'ZE999',
-      departure: 'CYOW',
-      destination: 'CYUL',
+      departure: '',
+      destination: '',
       aircraftType: 'TBD',
       route: 'DCT',
       lastPosReportTs: 0,
@@ -113,7 +116,19 @@ class DatarefStore {
               `fuel: ${XPlaneData.dataRoundup(fuelWeight)} kg`
             );
             this.flightData.startTime = Date.now();
-
+            axios
+              .get(
+                `https://ourairports.com/airports.json?min_lat=${
+                  lat - 0.03
+                }&min_lon=${lng - 0.03}&max_lat=${lat + 0.03}&max_lon=${
+                  lng + 0.03
+                }&strict=true&limit=1`
+              )
+              .then((res) => {
+                runInAction(() => {
+                  this.trackingFlight.departure = res.data[0].ident;
+                });
+              });
             timeDelta =
               parseInt(`${this.flightData.startTime}`) -
               parseInt(flightDataArray[0].ts);
@@ -164,6 +179,21 @@ class DatarefStore {
                 myResult[0].factResult,
                 `fuel: ${Math.round(fuelWeight)} kg`
               );
+              if (result.event.type === 'takeoff') {
+                axios
+                  .get(
+                    `https://ourairports.com/airports.json?min_lat=${
+                      lat - 0.03
+                    }&min_lon=${lng - 0.03}&max_lat=${lat + 0.03}&max_lon=${
+                      lng + 0.03
+                    }&strict=true&limit=1`
+                  )
+                  .then((res) => {
+                    runInAction(() => {
+                      this.trackingFlight.departure = res.data[0].ident;
+                    });
+                  });
+              }
               this.posReport(lat, lng, heading, elevation, gs, true);
             });
 
@@ -245,7 +275,21 @@ class DatarefStore {
                   timestamp,
                   `fuel: ${XPlaneData.dataRoundup(fuelWeight)} kg`
                 );
+                axios
+                  .get(
+                    `https://ourairports.com/airports.json?min_lat=${
+                      lat - 0.03
+                    }&min_lon=${lng - 0.03}&max_lat=${lat + 0.03}&max_lon=${
+                      lng + 0.03
+                    }&strict=true&limit=1`
+                  )
+                  .then((res) => {
+                    runInAction(() => {
+                      this.trackingFlight.destination = res.data[0].ident;
+                    });
+                  });
                 this.posReport(lat, lng, heading, elevation, gs);
+
                 await this.createReport();
                 this.resetTracking();
               }
@@ -308,8 +352,8 @@ class DatarefStore {
       this.flightData = XPlaneData.initFlightData();
       this.trackingFlight = {
         flightNumber: 'ZE999',
-        departure: 'CYOW',
-        destination: 'CYUL',
+        departure: '',
+        destination: '',
         aircraftType: 'TBD',
         route: 'DCT',
         lastPosReportTs: 0,
