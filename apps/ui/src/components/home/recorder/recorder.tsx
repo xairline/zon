@@ -17,46 +17,48 @@ export function Recorder(props: RecorderProps) {
   const { DatarefStore } = useGlobalStores();
   return useObserver(() => (
     <StyledRecorder>
-      <Row>
-        <PageHeader
-          ghost={false}
-          backIcon={false}
-          title="Recorder Status"
-          subTitle={
-            <>
-              {DatarefStore.isXPlaneConnected ? (
-                <Badge status="success" />
-              ) : (
-                <Badge status="error" />
-              )}{' '}
-              X Plane
-            </>
-          }
+      <PageHeader
+        ghost={false}
+        backIcon={false}
+        title="Recorder Status"
+        subTitle={
+          <>
+            {DatarefStore.isXPlaneConnected ? (
+              <Badge status="success" />
+            ) : (
+              <Badge status="error" />
+            )}{' '}
+            X Plane
+          </>
+        }
+        style={{
+          width: '96%',
+          marginLeft: '2%',
+        }}
+      >
+        <Row
           style={{
-            width: '96%',
-            marginLeft: '2%',
+            overflowY: 'auto',
           }}
         >
-          <Row>
-            <Col span={18}>
-              <FlightDetails size="small" />
-            </Col>
-            <Col span={6}>
-              <Timeline
-                pending={
-                  DatarefStore.isXPlaneConnected
-                    ? false
-                    : 'Waiting for X Plane ...'
-                }
-              >
-                {DatarefStore?.flightData?.events.map((event: string) => (
-                  <Timeline.Item key={event}>{event}</Timeline.Item>
-                ))}
-              </Timeline>
-            </Col>
-          </Row>
-        </PageHeader>
-      </Row>
+          <Col span={18}>
+            <FlightDetails size="small" />
+          </Col>
+          <Col span={6}>
+            <Timeline
+              pending={
+                DatarefStore.isXPlaneConnected
+                  ? false
+                  : 'Waiting for X Plane ...'
+              }
+            >
+              {DatarefStore?.flightData?.events.map((event: string) => (
+                <Timeline.Item key={event}>{event}</Timeline.Item>
+              ))}
+            </Timeline>
+          </Col>
+        </Row>
+      </PageHeader>
     </StyledRecorder>
   ));
 }

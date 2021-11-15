@@ -2,7 +2,7 @@ import {
   faBook,
   faPlaneDeparture,
   faTachometerAlt,
-  faRecordVinyl
+  faRecordVinyl,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar, Button, Form, Layout, Menu, Row, Col } from 'antd';
@@ -66,6 +66,14 @@ const StyledApp = styled.div`
         }
       }
     }
+  }
+  
+  .main-content {
+    margin: 10px;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
   }
 
   .ant-menu-title-content {
