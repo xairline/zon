@@ -1,8 +1,9 @@
-#### 0.0.1-beta.2 (2021-11-15)
+#### 0.0.1-beta.3 (2021-11-15)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-beta.2 (46d19dd7)
   *  bump up version: 0.0.1-beta.1 (2bc591e3)
   *  bump up version: 0.0.1-beta.0 (253a6cb2)
   *  bump up version: 0.0.1-alpha.8 (a8cf218d)
@@ -55,6 +56,8 @@
 
 ##### Bug Fixes
 
+*  #6 #7 use hhH mmM format (b3967392)
+*  #3 main content should be scrollable (9629a8a5)
 *  #5 (aba022a2)
 *  #5 use integer for alt,fuel,speed and vs (68935264)
 *  #4 type (36807d6c)
