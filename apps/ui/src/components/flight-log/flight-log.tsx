@@ -120,7 +120,8 @@ export function FlightLog(props: FlightLogProps) {
       dataIndex: 'totalFlightTime',
       key: 'totalFlightTime',
       sorter: (a: any, b: any) => a.totalFlightTime - b.totalFlightTime,
-      render: (value: number) => `${XPlaneData.dataRoundup(value)} hr`,
+      render: (value: number) =>
+        `${Math.round(value)}h ${Math.round((value % 1) * 60)}m`,
     },
     {
       title: 'Time In',
