@@ -21,6 +21,7 @@ class DatarefStore {
     route: string;
     aircraftType: string;
     lastPosReportTs?: number;
+    passengers: number;
   };
   @observable
   public dataref!: any;
@@ -43,6 +44,7 @@ class DatarefStore {
       aircraftType: 'TBD',
       route: 'DCT',
       lastPosReportTs: 0,
+      passengers: 0,
     };
     this.flightData = XPlaneData.initFlightData();
     this.dataref = {
@@ -311,6 +313,7 @@ class DatarefStore {
         aircraftType: 'TBD',
         route: 'DCT',
         lastPosReportTs: 0,
+        passengers: 0,
       };
       this.dataref = {
         vs: 0,
@@ -380,7 +383,7 @@ class DatarefStore {
         ) * 10, // from takeoff to land
       dryOperatingWeight: this.dataref.emptyWeight,
       payloadWeight: this.dataref.payloadWeight,
-      pax: 123, //TODO: what to do there???
+      pax: this.trackingFlight.passengers,
       fuelOut,
       fuelOff,
       fuelOn,

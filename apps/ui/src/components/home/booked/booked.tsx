@@ -179,6 +179,10 @@ export function Booked(props: BookedProps) {
                       simBriefPlanObj.OFP.destination[0].icao_code[0],
                     aircraftType: simBriefPlanObj.OFP.aircraft[0].icaocode[0],
                     route: simBriefPlanObj.OFP.general[0].route[0],
+                    passengers: simBriefPlanObj.OFP.general[0].passengers.reduce(
+                      (p, c) => (p += c * 1),
+                      0
+                    ),
                     lastPosReportTs: 0,
                   };
                   localStore.toggleModal();
@@ -203,6 +207,7 @@ export function Booked(props: BookedProps) {
                     destination: record.destination,
                     aircraftType: record.aircraftType,
                     route: record.route,
+                    passengers: record.passengers || 0,
                     lastPosReportTs: 0,
                   };
                   localStore.toggleModal();

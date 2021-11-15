@@ -49,14 +49,15 @@ export function FlightDetails(props: FlightDetailsProps) {
         <Descriptions.Item label="Aircraft Type">
           {DatarefStore?.dataref?.aircraftType || ''}
         </Descriptions.Item>
-        <Descriptions.Item label="Aircraft Registration">
-          {DatarefStore?.dataref?.aircraftRegistration || ''}
+        <Descriptions.Item label="Pax">
+          {DatarefStore?.trackingFlight.passengers || ''}
         </Descriptions.Item>
         <Descriptions.Item label="Fuel">
           {XPlaneData.dataRoundup(DatarefStore?.dataref?.fuelWeight || '')} kg
         </Descriptions.Item>
         <Descriptions.Item label="Payload">
-          {XPlaneData.dataRoundup(DatarefStore?.dataref?.payloadWeight || '')} kg
+          {XPlaneData.dataRoundup(DatarefStore?.dataref?.payloadWeight || '')}{' '}
+          kg
         </Descriptions.Item>
         <Descriptions.Item label="Route">
           {DatarefStore.trackingFlight.route}
