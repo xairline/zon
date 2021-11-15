@@ -126,7 +126,8 @@ export function Schedules(props: SchedulesProps) {
       dataIndex: 'totalFlightTime',
       key: 'totalFlightTime',
       sorter: (a: any, b: any) => a.totalFlightTime - b.totalFlightTime,
-      render: (value: number) => `${value} hr`,
+      render: (value: number) =>
+        `${Math.round(value)}h ${Math.round((value % 1) * 60)}m`,
     },
   ];
   useEffect(() => {
@@ -147,6 +148,7 @@ export function Schedules(props: SchedulesProps) {
                 departure: record.departure,
                 destination: record.destination,
                 aircraftType: record.aircraftType,
+                passengers: 0,
                 route: record.route,
               };
               localStore.toggleModal();
