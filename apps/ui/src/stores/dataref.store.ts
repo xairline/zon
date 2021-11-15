@@ -103,7 +103,7 @@ class DatarefStore {
           this.dataref.payloadWeight = totalWeight - fuelWeight - emptyWeight;
           this.dataref.emptyWeight = emptyWeight;
 
-          if (!this.flightData.state && flightDataArray[0].n1 === 0) {
+          if (!this.flightData.state) {
             XPlaneData.changeStateTo(
               this.flightData,
               'parked',
