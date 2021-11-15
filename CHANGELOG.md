@@ -1,8 +1,9 @@
-#### 0.0.1-beta.3 (2021-11-15)
+#### 0.0.1-beta.4 (2021-11-15)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-beta.3 (fc58ea2c)
   *  bump up version: 0.0.1-beta.2 (46d19dd7)
   *  bump up version: 0.0.1-beta.1 (2bc591e3)
   *  bump up version: 0.0.1-beta.0 (253a6cb2)
