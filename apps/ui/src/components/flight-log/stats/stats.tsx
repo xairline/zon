@@ -30,8 +30,8 @@ export function Stats(props: StatsProps) {
         touchDownTs = index;
         touchDownCounter = 100;
       }
-      data.vs = Math.round(data.vs * 196.85 * 100) / 100;
-      data.agl = Math.round(data.agl * 3.28084 * 100) / 100;
+      data.vs = Math.round(data.vs * 196.85);
+      data.agl = Math.round(data.agl * 3.28084);
       data.ts = new Date(data.ts).toISOString();
       if (data.agl < 50) {
         mydata.push(data);
@@ -114,55 +114,6 @@ export function Stats(props: StatsProps) {
       >
         <DualAxes {...config} />
       </PageHeader>
-      // <Collapse
-      //   expandIconPosition="right"
-      //   accordion={false}
-      //   style={{
-      //     maxHeight: '95%',
-      //     width: '96%',
-      //     marginLeft: '2%',
-      //   }}
-      // >
-      //   <Panel
-      //     header={
-      //       <Row>
-      //         <Col span={12}>
-      //           <Statistic
-      //             title="Langding G Force"
-      //             value={mylandingData.gForce}
-      //             precision={2}
-      //             valueStyle={
-      //               mylandingData.gForce < 1.5
-      //                 ? { color: '#3f8600' }
-      //                 : mylandingData.gForce < 2.5
-      //                 ? { color: '#d4b106' }
-      //                 : { color: '#cf1322' }
-      //             }
-      //             suffix="G"
-      //           />
-      //         </Col>
-      //         <Col span={12}>
-      //           <Statistic
-      //             title="Langding VS"
-      //             value={mylandingData.vs || '--'}
-      //             precision={2}
-      //             valueStyle={
-      //               mylandingData.vs * -1 < 100
-      //                 ? { color: '#3f8600' }
-      //                 : mylandingData.vs * -1 < 250
-      //                 ? { color: '#d4b106' }
-      //                 : { color: '#cf1322' }
-      //             }
-      //             suffix="ft/min"
-      //           />
-      //         </Col>
-      //       </Row>
-      //     }
-      //     key="0"
-      //   >
-
-      //   </Panel>
-      // </Collapse>
     );
   });
 }

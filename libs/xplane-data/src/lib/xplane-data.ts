@@ -44,7 +44,7 @@ export class XPlaneData {
 
       const lat = flightDataRaw[DATAREF_STR.LAT];
       const lng = flightDataRaw[DATAREF_STR.LNG];
-      const fuelWeight = flightDataRaw[DATAREF_STR.FUEL_WEIGHT];
+      const fuelWeight = Math.round(flightDataRaw[DATAREF_STR.FUEL_WEIGHT]);
       const totalWeight = flightDataRaw[DATAREF_STR.TOTAL_WEIGHT];
       const emptyWeight = flightDataRaw[DATAREF_STR.EMPTY_WEIGHT];
       const heading = flightDataRaw[DATAREF_STR.HEADING];

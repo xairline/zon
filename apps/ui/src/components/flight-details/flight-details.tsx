@@ -30,13 +30,13 @@ export function FlightDetails(props: FlightDetailsProps) {
         </Descriptions.Item>
         <Descriptions.Item label="ALT">
           {DatarefStore.isXPlaneConnected
-            ? XPlaneData.dataRoundup(DatarefStore.dataref.elevation * 3.28)
+            ? Math.round(DatarefStore.dataref.elevation * 3.28)
             : '--'}{' '}
           ft
         </Descriptions.Item>
         <Descriptions.Item label="VS">
           {DatarefStore.isXPlaneConnected
-            ? XPlaneData.dataRoundup(DatarefStore.dataref.vs * 196.85)
+            ? Math.round(DatarefStore.dataref.vs * 196.85)
             : '--'}{' '}
           ft/min
         </Descriptions.Item>

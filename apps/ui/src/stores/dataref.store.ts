@@ -274,8 +274,8 @@ class DatarefStore {
         latitudeDeg: XPlaneData.dataRoundup(lat),
         longitudeDeg: XPlaneData.dataRoundup(lng),
         headingDeg: XPlaneData.dataRoundup(heading),
-        altitudeFt: XPlaneData.dataRoundup(elevation * 3.28),
-        speedGS: XPlaneData.dataRoundup(gs * 1.9438),
+        altitudeFt: Math.round(elevation * 3.28),
+        speedGS: Math.round(gs * 1.9438),
         phase: this.flightData.state,
       };
       const req = {
