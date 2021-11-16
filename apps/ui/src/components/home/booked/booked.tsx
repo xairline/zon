@@ -30,7 +30,6 @@ export function Booked(props: BookedProps) {
     simBriefUsername: '',
     toggleModal() {
       localStore.showModal = !localStore.showModal;
-      console.log(DatarefStore.trackingFlight);
     },
   }));
   const columns = [
@@ -154,41 +153,57 @@ export function Booked(props: BookedProps) {
             <Input
               placeholder="SimBrief Username"
               onChange={(e) => {
-                localStore.simBriefUsername = e.target.value;
+                localStorage.setItem('simbriefUsername', e.target.value);
+                runInAction(() => {
+                  localStore.simBriefUsername = e.target.value;
+                });
               }}
+              defaultValue={localStorage.getItem('simbriefUsername')}
               style={{ width: '12vw' }}
             ></Input>,
             <Button
               type="primary"
               onClick={async () => {
-                const simBriefResponse = await axios
-                  .get(
-                    `https://www.simbrief.com/api/xml.fetcher.php?username=${localStore.simBriefUsername}`
-                  )
-                  .catch((e: any) => {
-                    throw e;
+                try {
+                  const simBriefResponse = await axios
+                    .get(
+                      `https://www.simbrief.com/api/xml.fetcher.php?username=${localStorage.getItem(
+                        'simbriefUsername'
+                      )}`
+                    )
+                    .catch((e: any) => {
+                      throw e;
+                    });
+                  const simBriefPlanObj = await xml2js.parseStringPromise(
+                    simBriefResponse.data
+                  );
+                  runInAction(() => {
+                    DatarefStore.resetTracking();
+                    localStore.dataBefore = DatarefStore.trackingFlight;
+                    DatarefStore.trackingFlight = {
+                      flightNumber: simBriefPlanObj.OFP.atc[0].callsign[0],
+                      departure: simBriefPlanObj.OFP.origin[0].icao_code[0],
+                      destination:
+                        simBriefPlanObj.OFP.destination[0].icao_code[0],
+                      aircraftType: simBriefPlanObj.OFP.aircraft[0].icaocode[0],
+                      route: simBriefPlanObj.OFP.general[0].route[0],
+                      passengers: simBriefPlanObj.OFP.general[0].passengers.reduce(
+                        (p, c) => (p += c * 1),
+                        0
+                      ),
+                      lastPosReportTs: 0,
+                    };
+                    window.electron.logger.info(
+                      `Filght plan loaded from simBrief for: ${localStorage.getItem(
+                        'simbriefUsername'
+                      )}`
+                    );
+                    localStore.toggleModal();
                   });
-                const simBriefPlanObj = await xml2js.parseStringPromise(
-                  simBriefResponse.data
-                );
-                runInAction(() => {
-                  DatarefStore.resetTracking();
-                  localStore.dataBefore = DatarefStore.trackingFlight;
-                  DatarefStore.trackingFlight = {
-                    flightNumber: simBriefPlanObj.OFP.atc[0].callsign[0],
-                    departure: simBriefPlanObj.OFP.origin[0].icao_code[0],
-                    destination:
-                      simBriefPlanObj.OFP.destination[0].icao_code[0],
-                    aircraftType: simBriefPlanObj.OFP.aircraft[0].icaocode[0],
-                    route: simBriefPlanObj.OFP.general[0].route[0],
-                    passengers: simBriefPlanObj.OFP.general[0].passengers.reduce(
-                      (p, c) => (p += c * 1),
-                      0
-                    ),
-                    lastPosReportTs: 0,
-                  };
-                  localStore.toggleModal();
-                });
+                } catch (error) {
+                  window.electron.logger.error('Failed to load from simBrief');
+                  window.electron.logger.error(error);
+                }
               }}
             >
               Load from SimBrief

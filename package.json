@@ -38,6 +38,7 @@
     "antd": "^4.16.13",
     "core-js": "^3.6.5",
     "document-register-element": "1.13.1",
+    "electron-log": "^4.4.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-is": "17.0.1",

@@ -1,7 +1,10 @@
-import { DATAREF_FEQ_LANDING, FlightData, FlightState } from '..';
+import { FlightData, FlightState } from '..';
 import { DATAREF_STR } from './xplane-data.constants';
-import { LandingData } from './xplane-data.interfaces';
-
+declare global {
+  interface Window {
+    electron?: any;
+  }
+}
 /**
  * totalFlights,
       totalLandingGForce,
@@ -98,6 +101,9 @@ export class XPlaneData {
     ts: number,
     metadataString: string
   ) {
+    window?.electron?.logger.info(
+      `State machine: ${flightData.state} ===> state`
+    );
     flightData.state = state;
     flightData.events.push(
       `${new Date(ts).toISOString()} - ${flightData.state} - ${metadataString}`

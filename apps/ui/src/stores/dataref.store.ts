@@ -36,9 +36,9 @@ class DatarefStore {
   constructor() {
     this.isXPlaneConnected = false;
     this?.ws?.close();
-    console.log('websocket closed');
+    window.electron.logger.info('websocket closed');
     this?.engine?.stop();
-    console.log('rules engine stopped');
+    window.electron.logger.info('rules engine stopped');
 
     this.trackingFlight = {
       flightNumber: 'ZE999',
@@ -296,7 +296,7 @@ class DatarefStore {
             }
           }
         } catch (e) {
-          console.error(e);
+          window.electron.logger.error(e);
         }
       });
     };
@@ -311,44 +311,49 @@ class DatarefStore {
     gs: number,
     foreeUpdate = false
   ) {
-    // POS report
-    if (
-      Date.now() - this.trackingFlight.lastPosReportTs > 3 * 60 * 1000 ||
-      foreeUpdate
-    ) {
-      const posReprotTemplate = {
-        latitudeDeg: XPlaneData.dataRoundup(lat),
-        longitudeDeg: XPlaneData.dataRoundup(lng),
-        headingDeg: XPlaneData.dataRoundup(heading),
-        altitudeFt: Math.round(elevation * 3.28),
-        speedGS: Math.round(gs * 1.9438),
-        phase: this.flightData.state,
-      };
-      const req = {
-        flight: {
-          number: this.trackingFlight.flightNumber,
-          aircraftType: this.dataref.aircraftType,
-          departure: this.trackingFlight.departure,
-          destination: this.trackingFlight.destination,
-        },
-        sample: posReprotTemplate,
-      };
-      console.log(req);
-      axios
-        .post('https://zonexecutive.com/action.php/acars/openfdr/flight', req)
-        .catch((e: any) => {
-          throw e;
-        });
-      this.trackingFlight.lastPosReportTs = Date.now();
+    try {
+      // POS report
+      if (
+        Date.now() - this.trackingFlight.lastPosReportTs > 3 * 60 * 1000 ||
+        foreeUpdate
+      ) {
+        const posReprotTemplate = {
+          latitudeDeg: XPlaneData.dataRoundup(lat),
+          longitudeDeg: XPlaneData.dataRoundup(lng),
+          headingDeg: XPlaneData.dataRoundup(heading),
+          altitudeFt: Math.round(elevation * 3.28),
+          speedGS: Math.round(gs * 1.9438),
+          phase: this.flightData.state,
+        };
+        const req = {
+          flight: {
+            number: this.trackingFlight.flightNumber,
+            aircraftType: this.dataref.aircraftType,
+            departure: this.trackingFlight.departure,
+            destination: this.trackingFlight.destination,
+          },
+          sample: posReprotTemplate,
+        };
+        axios
+          .post('https://zonexecutive.com/action.php/acars/openfdr/flight', req)
+          .catch((e: any) => {
+            throw e;
+          });
+        this.trackingFlight.lastPosReportTs = Date.now();
+      }
+      window.electron.logger.info('POS reported');
+    } catch (error) {
+      window.electron.logger.error('Failed to report POS');
+      window.electron.logger.error(error);
     }
   }
   resetTracking() {
     runInAction(() => {
       this.isXPlaneConnected = false;
       this?.ws?.close();
-      console.log('websocket closed');
+      window.electron.logger.info('websocket closed');
       this?.engine?.stop();
-      console.log('rules engine stopped');
+      window.electron.logger.info('rules engine stopped');
       this.flightData = XPlaneData.initFlightData();
       this.trackingFlight = {
         flightNumber: 'ZE999',
@@ -368,86 +373,91 @@ class DatarefStore {
         aircraftType: '',
       };
       this.ws = this.connect();
+      window.electron.logger.info('Tracking State Reset');
     });
   }
 
   private async createReport() {
-    const timeOut = new Date(
-      this.flightData.events
-        .find((value) => value.indexOf('engine started') !== -1)
-        .split(' -')[0]
-    ).getTime();
-    const timeOff = new Date(
-      this.flightData.events
-        .find((value) => value.indexOf('takeoff') !== -1)
-        .split(' -')[0]
-    ).getTime();
-    const timeOn = this.flightData.endTime;
-    const timeIn = new Date(
-      this.flightData.events
-        .find((value) => value.indexOf('engine stopped') !== -1)
-        .split(' -')[0]
-    ).getTime();
-    const fuelOut = XPlaneData.dataRoundup(
-      this.flightData.events
-        .find((value) => value.indexOf('engine started') !== -1)
-        .split('fuel: ')[1]
-        .split(' kg')[0]
-    );
-    const fuelOff = XPlaneData.dataRoundup(
-      this.flightData.events
-        .find((value) => value.indexOf('takeoff') !== -1)
-        .split('fuel: ')[1]
-        .split(' kg')[0]
-    );
-    const fuelOn = XPlaneData.dataRoundup(this.flightData.fuelOn);
-    const fuelIn = XPlaneData.dataRoundup(
-      this.flightData.events
-        .find((value) => value.indexOf('engine stopped') !== -1)
-        .split('fuel: ')[1]
-        .split(' kg')[0]
-    );
-    const flightReqTemplate = {
-      number: this.trackingFlight.flightNumber,
-      aircraftType: this.dataref.aircraftType,
-      aircraftRegistration: this.dataref.aircraftRegistration,
-      departure: this.trackingFlight.departure,
-      destination: this.trackingFlight.destination,
-      route: this.trackingFlight.route,
-      timeOut: this.toIsoStringWithOffset(timeOut), // engine start
-      timeOff: this.toIsoStringWithOffset(timeOff), // takeoff
-      timeOn: this.toIsoStringWithOffset(timeOn), // land
-      timeIn: this.toIsoStringWithOffset(timeIn), // engine stop
-      totalBlockTime: XPlaneData.dataRoundup(
-        (timeIn - timeOut) / 1000 / 60 / 60
-      ), // from engine start to engine stop
-      totalFlightTime:
-        XPlaneData.dataRoundup(
-          (parseInt(`${timeOn}`) - timeOff) / 1000 / 60 / 60
-        ) * 10, // from takeoff to land
-      dryOperatingWeight: this.dataref.emptyWeight,
-      payloadWeight: this.dataref.payloadWeight,
-      pax: this.trackingFlight.passengers,
-      fuelOut,
-      fuelOff,
-      fuelOn,
-      fuelIn,
-      landingRate: this.flightData.landingData.vs,
-    };
-    console.log(flightReqTemplate);
-    const res = await axios
-      .post('https://zonexecutive.com/action.php/acars/openfdr/flight', {
-        flight: flightReqTemplate,
-      })
-      .catch((e: any) => {
-        throw e;
-      });
-    console.log(res);
-    localStorage.setItem('lastFlight', res.data.data.id);
-    localStorage.setItem(
-      'lastFlightLanding',
-      JSON.stringify(this.flightData.landingData)
-    );
+    try {
+      const timeOut = new Date(
+        this.flightData.events
+          .find((value) => value.indexOf('engine started') !== -1)
+          .split(' -')[0]
+      ).getTime();
+      const timeOff = new Date(
+        this.flightData.events
+          .find((value) => value.indexOf('takeoff') !== -1)
+          .split(' -')[0]
+      ).getTime();
+      const timeOn = this.flightData.endTime;
+      const timeIn = new Date(
+        this.flightData.events
+          .find((value) => value.indexOf('engine stopped') !== -1)
+          .split(' -')[0]
+      ).getTime();
+      const fuelOut = XPlaneData.dataRoundup(
+        this.flightData.events
+          .find((value) => value.indexOf('engine started') !== -1)
+          .split('fuel: ')[1]
+          .split(' kg')[0]
+      );
+      const fuelOff = XPlaneData.dataRoundup(
+        this.flightData.events
+          .find((value) => value.indexOf('takeoff') !== -1)
+          .split('fuel: ')[1]
+          .split(' kg')[0]
+      );
+      const fuelOn = XPlaneData.dataRoundup(this.flightData.fuelOn);
+      const fuelIn = XPlaneData.dataRoundup(
+        this.flightData.events
+          .find((value) => value.indexOf('engine stopped') !== -1)
+          .split('fuel: ')[1]
+          .split(' kg')[0]
+      );
+      const flightReqTemplate = {
+        number: this.trackingFlight.flightNumber,
+        aircraftType: this.dataref.aircraftType,
+        aircraftRegistration: this.dataref.aircraftRegistration,
+        departure: this.trackingFlight.departure,
+        destination: this.trackingFlight.destination,
+        route: this.trackingFlight.route,
+        timeOut: this.toIsoStringWithOffset(timeOut), // engine start
+        timeOff: this.toIsoStringWithOffset(timeOff), // takeoff
+        timeOn: this.toIsoStringWithOffset(timeOn), // land
+        timeIn: this.toIsoStringWithOffset(timeIn), // engine stop
+        totalBlockTime: XPlaneData.dataRoundup(
+          (timeIn - timeOut) / 1000 / 60 / 60
+        ), // from engine start to engine stop
+        totalFlightTime:
+          XPlaneData.dataRoundup(
+            (parseInt(`${timeOn}`) - timeOff) / 1000 / 60 / 60
+          ) * 10, // from takeoff to land
+        dryOperatingWeight: this.dataref.emptyWeight,
+        payloadWeight: this.dataref.payloadWeight,
+        pax: this.trackingFlight.passengers,
+        fuelOut,
+        fuelOff,
+        fuelOn,
+        fuelIn,
+        landingRate: this.flightData.landingData.vs,
+      };
+      const res = await axios
+        .post('https://zonexecutive.com/action.php/acars/openfdr/flight', {
+          flight: flightReqTemplate,
+        })
+        .catch((e: any) => {
+          throw e;
+        });
+      localStorage.setItem('lastFlight', res.data.data.id);
+      localStorage.setItem(
+        'lastFlightLanding',
+        JSON.stringify(this.flightData.landingData)
+      );
+      window.electron.logger.info('PIREP filed');
+    } catch (error) {
+      window.electron.logger.error('Failed to file final report');
+      window.electron.logger.error(error);
+    }
   }
 
   private toIsoStringWithOffset(utc) {
