@@ -37,6 +37,8 @@ export const DATAREF_STR = {
   TOTAL_WEIGHT: 'sim/flightmodel/weight/m_total',
   EMPTY_WEIGHT: 'sim/aircraft/weight/acf_m_empty',
   HEADING: 'sim/flightmodel/position/mag_psi',
+  PAUSED: 'sim/time/paused',
+  ZULU_TIME: 'sim/time/zulu_time_sec',
 };
 export const DATAREF_FEQ = 5; // per second
 export const DATAREF_FEQ_LANDING = 30; // per second

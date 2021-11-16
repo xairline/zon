@@ -51,6 +51,8 @@ export class XPlaneData {
       const totalWeight = flightDataRaw[DATAREF_STR.TOTAL_WEIGHT];
       const emptyWeight = flightDataRaw[DATAREF_STR.EMPTY_WEIGHT];
       const heading = flightDataRaw[DATAREF_STR.HEADING];
+      const paused = flightDataRaw[DATAREF_STR.PAUSED];
+      const zuluTimeSec = flightDataRaw[DATAREF_STR.ZULU_TIME];
 
       let tail_number = '';
       Object.keys(DATAREF_STR)
@@ -73,6 +75,8 @@ export class XPlaneData {
         });
 
       result.push({
+        paused,
+        zuluTimeSec,
         fuelWeight,
         totalWeight,
         emptyWeight,

@@ -97,6 +97,8 @@ class DatarefStore {
             lat,
             lng,
             heading,
+            paused,
+            zuluTimeSec,
           } = flightDataArray[flightDataArray.length - 1];
           this.dataref.vs = vs;
           this.dataref.gs = gs;
@@ -136,8 +138,9 @@ class DatarefStore {
           if (timeDelta === 0) {
             return;
           }
-
-          this.posReport(lat, lng, heading, elevation, gs);
+          if (paused !== 1) {
+            this.posReport(lat, lng, heading, elevation, gs);
+          }
           for (let i = 0; i < flightDataArray.length; i++) {
             const {
               ts,
@@ -151,23 +154,27 @@ class DatarefStore {
               n1,
               fuelWeight,
               elevation,
+              paused,
             } = flightDataArray[i];
             const timestamp = Math.round(ts + timeDelta);
-            const { results } = await this.engine.run({
-              dataref: {
-                ts: timestamp,
-                vs,
-                agl,
-                gs,
-                gForce,
-                gearForce,
-                pitch,
-                ias,
-                n1,
-                elevation,
-                state: this.flightData.state,
-              },
-            });
+            const { results } =
+              paused !== 1
+                ? await this.engine.run({
+                    dataref: {
+                      ts: timestamp,
+                      vs,
+                      agl,
+                      gs,
+                      gForce,
+                      gearForce,
+                      pitch,
+                      ias,
+                      n1,
+                      elevation,
+                      state: this.flightData.state,
+                    },
+                  })
+                : { results: [] };
             // eslint-disable-next-line no-loop-func
             results.forEach((result) => {
               const myResult: any = (result.conditions as AllConditions).all.filter(
@@ -340,8 +347,8 @@ class DatarefStore {
             throw e;
           });
         this.trackingFlight.lastPosReportTs = Date.now();
+        window.electron.logger.info('POS reported');
       }
-      window.electron.logger.info('POS reported');
     } catch (error) {
       window.electron.logger.error('Failed to report POS');
       window.electron.logger.error(error);

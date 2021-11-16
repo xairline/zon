@@ -65,7 +65,6 @@ wss.on('connection', function connection(ws, request) {
       results.push(result);
       if (results.length === DATAREF_BATCH_SIZE) {
         ws.send(JSON.stringify(results));
-        console.debug(`${results.length} - sent`);
         results = [];
       }
       timer = setTimeout(() => {
