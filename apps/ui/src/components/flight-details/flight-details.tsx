@@ -59,7 +59,7 @@ export function FlightDetails(props: FlightDetailsProps) {
                 DatarefStore.trackingFlight.departure = e.target.value;
               });
             }}
-            style={{ width: '72px' }}
+            style={{ width: '96px' }}
           />
         </Descriptions.Item>
         <Descriptions.Item label="Arrival">
@@ -71,7 +71,7 @@ export function FlightDetails(props: FlightDetailsProps) {
                 DatarefStore.trackingFlight.destination = e.target.value;
               });
             }}
-            style={{ width: '72px' }}
+            style={{ width: '96px' }}
           />
         </Descriptions.Item>
         <Descriptions.Item label="Aircraft Type">
@@ -88,7 +88,7 @@ export function FlightDetails(props: FlightDetailsProps) {
                 );
               });
             }}
-            style={{ width: '72px' }}
+            style={{ width: '96px' }}
           />
         </Descriptions.Item>
         <Descriptions.Item label="Fuel">
@@ -99,7 +99,7 @@ export function FlightDetails(props: FlightDetailsProps) {
           kg
         </Descriptions.Item>
         <Descriptions.Item label="Route">
-          <Input
+          <Input.TextArea
             defaultValue={DatarefStore.trackingFlight.route}
             value={DatarefStore.trackingFlight.route}
             onChange={(e) => {
@@ -107,6 +107,7 @@ export function FlightDetails(props: FlightDetailsProps) {
                 DatarefStore.trackingFlight.route = e.target.value;
               });
             }}
+            style={{ minHeight: '8vh' }}
           />
         </Descriptions.Item>
       </Descriptions>

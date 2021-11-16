@@ -41,16 +41,20 @@ export function Recorder(props: RecorderProps) {
             overflowY: 'auto',
           }}
         >
-          <Col span={18}>
+          <Col span={12}>
             <FlightDetails size="small" />
           </Col>
-          <Col span={6}>
+          <Col span={12}>
             <Timeline
               pending={
                 DatarefStore.isXPlaneConnected
                   ? false
                   : 'Waiting for X Plane ...'
               }
+              style={{
+                marginTop: '8px',
+                marginLeft: '32px',
+              }}
             >
               {DatarefStore?.flightData?.events.map((event: string) => (
                 <Timeline.Item key={event}>{event}</Timeline.Item>

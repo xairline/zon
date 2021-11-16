@@ -106,7 +106,7 @@ export class XPlaneData {
     metadataString: string
   ) {
     window?.electron?.logger.info(
-      `State machine: ${flightData.state} ===> state`
+      `State machine: ${flightData.state} ===> ${state}`
     );
     flightData.state = state;
     flightData.events.push(

@@ -78,6 +78,7 @@ class DatarefStore {
         if (msg.data === 'xplane closed') {
           this.isXPlaneConnected = false;
           this.resetTracking();
+          window.electron.logger.info('XPlane disconnected/closed');
           return;
         }
         try {
@@ -100,6 +101,15 @@ class DatarefStore {
             paused,
             zuluTimeSec,
           } = flightDataArray[flightDataArray.length - 1];
+          if (
+            this.dataref.aircraftType !== '' &&
+            this.dataref.aircraftType !== aircraftType
+          ) {
+            // switching aircraft, reset tracking
+            window.electron.logger.info(`Load new plane: ${aircraftType}`);
+            this.resetTracking();
+            return;
+          }
           this.dataref.vs = vs;
           this.dataref.gs = gs;
           this.dataref.ias = ias;
@@ -129,6 +139,9 @@ class DatarefStore {
               .then((res) => {
                 runInAction(() => {
                   this.trackingFlight.departure = res.data[0].ident;
+                  window.electron.logger.info(
+                    `Nearest Airport: ${res.data[0].ident}`
+                  );
                 });
               });
             timeDelta =
@@ -461,6 +474,7 @@ class DatarefStore {
         JSON.stringify(this.flightData.landingData)
       );
       window.electron.logger.info('PIREP filed');
+      window.electron.logger.info(flightReqTemplate);
     } catch (error) {
       window.electron.logger.error('Failed to file final report');
       window.electron.logger.error(error);
