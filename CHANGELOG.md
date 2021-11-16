@@ -1,8 +1,9 @@
-#### 0.0.1-rc.3 (2021-11-15)
+#### 0.0.1-rc.4 (2021-11-16)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-rc.3 (07be8a7c)
   *  bump up version: 0.0.1-rc.2 (55c9155d)
   *  bump up version: 0.0.1-rc.1 (a1ef9a96)
   *  bump up version: 0.0.1-rc.0 (c8c3bd05)
@@ -43,6 +44,7 @@
 
 ##### New Features
 
+*  add render logs to main via preload.js (5d6e1ddd)
 *  #2 auto detect takeoff and landing airport (7ab5f014)
 *  allow modify flight info such as Dep/Arr/Pax #9 (2e744c89)
 *  load pax from simbrief (2a2b2018)
