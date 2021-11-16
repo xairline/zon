@@ -1,8 +1,9 @@
-#### 0.0.1-rc.4 (2021-11-16)
+#### 0.0.1-rc.5 (2021-11-16)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-rc.4 (39f3e0d4)
   *  bump up version: 0.0.1-rc.3 (07be8a7c)
   *  bump up version: 0.0.1-rc.2 (55c9155d)
   *  bump up version: 0.0.1-rc.1 (a1ef9a96)
@@ -67,6 +68,8 @@
 
 ##### Bug Fixes
 
+*  #10 reset tracking when switching planes (9055adf8)
+*  #11 do not report POS or run state machine compute when sim is paused (5c94df30)
 *  build is broken (36e012a4)
 *  #6 #7 use hhH mmM format (b3967392)
 *  #3 main content should be scrollable (9629a8a5)
@@ -89,5 +92,9 @@
   *  build script is not defined for release build (280c9a9f)
   *  build should run on PR against master (9e642cb2)
 * **packing:**  temporarily disable preload script (fb79defb)
+
+##### Other Changes
+
+*  add log location (4ce81203)
 
 
