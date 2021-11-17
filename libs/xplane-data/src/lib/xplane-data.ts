@@ -53,16 +53,17 @@ export class XPlaneData {
       const heading = flightDataRaw[DATAREF_STR.HEADING];
       const paused = flightDataRaw[DATAREF_STR.PAUSED];
       const zuluTimeSec = flightDataRaw[DATAREF_STR.ZULU_TIME];
+      const replayMode = flightDataRaw[DATAREF_STR.REPLAY_MODE];
 
-      let tail_number = '';
-      Object.keys(DATAREF_STR)
-        .filter((d) => d.indexOf('TAIL_NUMBER') === 0)
-        .map((key) => {
-          tail_number +=
-            flightDataRaw[DATAREF_STR[key]] !== 0
-              ? String.fromCharCode(flightDataRaw[DATAREF_STR[key]])
-              : '';
-        });
+      // let tail_number = '';
+      // Object.keys(DATAREF_STR)
+      //   .filter((d) => d.indexOf('TAIL_NUMBER') === 0)
+      //   .map((key) => {
+      //     tail_number +=
+      //       flightDataRaw[DATAREF_STR[key]] !== 0
+      //         ? String.fromCharCode(flightDataRaw[DATAREF_STR[key]])
+      //         : '';
+      //   });
 
       let ICAO = '';
       Object.keys(DATAREF_STR)
@@ -73,29 +74,30 @@ export class XPlaneData {
               ? String.fromCharCode(flightDataRaw[DATAREF_STR[key]])
               : '';
         });
-
-      result.push({
-        paused,
-        zuluTimeSec,
-        fuelWeight,
-        totalWeight,
-        emptyWeight,
-        aircraftType: ICAO,
-        aircraftRegistration: tail_number,
-        ts,
-        gs,
-        vs,
-        gForce,
-        agl,
-        elevation,
-        n1,
-        gearForce,
-        pitch,
-        ias,
-        lat,
-        lng,
-        heading,
-      });
+      if (replayMode !== 1) {
+        result.push({
+          paused,
+          zuluTimeSec,
+          fuelWeight,
+          totalWeight,
+          emptyWeight,
+          aircraftType: ICAO,
+          //aircraftRegistration: tail_number,
+          ts,
+          gs,
+          vs,
+          gForce,
+          agl,
+          elevation,
+          n1,
+          gearForce,
+          pitch,
+          ias,
+          lat,
+          lng,
+          heading,
+        });
+      }
     });
     return result;
   }
