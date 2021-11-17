@@ -4,12 +4,15 @@
   "copyright": "Copyright © 2021 Di Zou",
   "asar": true,
   "win": {
-    "target": "nsis"
+    "target": "nsis",
+    "icon": "apps/desktop/src/assets/icon.png"
   },
   "mac": {
-    "target": "dmg"
+    "target": "dmg",
+    "icon": "apps/desktop/src/assets/icon.png"
   },
   "linux": {
-    "target": ["deb", "rpm"]
+    "target": ["deb", "rpm"],
+    "icon": "apps/desktop/src/assets/icon.png"
   }
 }
