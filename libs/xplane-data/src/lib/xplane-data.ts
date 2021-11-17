@@ -74,7 +74,7 @@ export class XPlaneData {
               ? String.fromCharCode(flightDataRaw[DATAREF_STR[key]])
               : '';
         });
-      if (replayMode !== 1) {
+      if (replayMode === 0) {
         result.push({
           paused,
           zuluTimeSec,

@@ -86,7 +86,7 @@ class DatarefStore {
           const flightDataArray: any[] = XPlaneData.processRawData(msg.data);
 
           const {
-            aircraftRegistration,
+            //aircraftRegistration,
             aircraftType,
             vs,
             gs,
@@ -114,7 +114,7 @@ class DatarefStore {
           this.dataref.gs = gs;
           this.dataref.ias = ias;
           this.dataref.elevation = elevation;
-          this.dataref.aircraftRegistration = aircraftRegistration;
+          //this.dataref.aircraftRegistration = aircraftRegistration;
           this.dataref.aircraftType = aircraftType;
           this.dataref.fuelWeight = fuelWeight;
           this.dataref.payloadWeight = totalWeight - fuelWeight - emptyWeight;
@@ -437,7 +437,7 @@ class DatarefStore {
       const flightReqTemplate = {
         number: this.trackingFlight.flightNumber,
         aircraftType: this.dataref.aircraftType,
-        aircraftRegistration: this.dataref.aircraftRegistration,
+        //aircraftRegistration: this.dataref.aircraftRegistration,
         departure: this.trackingFlight.departure,
         destination: this.trackingFlight.destination,
         route: this.trackingFlight.route,
