@@ -67,7 +67,7 @@ const StyledApp = styled.div`
       }
     }
   }
-  
+
   .main-content {
     margin: 10px;
     background: transparent;
@@ -166,7 +166,7 @@ export function App() {
                 <Avatar
                   style={{ marginRight: '16px' }}
                   src="https://cdn.discordapp.com/icons/692812210686394368/1ce67acb9365e44fee9cd036ed6c849d.png?size=240"
-                  size={32}
+                  size={40}
                 />
                 <span className="user">
                   <strong style={{ fontSize: '20px' }}>
