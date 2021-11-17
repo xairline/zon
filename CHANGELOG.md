@@ -1,8 +1,11 @@
-#### 0.0.1-rc.5 (2021-11-16)
+#### 0.0.1-rc.6 (2021-11-17)
 
 ##### Continuous Integration
 
+*  add icon (ae73ea6d)
+*  add dependabot.yml (86e6aebf)
 * **release:**
+  *  bump up version: 0.0.1-rc.5 (b9447ea5)
   *  bump up version: 0.0.1-rc.4 (39f3e0d4)
   *  bump up version: 0.0.1-rc.3 (07be8a7c)
   *  bump up version: 0.0.1-rc.2 (55c9155d)
@@ -41,7 +44,6 @@
   *  bump up version: 0.0.1-debug.2 (acf54eec)
   *  bump up version: 0.0.1-debug.1 (9f9f7b9d)
   *  bump up version: 0.0.1-debug.0 (f6c5df21)
-*  add dependabot.yml (86e6aebf)
 
 ##### New Features
 
