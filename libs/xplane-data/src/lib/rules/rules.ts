@@ -187,6 +187,12 @@ export const DEFAULT_RULES = [
           operator: 'notEqual',
           value: 'landing',
         },
+        {
+          fact: 'dataref',
+          path: '$.state',
+          operator: 'notEqual',
+          value: 'climb',
+        },
       ],
     },
     event: {
