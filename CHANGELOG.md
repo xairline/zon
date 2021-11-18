@@ -1,8 +1,9 @@
-#### 0.0.1-rc.11 (2021-11-18)
+#### 0.0.1 (2021-11-18)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-rc.11 (1807102b)
   *  bump up version: 0.0.1-rc.10 (c023e30f)
   *  bump up version: 0.0.1-rc.9 (19f06ea1)
   *  bump up version: 0.0.1-rc.7 (907c4707)
