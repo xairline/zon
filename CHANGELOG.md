@@ -1,8 +1,9 @@
-#### 0.0.1-rc.10 (2021-11-17)
+#### 0.0.1-rc.11 (2021-11-18)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.0.1-rc.10 (c023e30f)
   *  bump up version: 0.0.1-rc.9 (19f06ea1)
   *  bump up version: 0.0.1-rc.7 (907c4707)
   *  bump up version: 0.0.1-rc.6 (2a735881)
@@ -75,6 +76,8 @@
 
 ##### Bug Fixes
 
+*  it should not go from climb to landing (0d6fad99)
+*  multiple minor UI bugs (5665ba41)
 *  #17 no tracking in replay mode (6012a9fc)
 *  #17 no tracking when replay (a5317538)
 *  #10 reset tracking when switching planes (9055adf8)
