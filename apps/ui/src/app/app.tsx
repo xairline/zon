@@ -2,16 +2,14 @@ import {
   faBook,
   faPlaneDeparture,
   faTachometerAlt,
-  faRecordVinyl,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, Button, Form, Layout, Menu, Row, Col } from 'antd';
+import { Avatar, Button, Col, Form, Layout, Menu, Row } from 'antd';
 import { useLocalObservable, useObserver } from 'mobx-react-lite';
 import React from 'react';
 import { Link, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import { FlightLog } from '../components/flight-log/flight-log';
-import { FlyNow } from '../components/fly-now/fly-now';
 import { Home } from '../components/home/home';
 import { Login } from '../components/login/login';
 import { Schedules } from '../components/schedules/schedules';
@@ -221,7 +219,7 @@ export function App() {
               }}
             >
               <Col span={12} offset={6}>
-                OpenFDR Client for ZonExecutive©2021 Created by ZE1356
+                OpenFDR Client for ZonExecutive©2021 - {PilotStore.version}
               </Col>
             </Footer>
           </Layout>

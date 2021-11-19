@@ -5,6 +5,8 @@ import 'reflect-metadata';
 export class PilotStore {
   @observable
   public isLoggedIn: boolean;
+  @observable
+  public version: string;
 
   public username: string;
 
@@ -41,6 +43,7 @@ export class PilotStore {
           localStorage.setItem('password', password);
         });
       }
+      this.version = await window.electron.getAppVersion();
     } catch (e) {
       window.electron.logger.error('Login failed');
       window.electron.logger.error(e);
