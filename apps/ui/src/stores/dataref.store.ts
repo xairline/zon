@@ -300,7 +300,7 @@ class DatarefStore {
       descendCounter = nextState === 'descend' ? descendCounter + 1 : 0;
       takeoffCounter = nextState === 'takeoff' ? takeoffCounter + 1 : 0;
       if (
-        cruiseCounter > 30 * DATAREF_FEQ &&
+        cruiseCounter > 10 * DATAREF_FEQ &&
         this.flightData.state !== nextState
       ) {
         XPlaneData.changeStateTo(
@@ -314,7 +314,7 @@ class DatarefStore {
         cruiseCounter = 0;
       }
       if (
-        climbCounter > 30 * DATAREF_FEQ &&
+        climbCounter > 10 * DATAREF_FEQ &&
         this.flightData.state !== nextState
       ) {
         XPlaneData.changeStateTo(
@@ -328,7 +328,7 @@ class DatarefStore {
         climbCounter = 0;
       }
       if (
-        descendCounter > 60 * DATAREF_FEQ &&
+        descendCounter > 10 * DATAREF_FEQ &&
         this.flightData.state !== nextState
       ) {
         XPlaneData.changeStateTo(
@@ -343,7 +343,7 @@ class DatarefStore {
       }
 
       if (
-        takeoffCounter > 15 * DATAREF_FEQ &&
+        takeoffCounter > 8 * DATAREF_FEQ &&
         this.flightData.state !== nextState
       ) {
         XPlaneData.changeStateTo(

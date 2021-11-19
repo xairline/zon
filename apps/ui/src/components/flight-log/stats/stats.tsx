@@ -1,6 +1,6 @@
 import { DualAxes } from '@ant-design/charts';
 import { LandingData, XPlaneData } from '@zon/xplane-data';
-import { Col, Collapse, PageHeader, Row, Statistic } from 'antd';
+import { Collapse, PageHeader } from 'antd';
 import { useObserver } from 'mobx-react-lite';
 import React from 'react';
 const { Panel } = Collapse;
@@ -23,7 +23,9 @@ export function Stats(props: StatsProps) {
       } else {
         touchDownCounter--;
       }
-      if (Math.round(data.vs * 196.85) === mylandingData.vs) {
+      if (
+        Math.round(data.vs * 196.85) === Math.round(mylandingData.vs * 196.85)
+      ) {
         touchDownTs = index;
         touchDownCounter = 100;
       }
