@@ -14,10 +14,19 @@ export class XPlaneData {
   static initFlightData(): FlightData {
     return {
       state: undefined,
-      startTime: 0,
-      endTime: 0,
+      timeOn: { system: 0, sim: 0 },
+      timeOff: { system: 0, sim: 0 },
+      timeOut: { system: 0, sim: 0 },
+      timeIn: { system: 0, sim: 0 },
       fuelOn: 0,
-      landingData: { vs: 0, gForce: 0, data: [] },
+      fuelOff: 0,
+      fuelOut: 0,
+      fuelIn: 0,
+      landingData: {
+        vs: 0,
+        gForce: 0,
+        data: [],
+      },
       events: [],
       violationEvents: [],
       rules: [],
@@ -105,14 +114,35 @@ export class XPlaneData {
     flightData: FlightData,
     state: FlightState,
     ts: number,
-    metadataString: string
+    zuluTimeSec: number,
+    fuel: number,
   ) {
-    window?.electron?.logger.info(
-      `State machine: ${flightData.state} ===> ${state}`
-    );
+    if (flightData.state === state) {
+      return;
+    }
+
+    if (state === 'engine started') {
+      flightData.timeOut = { system: ts, sim: zuluTimeSec };
+      flightData.fuelOut = fuel;
+      window?.electron?.logger.info(
+        `${flightData.timeOut} | ${flightData.fuelOut}`
+      );
+    }
+    if (state === 'engine stopped') {
+      flightData.timeIn = { system: ts, sim: zuluTimeSec };
+      flightData.fuelIn = fuel;
+    }
+    if (state === 'takeoff') {
+      flightData.timeOff = { system: ts, sim: zuluTimeSec };
+      flightData.fuelOff = fuel;
+    }
+
     flightData.state = state;
     flightData.events.push(
-      `${new Date(ts).toISOString()} - ${flightData.state} - ${metadataString}`
+      `${new Date(ts).toISOString()} - ${flightData.state}`
+    );
+    window?.electron?.logger.info(
+      `State machine: ${flightData.state} ===> ${state}`
     );
   }
   static calculateLandingData(
@@ -125,12 +155,14 @@ export class XPlaneData {
     pitch: number,
     ias: number,
     fuel: number,
+    zuleSec: number,
     flightData: FlightData
   ) {
     const lastVs =
       flightData.landingData.data.length > 0
         ? flightData.landingData.data[flightData.landingData.data.length - 1].vs
         : 0;
+
     const lastTs =
       flightData.landingData.data.length > 0
         ? flightData.landingData.data[flightData.landingData.data.length - 1].ts
@@ -142,7 +174,8 @@ export class XPlaneData {
     if (gForce > calculatedGForce) {
       calculatedGForce = gForce;
     }
-    if (gs >= 30 / 1.9438) {
+
+    if (ias >= 30) {
       flightData.landingData.data.push({
         ts,
         gForce: calculatedGForce,
@@ -156,20 +189,14 @@ export class XPlaneData {
 
     if (
       gearForce > 1000 &&
-      (flightData.landingData.gForce === 0 || flightData.endTime - ts < 3000)
+      (flightData.landingData.gForce === 0 ||
+        ts - flightData.timeOn.system < 3000)
     ) {
-      console.log(
-        `Touch down: ${{
-          ts,
-          gForce: calculatedGForce,
-          vs,
-          agl,
-          gearForce,
-          pitch,
-          ias,
-        }}`
-      );
-      flightData.endTime = ts;
+      if (flightData.timeOn.system === 0) {
+        flightData.timeOn.system = ts;
+        flightData.timeOn.sim = zuleSec;
+        flightData.fuelOn = fuel;
+      }
       if (flightData.fuelOn === 0) {
         flightData.fuelOn = fuel;
       }
@@ -184,8 +211,9 @@ export class XPlaneData {
           ? calculatedGForce
           : flightData.landingData.gForce;
       flightData.landingData.vs =
-        lastVs < flightData.landingData.vs
-          ? Math.round(lastVs * 196.85)
+        Math.round(lastVs * 196.85 * 100) <
+        Math.round(flightData.landingData.vs * 196.85 * 100)
+          ? lastVs
           : flightData.landingData.vs;
     }
   }

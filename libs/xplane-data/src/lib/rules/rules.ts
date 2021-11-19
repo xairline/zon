@@ -25,12 +25,6 @@ export const DEFAULT_RULES = [
       all: [
         {
           fact: 'dataref',
-          path: '$.ts',
-          operator: 'greaterThan',
-          value: 0,
-        },
-        {
-          fact: 'dataref',
           path: '$.n1',
           operator: 'greaterThan',
           value: 20,
@@ -53,12 +47,6 @@ export const DEFAULT_RULES = [
       all: [
         {
           fact: 'dataref',
-          path: '$.ts',
-          operator: 'greaterThan',
-          value: 0,
-        },
-        {
-          fact: 'dataref',
           path: '$.n1',
           operator: 'greaterThan',
           value: 20,
@@ -78,7 +66,7 @@ export const DEFAULT_RULES = [
       ],
     },
     event: {
-      type: 'taxi',
+      type: 'taxi out',
     },
   },
   {
@@ -87,27 +75,21 @@ export const DEFAULT_RULES = [
       all: [
         {
           fact: 'dataref',
-          path: '$.ts',
+          path: '$.ias',
           operator: 'greaterThan',
-          value: 0,
+          value: 35,
         },
         {
           fact: 'dataref',
           path: '$.n1',
           operator: 'greaterThan',
-          value: 75,
-        },
-        {
-          fact: 'dataref',
-          path: '$.gearForce',
-          operator: 'greaterThan',
-          value: 0,
+          value: 50,
         },
         {
           fact: 'dataref',
           path: '$.state',
           operator: 'equal',
-          value: 'taxi',
+          value: 'taxi out',
         },
       ],
     },
@@ -120,11 +102,43 @@ export const DEFAULT_RULES = [
     conditions: {
       all: [
         {
+          any: [
+            {
+              fact: 'dataref',
+              path: '$.n1',
+              operator: 'lessThan',
+              value: 50,
+            },
+            {
+              fact: 'dataref',
+              path: '$.ias',
+              operator: 'lessThan',
+              value: 40,
+            },
+          ],
+        },
+        {
           fact: 'dataref',
-          path: '$.ts',
+          path: '$.gearForce',
           operator: 'greaterThan',
           value: 0,
         },
+        {
+          fact: 'dataref',
+          path: '$.state',
+          operator: 'equal',
+          value: 'takeoff',
+        },
+      ],
+    },
+    event: {
+      type: 'RTO',
+    },
+  },
+  {
+    priority: 999,
+    conditions: {
+      all: [
         {
           fact: 'dataref',
           path: '$.vs',
@@ -145,6 +159,24 @@ export const DEFAULT_RULES = [
               operator: 'equal',
               value: 'takeoff',
             },
+            {
+              fact: 'dataref',
+              path: '$.state',
+              operator: 'equal',
+              value: 'cruise',
+            },
+            {
+              fact: 'dataref',
+              path: '$.state',
+              operator: 'equal',
+              value: 'climb',
+            },
+            {
+              fact: 'dataref',
+              path: '$.state',
+              operator: 'equal',
+              value: 'descend',
+            },
           ],
         },
       ],
@@ -159,10 +191,86 @@ export const DEFAULT_RULES = [
       all: [
         {
           fact: 'dataref',
-          path: '$.ts',
+          path: '$.vs',
           operator: 'greaterThan',
-          value: 0,
+          value: -200 / 196.85, //vs>-200ft/min
         },
+        {
+          fact: 'dataref',
+          path: '$.vs',
+          operator: 'lessThan',
+          value: 200 / 196.85, //vs<200ft/min
+        },
+        {
+          fact: 'dataref',
+          path: '$.gearForce',
+          operator: 'lessThan',
+          value: 1,
+        },
+        {
+          any: [
+            {
+              fact: 'dataref',
+              path: '$.state',
+              operator: 'equal',
+              value: 'descend',
+            },
+            {
+              fact: 'dataref',
+              path: '$.state',
+              operator: 'equal',
+              value: 'climb',
+            },
+          ],
+        },
+      ],
+    },
+    event: {
+      type: 'cruise',
+    },
+  },
+  {
+    priority: 999,
+    conditions: {
+      all: [
+        {
+          fact: 'dataref',
+          path: '$.vs',
+          operator: 'lessThan',
+          value: -200 / 196.85, //vs<-200ft/min
+        },
+        {
+          fact: 'dataref',
+          path: '$.gearForce',
+          operator: 'lessThan',
+          value: 1,
+        },
+        {
+          any: [
+            {
+              fact: 'dataref',
+              path: '$.state',
+              operator: 'equal',
+              value: 'climb',
+            },
+            {
+              fact: 'dataref',
+              path: '$.state',
+              operator: 'equal',
+              value: 'cruise',
+            },
+          ],
+        },
+      ],
+    },
+    event: {
+      type: 'descend',
+    },
+  },
+  {
+    priority: 999,
+    conditions: {
+      all: [
         {
           fact: 'dataref',
           path: '$.agl',
@@ -182,16 +290,20 @@ export const DEFAULT_RULES = [
           value: 5,
         },
         {
-          fact: 'dataref',
-          path: '$.state',
-          operator: 'notEqual',
-          value: 'landing',
-        },
-        {
-          fact: 'dataref',
-          path: '$.state',
-          operator: 'notEqual',
-          value: 'climb',
+          any: [
+            {
+              fact: 'dataref',
+              path: '$.state',
+              operator: 'equal',
+              value: 'descend',
+            },
+            {
+              fact: 'dataref',
+              path: '$.state',
+              operator: 'equal',
+              value: 'cruise',
+            },
+          ],
         },
       ],
     },
@@ -199,116 +311,74 @@ export const DEFAULT_RULES = [
       type: 'landing',
     },
   },
-];
-
-export const COMMON_TAXI_RULES = [
   {
-    name: 'taxi_over_speed',
-    priority: 1,
+    priority: 999,
     conditions: {
       all: [
         {
           fact: 'dataref',
-          path: '$.ts',
+          path: '$.n1',
           operator: 'greaterThan',
-          value: 0,
+          value: 20,
         },
-
         {
           fact: 'dataref',
           path: '$.gs',
           operator: 'greaterThan',
-          value: 30 / 1.9438,
-        },
-        {
-          fact: 'dataref',
-          path: '$.state',
-          operator: 'equal',
-          value: 'taxi',
-        },
-      ],
-    },
-    event: {
-      type: 'taxi',
-      params: {
-        event: 'taxi_over_speed (30)',
-      },
-    },
-  },
-];
-
-export const COMMON_DESCEND_RULES = [
-  {
-    name: 'Descend: too fast',
-    priority: 1,
-    conditions: {
-      all: [
-        {
-          fact: 'dataref',
-          path: '$.ts',
-          operator: 'greaterThan',
-          value: 0,
-        },
-        {
-          fact: 'dataref',
-          path: '$.vs',
-          operator: 'lessThan',
-          value: -2500 / 196.85,
-        },
-        {
-          fact: 'dataref',
-          path: '$.state',
-          operator: 'equal',
-          value: 'descend',
-        },
-      ],
-    },
-    event: {
-      type: 'descend',
-      params: {
-        event: 'vertical speed is over -2,500 ft/min',
-      },
-    },
-  },
-  {
-    name: 'Descend: Speed is too fast',
-    priority: 1,
-    conditions: {
-      all: [
-        {
-          fact: 'dataref',
-          path: '$.ts',
-          operator: 'greaterThan',
-          value: 0,
+          value: 2,
         },
         {
           fact: 'dataref',
           path: '$.ias',
-          operator: 'greaterThan',
-          value: 250,
+          operator: 'lessThan',
+          value: 40,
         },
         {
+          any: [
+            {
+              fact: 'dataref',
+              path: '$.state',
+              operator: 'equal',
+              value: 'RTO',
+            },
+            {
+              fact: 'dataref',
+              path: '$.state',
+              operator: 'equal',
+              value: 'landing',
+            },
+          ],
+        },
+      ],
+    },
+    event: {
+      type: 'taxi in',
+    },
+  },
+  {
+    priority: 999,
+    conditions: {
+      all: [
+        {
           fact: 'dataref',
-          path: '$.elevation',
-          operator: 'lessThan',
-          value: 10000 / 3.28,
+          path: '$.n1',
+          operator: 'equal',
+          value: 0,
         },
         {
           fact: 'dataref',
           path: '$.state',
           operator: 'equal',
-          value: 'descend',
+          value: 'taxi in',
         },
       ],
     },
     event: {
-      type: 'descend',
-      params: {
-        event: 'descend speed is too fast (> 250kt below 10,000ft)',
-      },
+      type: 'engine stopped',
     },
   },
 ];
+
 export class Rules {
   rules: IRules;
   constructor(flightData: FlightData) {
