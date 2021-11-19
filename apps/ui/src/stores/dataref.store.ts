@@ -424,15 +424,15 @@ class DatarefStore {
             throw e;
           });
         this.trackingFlight.lastPosReportTs = Date.now();
-        window.electron.logger.info(
-          `POS reported - ${JSON.stringify({
-            lat,
-            lng,
-            heading,
-            elevation,
-            gs,
-          })}`
-        );
+        // window.electron.logger.info(
+        //   `POS reported - ${JSON.stringify({
+        //     lat,
+        //     lng,
+        //     heading,
+        //     elevation,
+        //     gs,
+        //   })}`
+        // );
       }
     } catch (error) {
       window.electron.logger.error('Failed to report POS');
