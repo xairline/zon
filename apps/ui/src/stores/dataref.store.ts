@@ -501,6 +501,20 @@ class DatarefStore {
       this.trackingFlight.destination =
         response?.data[0]?.ident || this.trackingFlight.destination;
 
+      /**
+       * xplane zule time sec is sec of the day
+       * so we need to hanld the case where a flight
+       * landed "UTC next day"
+       */
+      this.flightData.timeIn.sim =
+        this.flightData.timeIn.sim < this.flightData.timeOut.sim
+          ? this.flightData.timeIn.sim + 24 * 60 * 60
+          : this.flightData.timeIn.sim;
+      this.flightData.timeOn.sim =
+        this.flightData.timeOn.sim < this.flightData.timeOff.sim
+          ? this.flightData.timeOn.sim + 24 * 60 * 60
+          : this.flightData.timeOn.sim;
+
       const flightReqTemplate = {
         number: this.trackingFlight.flightNumber,
         aircraftType: this.dataref.aircraftType,

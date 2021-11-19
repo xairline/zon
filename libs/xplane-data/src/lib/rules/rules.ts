@@ -67,7 +67,7 @@ export const DEFAULT_RULES = [
       all: [
         {
           fact: 'dataref',
-          path: '$.ias',
+          path: '$.gs',
           operator: 'greaterThan',
           value: 35,
         },
