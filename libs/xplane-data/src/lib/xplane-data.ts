@@ -5,11 +5,7 @@ declare global {
     electron?: any;
   }
 }
-/**
- * totalFlights,
-      totalLandingGForce,
-      totalLandingVs,
- */
+
 export class XPlaneData {
   static initFlightData(): FlightData {
     return {
@@ -64,16 +60,6 @@ export class XPlaneData {
       const zuluTimeSec = flightDataRaw[DATAREF_STR.ZULU_TIME];
       const replayMode = flightDataRaw[DATAREF_STR.REPLAY_MODE];
 
-      // let tail_number = '';
-      // Object.keys(DATAREF_STR)
-      //   .filter((d) => d.indexOf('TAIL_NUMBER') === 0)
-      //   .map((key) => {
-      //     tail_number +=
-      //       flightDataRaw[DATAREF_STR[key]] !== 0
-      //         ? String.fromCharCode(flightDataRaw[DATAREF_STR[key]])
-      //         : '';
-      //   });
-
       let ICAO = '';
       Object.keys(DATAREF_STR)
         .filter((d) => d.indexOf('ICAO') === 0)
@@ -115,7 +101,7 @@ export class XPlaneData {
     state: FlightState,
     ts: number,
     zuluTimeSec: number,
-    fuel: number,
+    fuel: number
   ) {
     if (flightData.state === state) {
       return;
@@ -125,26 +111,36 @@ export class XPlaneData {
       flightData.timeOut = { system: ts, sim: zuluTimeSec };
       flightData.fuelOut = fuel;
       window?.electron?.logger.info(
-        `${flightData.timeOut} | ${flightData.fuelOut}`
+        `${state}: ${JSON.stringify(flightData.timeOut)} | ${
+          flightData.fuelOut
+        }`
       );
     }
     if (state === 'engine stopped') {
       flightData.timeIn = { system: ts, sim: zuluTimeSec };
       flightData.fuelIn = fuel;
+      window?.electron?.logger.info(
+        `${state}: ${JSON.stringify(flightData.timeIn)} | ${flightData.fuelIn}`
+      );
     }
     if (state === 'takeoff') {
       flightData.timeOff = { system: ts, sim: zuluTimeSec };
       flightData.fuelOff = fuel;
+      window?.electron?.logger.info(
+        `${state}: ${JSON.stringify(flightData.timeOff)} | ${
+          flightData.fuelOff
+        }`
+      );
     }
-
+    window?.electron?.logger.info(
+      `State machine: ${flightData.state} ===> ${state}`
+    );
     flightData.state = state;
     flightData.events.push(
       `${new Date(ts).toISOString()} - ${flightData.state}`
     );
-    window?.electron?.logger.info(
-      `State machine: ${flightData.state} ===> ${state}`
-    );
   }
+
   static calculateLandingData(
     gs: number,
     ts: number,
@@ -196,9 +192,11 @@ export class XPlaneData {
         flightData.timeOn.system = ts;
         flightData.timeOn.sim = zuleSec;
         flightData.fuelOn = fuel;
-      }
-      if (flightData.fuelOn === 0) {
-        flightData.fuelOn = fuel;
+        window?.electron?.logger.info(
+          `touchdown: ${JSON.stringify(flightData.timeOn)} | ${
+            flightData.fuelOn
+          }`
+        );
       }
       // do not use the data at touch down time
       if (flightData.landingData.gForce === 0) {

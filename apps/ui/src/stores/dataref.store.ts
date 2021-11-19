@@ -7,6 +7,8 @@ import {
   Rules,
   XPlaneData,
 } from '@zon/xplane-data';
+import { notification } from 'antd';
+import util from 'util';
 import axios from 'axios';
 import runways from './runways.json';
 // const runwayData: any[] = runways as any[];
@@ -258,10 +260,6 @@ class DatarefStore {
                 zuluTimeSec,
                 Math.round(fuelWeight)
               );
-              this.flightData.timeOff = {
-                system: Date.now(),
-                sim: zuluTimeSec,
-              };
               this.posReport(lat, lng, heading, elevation, gs, paused);
               await this.createReport(lat, lng);
             }
@@ -508,17 +506,15 @@ class DatarefStore {
         timeIn: this.toIsoStringWithOffset(timeIn), // engine stop
         totalBlockTime: XPlaneData.dataRoundup(
           (this.flightData.timeIn.sim - this.flightData.timeOut.sim) /
-            1000 /
             60 /
             60
-        ), // from engine start to engine stop
+        ), // from engine start to engine stop 79572.2734375 77769.1015625
         totalFlightTime:
           XPlaneData.dataRoundup(
             (this.flightData.timeOn.sim - this.flightData.timeOff.sim) /
-              1000 /
               60 /
               60
-          ) * 10, // from takeoff to land
+          ), // from takeoff to land
         dryOperatingWeight: this.dataref.emptyWeight,
         payloadWeight: this.dataref.payloadWeight,
         pax: this.trackingFlight.passengers,
@@ -539,6 +535,10 @@ class DatarefStore {
         });
       localStorage.setItem('lastFlight', res.data.data.id);
       window.electron.logger.info('PIREP filed');
+      notification.open({
+        message: 'PIREP Filed successfully',
+        description: util.inspect(flightReqTemplate),
+      });
     } catch (error) {
       window.electron.logger.error('Failed to file final report');
       window.electron.logger.error(error);

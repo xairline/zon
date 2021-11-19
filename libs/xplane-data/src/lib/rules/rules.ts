@@ -1,13 +1,5 @@
-import {
-  AllConditions,
-  Almanac,
-  Event,
-  EventHandler,
-  RuleProperties,
-  RuleResult,
-} from 'json-rules-engine';
-import { XPlaneData } from '../xplane-data';
-import { FlightData, FlightState } from '../xplane-data.interfaces';
+import { RuleProperties } from 'json-rules-engine';
+import { FlightData } from '../xplane-data.interfaces';
 export interface IRules {
   defaultRules?: RuleProperties[];
   taxiRules?: RuleProperties[];

@@ -23,10 +23,7 @@ export function Stats(props: StatsProps) {
       } else {
         touchDownCounter--;
       }
-      if (
-        Math.round(data.vs * 196.85 * 100) ===
-        Math.round(mylandingData.vs * 100)
-      ) {
+      if (Math.round(data.vs * 196.85) === mylandingData.vs) {
         touchDownTs = index;
         touchDownCounter = 100;
       }
@@ -103,7 +100,7 @@ export function Stats(props: StatsProps) {
         subTitle={
           <strong>
             G: {XPlaneData.dataRoundup(mylandingData.gForce)} G | VS:
-            {mylandingData.vs} fpm
+            {Math.round(mylandingData.vs * 196.85)} fpm
           </strong>
         }
         style={{

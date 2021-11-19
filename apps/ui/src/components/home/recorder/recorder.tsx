@@ -41,10 +41,10 @@ export function Recorder(props: RecorderProps) {
             overflowY: 'auto',
           }}
         >
-          <Col span={12}>
+          <Col span={14}>
             <FlightDetails size="small" />
           </Col>
-          <Col span={12}>
+          <Col span={10}>
             <Timeline
               pending={
                 DatarefStore.isXPlaneConnected
