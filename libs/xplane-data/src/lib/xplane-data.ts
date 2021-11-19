@@ -171,7 +171,11 @@ export class XPlaneData {
       calculatedGForce = gForce;
     }
 
-    if (ias >= 30) {
+    if (
+      ias >= 30 &&
+      (flightData.timeOn.system === 0 ||
+        ts - flightData.timeOn.system > 30 * 1000)
+    ) {
       flightData.landingData.data.push({
         ts,
         gForce: calculatedGForce,

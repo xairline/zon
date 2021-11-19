@@ -424,7 +424,15 @@ class DatarefStore {
             throw e;
           });
         this.trackingFlight.lastPosReportTs = Date.now();
-        window.electron.logger.info('POS reported');
+        window.electron.logger.info(
+          `POS reported - ${JSON.stringify({
+            lat,
+            lng,
+            heading,
+            elevation,
+            gs,
+          })}`
+        );
       }
     } catch (error) {
       window.electron.logger.error('Failed to report POS');
@@ -505,16 +513,11 @@ class DatarefStore {
         timeOn: this.toIsoStringWithOffset(timeOn), // land
         timeIn: this.toIsoStringWithOffset(timeIn), // engine stop
         totalBlockTime: XPlaneData.dataRoundup(
-          (this.flightData.timeIn.sim - this.flightData.timeOut.sim) /
-            60 /
-            60
+          (this.flightData.timeIn.sim - this.flightData.timeOut.sim) / 60 / 60
         ), // from engine start to engine stop 79572.2734375 77769.1015625
-        totalFlightTime:
-          XPlaneData.dataRoundup(
-            (this.flightData.timeOn.sim - this.flightData.timeOff.sim) /
-              60 /
-              60
-          ), // from takeoff to land
+        totalFlightTime: XPlaneData.dataRoundup(
+          (this.flightData.timeOn.sim - this.flightData.timeOff.sim) / 60 / 60
+        ), // from takeoff to land
         dryOperatingWeight: this.dataref.emptyWeight,
         payloadWeight: this.dataref.payloadWeight,
         pax: this.trackingFlight.passengers,
