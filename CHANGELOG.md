@@ -1,8 +1,10 @@
-#### 0.1.0-alpha.1 (2021-11-19)
+#### 0.1.0-beta.0 (2021-11-20)
 
 ##### Continuous Integration
 
-* **release:**  bump up version: 0.1.0-alpha.0 (f80922f9)
+* **release:**
+  *  bump up version: 0.1.0-alpha.1 (d82619ce)
+  *  bump up version: 0.1.0-alpha.0 (f80922f9)
 
 ##### New Features
 
@@ -11,6 +13,7 @@
 
 ##### Bug Fixes
 
+*  log should have stacktrace (609d1935)
 *  #11 using in sim timer to track flight time so paused time period won't be counted (d55e614e)
 *  touchdown annotation (8c3072eb)
 *  capture less landing data after touch down (81278a91)
