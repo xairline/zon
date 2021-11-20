@@ -46,7 +46,7 @@ export function FlightDetails(props: FlightDetailsProps) {
         </Descriptions.Item>
         <Descriptions.Item label="VS">
           {DatarefStore.isXPlaneConnected
-            ? Math.round(DatarefStore.dataref.vs * 196.85)
+            ? Math.round(DatarefStore.dataref.vs)
             : '--'}{' '}
           ft/min
         </Descriptions.Item>

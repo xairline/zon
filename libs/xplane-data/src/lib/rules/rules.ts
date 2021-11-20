@@ -135,7 +135,7 @@ export const DEFAULT_RULES = [
           fact: 'dataref',
           path: '$.vs',
           operator: 'greaterThan',
-          value: 200 / 196.85, //vs>200ft/min
+          value: 200, //vs>200ft/min
         },
         {
           fact: 'dataref',
@@ -185,13 +185,13 @@ export const DEFAULT_RULES = [
           fact: 'dataref',
           path: '$.vs',
           operator: 'greaterThan',
-          value: -200 / 196.85, //vs>-200ft/min
+          value: -200, //vs>-200ft/min
         },
         {
           fact: 'dataref',
           path: '$.vs',
           operator: 'lessThan',
-          value: 200 / 196.85, //vs<200ft/min
+          value: 200, //vs<200ft/min
         },
         {
           fact: 'dataref',
@@ -229,7 +229,7 @@ export const DEFAULT_RULES = [
           fact: 'dataref',
           path: '$.vs',
           operator: 'lessThan',
-          value: -200 / 196.85, //vs<-200ft/min
+          value: -200, //vs<-200ft/min
         },
         {
           fact: 'dataref',
@@ -273,7 +273,7 @@ export const DEFAULT_RULES = [
           fact: 'dataref',
           path: '$.vs',
           operator: 'lessThan',
-          value: -200 / 196.85,
+          value: -200,
         },
         {
           fact: 'dataref',

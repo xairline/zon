@@ -1,5 +1,5 @@
 export const DATAREF_STR = {
-  VS: 'sim/flightmodel/position/local_vy',
+  VS: 'sim/flightmodel/position/vh_ind_fpm',
   GEAR_FORCE: 'sim/flightmodel/forces/fnrml_gear',
   G_FORCE: 'sim/flightmodel2/misc/gforce_normal',
   AGL: 'sim/flightmodel/position/y_agl',

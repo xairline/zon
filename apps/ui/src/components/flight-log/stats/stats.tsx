@@ -24,12 +24,14 @@ export function Stats(props: StatsProps) {
         touchDownCounter--;
       }
       if (
-        Math.round(data.vs * 196.85) === Math.round(mylandingData.vs * 196.85)
+        Math.round(data.vs) === Math.round(mylandingData.vs) &&
+        data.agl < 5 &&
+        touchDownCounter === -1
       ) {
         touchDownTs = index;
         touchDownCounter = 100;
       }
-      data.vs = XPlaneData.dataRoundup(data.vs * 196.85 * -1);
+      data.vs = XPlaneData.dataRoundup(data.vs * -1);
       data.agl = XPlaneData.dataRoundup(data.agl * 3.28084);
       data.ts = new Date(data.ts).toISOString();
       if (data.agl < 50) {
@@ -66,27 +68,36 @@ export function Stats(props: StatsProps) {
         },
       ],
       height: 250,
-      annotations: [
-        [
-          {
-            type: 'text',
-            position: { ts: mylandingData.data[touchDownTs].ts, vs: 'max' },
-            content: 'touch down',
-            offsetY: -16,
-          },
-          {
-            type: 'region',
-            top: true,
-            start: { ts: mylandingData.data[touchDownTs].ts, vs: 'min' },
-            end: { ts: mylandingData.data[touchDownTs + 1].ts, vs: 'max' },
-            style: {
-              stroke: '#F4664A',
-              lineWidth: 2,
-              fill: 'red',
-            },
-          },
-        ],
-      ],
+      annotations:
+        touchDownTs !== 0
+          ? [
+              [
+                {
+                  type: 'text',
+                  position: {
+                    ts: mylandingData.data[touchDownTs].ts,
+                    vs: 'max',
+                  },
+                  content: 'touch down',
+                  offsetY: -16,
+                },
+                {
+                  type: 'region',
+                  top: true,
+                  start: { ts: mylandingData.data[touchDownTs].ts, vs: 'min' },
+                  end: {
+                    ts: mylandingData.data[touchDownTs + 1].ts,
+                    vs: 'max',
+                  },
+                  style: {
+                    stroke: '#F4664A',
+                    lineWidth: 2,
+                    fill: 'red',
+                  },
+                },
+              ],
+            ]
+          : null,
       smooth: true,
       animation: {
         appear: {
@@ -102,7 +113,7 @@ export function Stats(props: StatsProps) {
         subTitle={
           <strong>
             G: {XPlaneData.dataRoundup(mylandingData.gForce)} G | VS:
-            {Math.round(mylandingData.vs * 196.85)} fpm
+            {Math.round(mylandingData.vs)} fpm
           </strong>
         }
         style={{

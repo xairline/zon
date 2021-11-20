@@ -76,7 +76,7 @@ class DatarefStore {
     const ws = new WebSocket('ws://localhost:4444');
     let landingDataFeq = false;
     let timeDelta = 0;
-
+    let lastRecvTs = 0;
     ws.onmessage = (msg) => {
       runInAction(async () => {
         if (msg.data === 'xplane closed') {
@@ -177,23 +177,31 @@ class DatarefStore {
               paused,
               zuluTimeSec,
             } = flightDataArray[i];
+            // make sure we ignore older data
+            if (ts < lastRecvTs) {
+              window?.electron?.logger.warn(`dataref is too old`);
+              continue;
+            } else {
+              lastRecvTs = ts;
+            }
             const timestamp = Math.round(ts + timeDelta);
+            const datarefNow = {
+              ts: timestamp,
+              vs,
+              agl,
+              gs,
+              gForce,
+              gearForce,
+              pitch,
+              ias,
+              n1,
+              elevation,
+              state: this.flightData.state,
+            };
             const { results } =
               paused !== 1
                 ? await this.engine.run({
-                    dataref: {
-                      ts: timestamp,
-                      vs,
-                      agl,
-                      gs,
-                      gForce,
-                      gearForce,
-                      pitch,
-                      ias,
-                      n1,
-                      elevation,
-                      state: this.flightData.state,
-                    },
+                    dataref: datarefNow,
                   })
                 : { results: [] };
             // eslint-disable-next-line no-loop-func
@@ -215,6 +223,11 @@ class DatarefStore {
                 paused,
                 stateChanged
               );
+              if (stateChanged) {
+                window?.electron?.logger.info(
+                  `State change: ${util.inspect(datarefNow)}`
+                );
+              }
               //get takeoff airport
               if (result.event.type === 'takeoff') {
                 axios
@@ -302,7 +315,7 @@ class DatarefStore {
       descendCounter = nextState === 'descend' ? descendCounter + 1 : 0;
       takeoffCounter = nextState === 'takeoff' ? takeoffCounter + 1 : 0;
       if (
-        cruiseCounter > 10 * DATAREF_FEQ &&
+        cruiseCounter > 20 * DATAREF_FEQ &&
         this.flightData.state !== nextState
       ) {
         XPlaneData.changeStateTo(
@@ -330,7 +343,7 @@ class DatarefStore {
         climbCounter = 0;
       }
       if (
-        descendCounter > 10 * DATAREF_FEQ &&
+        descendCounter > 20 * DATAREF_FEQ &&
         this.flightData.state !== nextState
       ) {
         XPlaneData.changeStateTo(
@@ -542,7 +555,7 @@ class DatarefStore {
         fuelOff,
         fuelOn,
         fuelIn,
-        landingRate: Math.round(this.flightData.landingData.vs * 196.85),
+        landingRate: Math.round(this.flightData.landingData.vs),
       };
       window.electron.logger.info(flightReqTemplate);
 

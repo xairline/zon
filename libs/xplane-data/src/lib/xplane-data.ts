@@ -165,7 +165,10 @@ export class XPlaneData {
         : ts;
     let calculatedGForce: number =
       flightData.landingData.data.length > 0
-        ? ((vs - lastVs) / ((ts - lastTs) / 1000) + 9.8) / 9.8
+        ? ((vs* 0.00508 - lastVs* 0.00508) /
+            ((ts - lastTs) / 1000) +
+            9.8) /
+          9.8
         : gForce;
     if (gForce > calculatedGForce) {
       calculatedGForce = gForce;
@@ -213,8 +216,7 @@ export class XPlaneData {
           ? calculatedGForce
           : flightData.landingData.gForce;
       flightData.landingData.vs =
-        Math.round(lastVs * 196.85 * 100) <
-        Math.round(flightData.landingData.vs * 196.85 * 100)
+        Math.round(lastVs * 100) < Math.round(flightData.landingData.vs * 100)
           ? lastVs
           : flightData.landingData.vs;
     }
