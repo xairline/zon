@@ -266,6 +266,8 @@ class DatarefStore {
           }
         } catch (e) {
           window.electron.logger.error(e);
+          window.electron.logger.error(util.inspect(e));
+          window.electron.logger.error(e.stack);
         }
       });
     };
@@ -436,7 +438,8 @@ class DatarefStore {
       }
     } catch (error) {
       window.electron.logger.error('Failed to report POS');
-      window.electron.logger.error(error);
+      window.electron.logger.error(util.inspect(error));
+      window.electron.logger.error(error.stack);
     }
   }
 
@@ -558,7 +561,8 @@ class DatarefStore {
       });
     } catch (error) {
       window.electron.logger.error('Failed to file final report');
-      window.electron.logger.error(error);
+      window.electron.logger.error(util.inspect(error));
+      window.electron.logger.error(error.stack);
     } finally {
       // store landing data
       localStorage.setItem(

@@ -58,7 +58,7 @@ export const DEFAULT_RULES = [
       ],
     },
     event: {
-      type: 'taxi out',
+      type: 'taxi',
     },
   },
   {
@@ -81,7 +81,7 @@ export const DEFAULT_RULES = [
           fact: 'dataref',
           path: '$.state',
           operator: 'equal',
-          value: 'taxi out',
+          value: 'taxi',
         },
       ],
     },
@@ -344,7 +344,7 @@ export const DEFAULT_RULES = [
       ],
     },
     event: {
-      type: 'taxi in',
+      type: 'taxi',
     },
   },
   {
@@ -361,7 +361,7 @@ export const DEFAULT_RULES = [
           fact: 'dataref',
           path: '$.state',
           operator: 'equal',
-          value: 'taxi in',
+          value: 'taxi',
         },
       ],
     },

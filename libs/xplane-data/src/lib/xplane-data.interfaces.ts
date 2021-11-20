@@ -1,14 +1,13 @@
 export type FlightState =
   | 'parked'
   | 'engine started'
-  | 'taxi out'
+  | 'taxi'
   | 'takeoff'
   | 'climb'
   | 'cruise'
   | 'descend'
   | 'landing'
   | 'RTO'
-  | 'taxi in'
   | 'engine stopped'
   | undefined;
 

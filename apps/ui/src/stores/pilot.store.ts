@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { makeObservable, observable, runInAction } from 'mobx';
 import 'reflect-metadata';
-
+import util from 'util';
 export class PilotStore {
   @observable
   public isLoggedIn: boolean;
@@ -47,6 +47,8 @@ export class PilotStore {
     } catch (e) {
       window.electron.logger.error('Login failed');
       window.electron.logger.error(e);
+      window.electron.logger.error(util.inspect(e));
+      window.electron.logger.error(e.stack);
     }
   }
 }

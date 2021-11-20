@@ -17,6 +17,7 @@ import { useGlobalStores } from '../../../stores';
 import FlightDetails from '../../flight-details/flight-details';
 import axios from 'axios';
 import xml2js from 'xml2js';
+import util from 'util';
 /* eslint-disable-next-line */
 export interface BookedProps {}
 
@@ -202,7 +203,8 @@ export function Booked(props: BookedProps) {
                   });
                 } catch (error) {
                   window.electron.logger.error('Failed to load from simBrief');
-                  window.electron.logger.error(error);
+                  window.electron.logger.error(util.inspect(error));
+                  window.electron.logger.error(error.stack);
                 }
               }}
             >
