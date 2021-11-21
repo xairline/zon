@@ -177,7 +177,7 @@ export class XPlaneData {
     if (
       ias >= 30 &&
       (flightData.timeOn.system === 0 ||
-        ts - flightData.timeOn.system > 30 * 1000)
+        ts - flightData.timeOn.system < 30 * 1000)
     ) {
       flightData.landingData.data.push({
         ts,
