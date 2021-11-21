@@ -1,8 +1,9 @@
-#### 0.1.0-beta.2 (2021-11-21)
+#### 0.1.0-beta.3 (2021-11-21)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.1.0-beta.2 (065a9e99)
   *  bump up version: 0.1.0-beta.1 (636e6318)
   *  bump up version: 0.1.0-beta.0 (6e8cdea0)
   *  bump up version: 0.1.0-alpha.1 (d82619ce)
@@ -15,6 +16,7 @@
 
 ##### Bug Fixes
 
+*  auto size text area for route (649885de)
 *  chart broken in stats (b36a85b0)
 *  stat page is not showing touch down point (b12596a0)
 *  landing analysis missing data (1438b0fe)
