@@ -12,25 +12,11 @@ export function Stats(props: StatsProps) {
     const mylandingData: LandingData = JSON.parse(
       localStorage.getItem('lastFlightLanding') || '{}'
     );
-    let touchDownTs = 0;
+    const touchDownTs = mylandingData.touchDown;
     let index = 0;
-    let touchDownCounter = -1;
     const mydata: any[] = [];
     const mydataTransformed: any[] = [];
     mylandingData.data.forEach((data: any) => {
-      if (touchDownCounter === 0) {
-        return;
-      } else {
-        touchDownCounter--;
-      }
-      if (
-        Math.round(data.vs) === Math.round(mylandingData.vs) &&
-        data.agl < 5 &&
-        touchDownCounter === -1
-      ) {
-        touchDownTs = index;
-        touchDownCounter = 100;
-      }
       data.vs = XPlaneData.dataRoundup(data.vs * -1);
       data.agl = XPlaneData.dataRoundup(data.agl * 3.28084);
       data.ts = new Date(data.ts).toISOString();

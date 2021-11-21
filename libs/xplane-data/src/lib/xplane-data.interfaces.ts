@@ -14,6 +14,7 @@ export type FlightState =
 export interface LandingData {
   vs: number;
   gForce: number;
+  touchDown: number;
   data: any[];
 }
 

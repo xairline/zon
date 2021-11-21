@@ -21,6 +21,7 @@ export class XPlaneData {
       landingData: {
         vs: 0,
         gForce: 0,
+        touchDown: 0,
         data: [],
       },
       events: [],
@@ -165,9 +166,7 @@ export class XPlaneData {
         : ts;
     let calculatedGForce: number =
       flightData.landingData.data.length > 0
-        ? ((vs* 0.00508 - lastVs* 0.00508) /
-            ((ts - lastTs) / 1000) +
-            9.8) /
+        ? ((vs * 0.00508 - lastVs * 0.00508) / ((ts - lastTs) / 1000) + 9.8) /
           9.8
         : gForce;
     if (gForce > calculatedGForce) {
@@ -177,7 +176,7 @@ export class XPlaneData {
     if (
       ias >= 30 &&
       (flightData.timeOn.system === 0 ||
-        ts - flightData.timeOn.system < 30 * 1000)
+        ts - flightData.timeOn.system < 10 * 1000)
     ) {
       flightData.landingData.data.push({
         ts,
@@ -199,6 +198,7 @@ export class XPlaneData {
         flightData.timeOn.system = ts;
         flightData.timeOn.sim = zuleSec;
         flightData.fuelOn = fuel;
+        flightData.landingData.touchDown = ts;
         window?.electron?.logger.info(
           `touchdown: ${JSON.stringify(flightData.timeOn)} | ${
             flightData.fuelOn
