@@ -4,6 +4,7 @@ import {
   DATAREF_FEQ,
   FlightData,
   FlightState,
+  IPirep,
   Rules,
   XPlaneData,
 } from '@zon/xplane-data';
@@ -531,7 +532,7 @@ class DatarefStore {
           ? this.flightData.timeOn.sim + 24 * 60 * 60
           : this.flightData.timeOn.sim;
 
-      const flightReqTemplate = {
+      const flightReqTemplate: IPirep = {
         number: this.trackingFlight.flightNumber,
         aircraftType: this.dataref.aircraftType,
         //aircraftRegistration: this.dataref.aircraftRegistration,
@@ -557,19 +558,22 @@ class DatarefStore {
         fuelIn,
         landingRate: Math.round(this.flightData.landingData.vs),
       };
-      window.electron.logger.info(flightReqTemplate);
 
       const res = await axios
         .post('https://zonexecutive.com/action.php/acars/openfdr/flight', {
           flight: flightReqTemplate,
         })
         .catch((e: any) => {
+          // store pirep for future submission
+          window.electron.savePirep(flightReqTemplate).then((pirepFile) => {
+            window.electron.logger.info(`PIREP stored: ${pirepFile}`);
+          });
+
           notification.warning({
             message: 'PIREP Failed',
             duration: 0,
             description: `${flightReqTemplate.number}: ${flightReqTemplate.departure} - ${flightReqTemplate.destination}`,
           });
-          // TODO: save flightTemplate to file
           throw e;
         });
       localStorage.setItem('lastFlight', res.data.data.id);

@@ -38,3 +38,25 @@ export interface FlightData {
   violationEvents: any[];
   rules: any[];
 }
+export interface IPirep {
+  number: string;
+  aircraftType: string;
+  //aircraftRegistration: this.dataref.aircraftRegistration,
+  departure: string;
+  destination: string;
+  route: string;
+  timeOut: string; // engine start
+  timeOff: string; // takeoff
+  timeOn: string; // land
+  timeIn: string; // engine stop
+  totalBlockTime: number;
+  totalFlightTime: number; // from takeoff to land
+  dryOperatingWeight: number;
+  payloadWeight: number;
+  pax: number;
+  fuelOut: number;
+  fuelOff: number;
+  fuelOn: number;
+  fuelIn: number;
+  landingRate: number;
+}

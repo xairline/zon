@@ -4,6 +4,7 @@
  */
 
 import { app, ipcMain } from 'electron';
+import * as path from 'path';
 import { environment } from '../../environments/environment';
 
 export default class ElectronEvents {
@@ -17,6 +18,12 @@ ipcMain.handle('get-app-version', (event) => {
   console.log(`Fetching application version... [v${environment.version}]`);
 
   return environment.version;
+});
+
+ipcMain.handle('get-app-data-path', (event) => {
+  const res = path.join(app.getPath('documents'), 'openFDR');
+  console.log(`Fetching application data path... ${res}`);
+  return res;
 });
 
 // Handle App termination
