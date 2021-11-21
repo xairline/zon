@@ -564,13 +564,20 @@ class DatarefStore {
           flight: flightReqTemplate,
         })
         .catch((e: any) => {
+          notification.warning({
+            message: 'PIREP Failed',
+            duration: 0,
+            description: `${flightReqTemplate.number}: ${flightReqTemplate.departure} - ${flightReqTemplate.destination}`,
+          });
+          // TODO: save flightTemplate to file
           throw e;
         });
       localStorage.setItem('lastFlight', res.data.data.id);
       window.electron.logger.info('PIREP filed');
-      notification.open({
+      notification.success({
         message: 'PIREP Filed successfully',
-        description: util.inspect(flightReqTemplate),
+        duration: 0,
+        description: `${flightReqTemplate.number}: ${flightReqTemplate.departure} - ${flightReqTemplate.destination}`,
       });
     } catch (error) {
       window.electron.logger.error('Failed to file final report');
