@@ -107,7 +107,7 @@ export function FlightDetails(props: FlightDetailsProps) {
                 DatarefStore.trackingFlight.route = e.target.value;
               });
             }}
-            style={{ minHeight: '8vh' }}
+            autoSize={{ minRows: 3, maxRows: 8 }}
           />
         </Descriptions.Item>
       </Descriptions>
