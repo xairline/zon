@@ -1,8 +1,9 @@
-#### 0.1.0-beta.4 (2021-11-22)
+#### 0.1.0-beta.5 (2021-11-22)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.1.0-beta.4 (bf68c2f4)
   *  bump up version: 0.1.0-beta.3 (8c53bcee)
   *  bump up version: 0.1.0-beta.2 (065a9e99)
   *  bump up version: 0.1.0-beta.1 (636e6318)
@@ -12,6 +13,7 @@
 
 ##### New Features
 
+*  offline pirep should be sync'ed to server on start up (cc6ae562)
 *  offline mode (f36a0bdb)
 *  store Pirep when in offline mode/lost internet (0976ae97)
 *  #21 show app version (33f1c7f8)
