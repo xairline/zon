@@ -579,9 +579,8 @@ class DatarefStore {
       window.electron.logger.error(util.inspect(error));
       window.electron.logger.error(error.stack);
       // store pirep for future submission
-      window.electron.savePirep(flightReqTemplate).then((pirepFile) => {
-        window.electron.logger.info(`PIREP stored: ${pirepFile}`);
-      });
+      const pirepFile = await window.electron.savePirep(flightReqTemplate);
+      window.electron.logger.info(`PIREP stored: ${pirepFile}`);
 
       notification.warning({
         message: 'PIREP Failed',
