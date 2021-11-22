@@ -1,3 +1,4 @@
+import { message, notification } from 'antd';
 import axios from 'axios';
 import { makeObservable, observable, runInAction } from 'mobx';
 import 'reflect-metadata';
@@ -48,6 +49,49 @@ export class PilotStore {
           localStorage.setItem('username', username);
           localStorage.setItem('password', password);
         });
+        const offlinePireps = await window.electron.loadOfflinePirep();
+        if (offlinePireps.length > 0) {
+          notification.success({
+            message: 'Offline PIREP found',
+            duration: 0,
+            description: `You have ${offlinePireps.length} offline PIREPS to sync`,
+          });
+
+          const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+          for (const offlinePirep of offlinePireps) {
+            offlinePirep.content.remarks = 'Offline sync';
+            axios
+              .post(
+                'https://zonexecutive.com/action.php/acars/openfdr/flight',
+                {
+                  flight: offlinePirep.content,
+                }
+              )
+              .then(async (res) => {
+                await window.electron.deleteOfflinePirep(offlinePirep.path);
+                window.electron.logger.info(`PIREP sync'ed`);
+                notification.success({
+                  message: `PIREP Sync'ed Successfully - ${res.data.data.id}`,
+                  duration: 0,
+                  description: `${offlinePirep.content.number}: ${offlinePirep.content.departure} - ${offlinePirep.content.destination}`,
+                });
+              })
+              .catch((e: any) => {
+                window.electron.logger.error(
+                  `Sync failed: ${offlinePirep.content.number}: ${offlinePirep.content.departure} - ${offlinePirep.content.destination}`
+                );
+                window.electron.logger.error(e);
+                window.electron.logger.error(util.inspect(e));
+                window.electron.logger.error(e.stack);
+                notification.error({
+                  message: `PIREP Sync'ed Failed`,
+                  duration: 0,
+                  description: `${offlinePirep.content.number}: ${offlinePirep.content.departure} - ${offlinePirep.content.destination}`,
+                });
+              });
+            await delay(70 * 1000);
+          }
+        }
       }
     } catch (e) {
       window.electron.logger.error('Login failed');
