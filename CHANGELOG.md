@@ -1,8 +1,9 @@
-#### 0.1.0-beta.3 (2021-11-21)
+#### 0.1.0-beta.4 (2021-11-22)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.1.0-beta.3 (8c53bcee)
   *  bump up version: 0.1.0-beta.2 (065a9e99)
   *  bump up version: 0.1.0-beta.1 (636e6318)
   *  bump up version: 0.1.0-beta.0 (6e8cdea0)
@@ -11,11 +12,16 @@
 
 ##### New Features
 
+*  offline mode (f36a0bdb)
+*  store Pirep when in offline mode/lost internet (0976ae97)
 *  #21 show app version (33f1c7f8)
 *  rework state machine to be more accurate (10e2778e)
 
 ##### Bug Fixes
 
+*  missing error handling of offline fly (a7a97bd2)
+*  race condtion when saving pirep - offline mode (f8b1be5c)
+*  pirep notification windows should stay open (5168b64a)
 *  auto size text area for route (649885de)
 *  chart broken in stats (b36a85b0)
 *  stat page is not showing touch down point (b12596a0)
