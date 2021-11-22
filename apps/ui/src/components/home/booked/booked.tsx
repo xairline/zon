@@ -24,7 +24,7 @@ export interface BookedProps {}
 const StyledBooked = styled.div``;
 
 export function Booked(props: BookedProps) {
-  const { FlightStore, DatarefStore } = useGlobalStores();
+  const { FlightStore, DatarefStore, PilotStore } = useGlobalStores();
   const localStore = useLocalObservable(() => ({
     showModal: false,
     dataBefore: {},
@@ -164,6 +164,7 @@ export function Booked(props: BookedProps) {
             ></Input>,
             <Button
               type="primary"
+              disabled={PilotStore.offline}
               onClick={async () => {
                 try {
                   const simBriefResponse = await axios

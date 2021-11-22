@@ -500,6 +500,7 @@ class DatarefStore {
       return this;
     }
     reportFiled = true;
+    let flightReqTemplate: IPirep;
     try {
       const timeOut = this.flightData.timeOut.system;
       const timeOff = this.flightData.timeOff.system;
@@ -532,7 +533,7 @@ class DatarefStore {
           ? this.flightData.timeOn.sim + 24 * 60 * 60
           : this.flightData.timeOn.sim;
 
-      const flightReqTemplate: IPirep = {
+      flightReqTemplate = {
         number: this.trackingFlight.flightNumber,
         aircraftType: this.dataref.aircraftType,
         //aircraftRegistration: this.dataref.aircraftRegistration,
@@ -564,16 +565,6 @@ class DatarefStore {
           flight: flightReqTemplate,
         })
         .catch((e: any) => {
-          // store pirep for future submission
-          window.electron.savePirep(flightReqTemplate).then((pirepFile) => {
-            window.electron.logger.info(`PIREP stored: ${pirepFile}`);
-          });
-
-          notification.warning({
-            message: 'PIREP Failed',
-            duration: 0,
-            description: `${flightReqTemplate.number}: ${flightReqTemplate.departure} - ${flightReqTemplate.destination}`,
-          });
           throw e;
         });
       localStorage.setItem('lastFlight', res.data.data.id);
@@ -587,6 +578,16 @@ class DatarefStore {
       window.electron.logger.error('Failed to file final report');
       window.electron.logger.error(util.inspect(error));
       window.electron.logger.error(error.stack);
+      // store pirep for future submission
+      window.electron.savePirep(flightReqTemplate).then((pirepFile) => {
+        window.electron.logger.info(`PIREP stored: ${pirepFile}`);
+      });
+
+      notification.warning({
+        message: 'PIREP Failed',
+        duration: 0,
+        description: `${flightReqTemplate.number}: ${flightReqTemplate.departure} - ${flightReqTemplate.destination}`,
+      });
     } finally {
       // store landing data
       localStorage.setItem(

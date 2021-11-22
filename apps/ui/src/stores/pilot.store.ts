@@ -7,12 +7,18 @@ export class PilotStore {
   public isLoggedIn: boolean;
   @observable
   public version: string;
+  @observable
+  public offline: boolean;
 
   public username: string;
 
   constructor() {
     this.isLoggedIn = false;
+    this.offline = false;
     this.username = localStorage.getItem('username') as string;
+    window.electron.getAppVersion().then((res) => {
+      this.version = res;
+    });
     if (this.username?.length > 0) {
       this.login(this.username, localStorage.getItem('password') as string);
     }
@@ -43,7 +49,6 @@ export class PilotStore {
           localStorage.setItem('password', password);
         });
       }
-      this.version = await window.electron.getAppVersion();
     } catch (e) {
       window.electron.logger.error('Login failed');
       window.electron.logger.error(e);

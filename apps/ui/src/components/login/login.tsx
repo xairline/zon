@@ -4,6 +4,7 @@ import { Content } from 'antd/lib/layout/layout';
 import { useObserver } from 'mobx-react-lite';
 import styled from 'styled-components';
 import { useGlobalStores } from '../../stores';
+import { runInAction } from 'mobx';
 
 /* eslint-disable-next-line */
 export interface LoginProps {}
@@ -69,6 +70,19 @@ export function Login(props: LoginProps) {
                   <Form.Item wrapperCol={{ offset: 10, span: 8 }}>
                     <Button type="primary" htmlType="submit">
                       Login
+                    </Button>
+                    <Button
+                      danger
+                      type="primary"
+                      style={{ marginLeft: '16px' }}
+                      onClick={() => {
+                        runInAction(() => {
+                          PilotStore.isLoggedIn = true;
+                          PilotStore.offline = true;
+                        });
+                      }}
+                    >
+                      Offline
                     </Button>
                   </Form.Item>
                 </Form>
