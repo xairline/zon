@@ -2,6 +2,10 @@
 
 This project was generated using [Nx](https://nx.dev).
 
+## Flight Phase State Machine
+
+![Alt text](https://g.gravizo.com/svg?digraph%20G%20%7B%0A%20%20%20%20aize%20%3D%224%2C4%22%3B%0A%20%20%20%20parked%20%5Bshape%3Dbox%5D%3B%0A%20%20%20%20parked%20-%3E%20%22engine%20started%22%0A%20%20%20%20%22engine%20started%22%20-%3E%20taxi%0A%20%20%20%20taxi%20-%3E%20%22engine%20stopped%22%0A%20%20%20%20taxi%20-%3E%20takeoff%0A%20%20%20%20takeoff%20-%3E%20RTO%0A%20%20%20%20takeoff%20-%3E%20climb%0A%20%20%20%20RTO%20-%3E%20taxi%0A%20%20%20%20climb%20-%3E%20cruise%0A%20%20%20%20climb%20-%3E%20descend%0A%20%20%20%20cruise%20-%3E%20climb%0A%20%20%20%20cruise%20-%3E%20descend%0A%20%20%20%20cruise%20-%3E%20landing%0A%20%20%20%20descend%20-%3E%20landing%0A%20%20%20%20descend%20-%3E%20climb%0A%20%20%20%20descend%20-%3E%20cruise%0A%20%20%20%20landing%20-%3E%20taxi%0A%20%20%20%20landing%20-%3E%20climb%0A%20%20%20%20%22engine%20stopped%22%20-%3E%20parked%20%5Bstyle%3Ddotted%5D%3B%0A%7D)
+
 ## Log location
 By default, it writes logs to the following locations:
 
