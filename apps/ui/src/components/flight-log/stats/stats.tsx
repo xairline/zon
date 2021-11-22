@@ -75,7 +75,10 @@ export function Stats(props: StatsProps) {
                   top: true,
                   start: { ts: mylandingData.data[touchDownTs].ts, vs: 'min' },
                   end: {
-                    ts: mylandingData.data[touchDownTs + 1].ts,
+                    ts:
+                      touchDownTs + 1 === mylandingData.data.length
+                        ? mylandingData.data[touchDownTs].ts
+                        : mylandingData.data[touchDownTs + 1].ts,
                     vs: 'max',
                   },
                   style: {

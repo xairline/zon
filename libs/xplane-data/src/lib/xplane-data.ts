@@ -153,6 +153,8 @@ export class XPlaneData {
     ias: number,
     fuel: number,
     zuleSec: number,
+    lat: number,
+    lng: number,
     flightData: FlightData
   ) {
     const lastVs =
@@ -186,6 +188,8 @@ export class XPlaneData {
         gearForce,
         pitch,
         ias,
+        lat,
+        lng,
       });
     }
 

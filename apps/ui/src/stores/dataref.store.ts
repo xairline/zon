@@ -263,6 +263,8 @@ class DatarefStore {
                 ias,
                 fuelWeight,
                 zuluTimeSec,
+                lat,
+                lng,
                 this.flightData
               );
             }
