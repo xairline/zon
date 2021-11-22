@@ -511,11 +511,18 @@ class DatarefStore {
       const fuelOn = this.flightData.fuelOn;
       const fuelIn = this.flightData.fuelIn;
 
-      const response = await axios.get(
-        `https://ourairports.com/airports.json?min_lat=${lat - 0.03}&min_lon=${
-          lng - 0.03
-        }&max_lat=${lat + 0.03}&max_lon=${lng + 0.03}&strict=true&limit=1`
-      );
+      const response =
+        (await axios
+          .get(
+            `https://ourairports.com/airports.json?min_lat=${
+              lat - 0.03
+            }&min_lon=${lng - 0.03}&max_lat=${lat + 0.03}&max_lon=${
+              lng + 0.03
+            }&strict=true&limit=1`
+          )
+          .catch((e) => {
+            window.electron.logger.info(`Failed to get nearest airport`);
+          })) || null;
       this.trackingFlight.destination =
         response?.data[0]?.ident || this.trackingFlight.destination;
 
