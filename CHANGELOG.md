@@ -1,8 +1,9 @@
-#### 0.1.0-beta.5 (2021-11-22)
+#### 0.1.0-beta.6 (2021-11-23)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.1.0-beta.5 (4923e996)
   *  bump up version: 0.1.0-beta.4 (bf68c2f4)
   *  bump up version: 0.1.0-beta.3 (8c53bcee)
   *  bump up version: 0.1.0-beta.2 (065a9e99)
@@ -13,6 +14,8 @@
 
 ##### New Features
 
+*  #8 show 2D landing movement on map (afa0868b)
+*  fix landing analysis (89848654)
 *  offline pirep should be sync'ed to server on start up (cc6ae562)
 *  offline mode (f36a0bdb)
 *  store Pirep when in offline mode/lost internet (0976ae97)
