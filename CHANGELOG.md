@@ -1,8 +1,9 @@
-#### 0.1.0-beta.7 (2021-11-24)
+#### 0.1.0-beta.8 (2021-11-24)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.1.0-beta.7 (e8907efd)
   *  bump up version: 0.1.0-beta.6 (14bd897d)
   *  bump up version: 0.1.0-beta.5 (4923e996)
   *  bump up version: 0.1.0-beta.4 (bf68c2f4)
@@ -25,6 +26,7 @@
 
 ##### Bug Fixes
 
+*   black screen because of new landing data (f5c147c8)
 *   recorder reset mid flight (3c06b67f)
 *  missing error handling of offline fly (a7a97bd2)
 *  race condtion when saving pirep - offline mode (f8b1be5c)
