@@ -84,7 +84,9 @@ class DatarefStore {
       runInAction(async () => {
         if (msg.data === 'xplane closed') {
           this.isXPlaneConnected = false;
-          //this.resetTracking();
+          if (this.flightData.state === 'parked') {
+            this.resetTracking();
+          }
           window.electron.logger.info('XPlane disconnected/closed');
           return;
         }
@@ -210,7 +212,16 @@ class DatarefStore {
             // eslint-disable-next-line no-loop-func
             results.forEach((result) => {
               const nextState = result.event.type as FlightState;
-
+              
+              // set poll freq to 5hz after landing phase
+              if (
+                this.flightData.state === 'landing' &&
+                !normalDataFeq &&
+                nextState === 'taxi'
+              ) {
+                this.ws?.send(`${DATAREF_FEQ}`);
+                normalDataFeq = true;
+              }
               const stateChanged = this.changeState(
                 nextState,
                 timestamp,
@@ -230,10 +241,6 @@ class DatarefStore {
                 window?.electron?.logger.info(
                   `State change: ${util.inspect(datarefNow)}`
                 );
-                if (this.flightData.state === 'taxi' && !normalDataFeq) {
-                  this.ws?.send(`${DATAREF_FEQ}`);
-                  normalDataFeq = true;
-                }
               }
               //get takeoff airport
               if (result.event.type === 'takeoff') {
@@ -605,7 +612,7 @@ class DatarefStore {
     } finally {
       // store landing data
       localStorage.setItem(
-        'lastFlightLanding',
+        'lastFlightLandingData',
         JSON.stringify(this.flightData.landingData)
       );
       this.resetTracking();
