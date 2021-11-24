@@ -2,6 +2,7 @@ import { makeObservable, observable, runInAction } from 'mobx';
 import { Engine } from 'json-rules-engine';
 import {
   DATAREF_FEQ,
+  DATAREF_FEQ_LANDING,
   FlightData,
   FlightState,
   IPirep,
@@ -76,13 +77,14 @@ class DatarefStore {
     this.engine = new Engine(this.rules.getRules());
     const ws = new WebSocket('ws://localhost:4444');
     let landingDataFeq = false;
+    let normalDataFeq = false;
     let timeDelta = 0;
     let lastRecvTs = 0;
     ws.onmessage = (msg) => {
       runInAction(async () => {
         if (msg.data === 'xplane closed') {
           this.isXPlaneConnected = false;
-          this.resetTracking();
+          //this.resetTracking();
           window.electron.logger.info('XPlane disconnected/closed');
           return;
         }
@@ -228,6 +230,10 @@ class DatarefStore {
                 window?.electron?.logger.info(
                   `State change: ${util.inspect(datarefNow)}`
                 );
+                if (this.flightData.state === 'taxi' && !normalDataFeq) {
+                  this.ws?.send(`${DATAREF_FEQ}`);
+                  normalDataFeq = true;
+                }
               }
               //get takeoff airport
               if (result.event.type === 'takeoff') {
@@ -249,7 +255,7 @@ class DatarefStore {
 
             if (this.flightData.state === 'landing') {
               if (!landingDataFeq) {
-                this.ws?.send('Landing dataref freq');
+                this.ws?.send(`${DATAREF_FEQ_LANDING}`);
                 landingDataFeq = true;
               }
               XPlaneData.calculateLandingData(

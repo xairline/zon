@@ -75,7 +75,7 @@ wss.on('connection', function connection(ws, request) {
           clearTimeout(timer);
         }
         console.log('X plane is closed');
-      }, 20000);
+      }, 60000);
     },
     debug: false,
   });
@@ -103,7 +103,7 @@ wss.on('connection', function connection(ws, request) {
 
   // Handle all messages from users.
   ws.on('message', function (msgStr) {
-    requestDataRef(DATAREF_FEQ_LANDING);
+    requestDataRef(parseInt(msgStr));
   });
   // What to do when client disconnect?
   ws.on('close', function (connection) {
