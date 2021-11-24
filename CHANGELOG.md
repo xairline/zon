@@ -1,8 +1,9 @@
-#### 0.1.0-beta.6 (2021-11-23)
+#### 0.1.0-beta.7 (2021-11-24)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.1.0-beta.6 (14bd897d)
   *  bump up version: 0.1.0-beta.5 (4923e996)
   *  bump up version: 0.1.0-beta.4 (bf68c2f4)
   *  bump up version: 0.1.0-beta.3 (8c53bcee)
@@ -24,6 +25,7 @@
 
 ##### Bug Fixes
 
+*   recorder reset mid flight (3c06b67f)
 *  missing error handling of offline fly (a7a97bd2)
 *  race condtion when saving pirep - offline mode (f8b1be5c)
 *  pirep notification windows should stay open (5168b64a)
