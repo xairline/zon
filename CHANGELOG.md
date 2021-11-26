@@ -1,8 +1,9 @@
-#### 0.1.0-beta.8 (2021-11-24)
+#### 0.1.0 (2021-11-26)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.1.0-beta.8 (84053dc4)
   *  bump up version: 0.1.0-beta.7 (e8907efd)
   *  bump up version: 0.1.0-beta.6 (14bd897d)
   *  bump up version: 0.1.0-beta.5 (4923e996)
@@ -26,6 +27,7 @@
 
 ##### Bug Fixes
 
+*  #25 do not reset tracking when updating editable information in recorder status (da8579cd)
 *   black screen because of new landing data (f5c147c8)
 *   recorder reset mid flight (3c06b67f)
 *  missing error handling of offline fly (a7a97bd2)
