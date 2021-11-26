@@ -8,6 +8,7 @@ import App from './app/app';
 declare global {
   interface Window {
     electron?: any;
+    tb?:any;
   }
 }
 

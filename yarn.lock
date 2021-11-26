@@ -14561,6 +14561,11 @@ text-table@^0.2.0:
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
+threebox-plugin@^2.2.5:
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/threebox-plugin/-/threebox-plugin-2.2.5.tgz#73fb84f74ed39ab172a0f2ef35d7a4b59a9caf79"
+  integrity sha512-YRgf+nVmE9vVz7x1WQ29uP/XnjdbT6VPTRpA18wmDGf+g6RvUTDutRyh1ISRfjP7XPuHU7/LEy6LohvzB1/F7A==
+
 throat@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/throat/-/throat-5.0.0.tgz#c5199235803aad18754a667d659b5e72ce16764b"

@@ -4,6 +4,7 @@ import { Col, Collapse, PageHeader, Row } from 'antd';
 import { useObserver } from 'mobx-react-lite';
 import ReactMapboxGl, { GeoJSONLayer, Source } from 'react-mapbox-gl';
 import React from 'react';
+import { Threebox } from 'threebox-plugin';
 const { Panel } = Collapse;
 /* eslint-disable-next-line */
 export interface StatsProps {}
@@ -13,31 +14,14 @@ export function Stats(props: StatsProps) {
     const mylandingData: LandingData = JSON.parse(
       localStorage.getItem('lastFlightLandingData') || '{}'
     );
+    const landingLine = [];
+    const touchDownLine = [];
+    const helpLines = [];
     let touchDownIndex = 0;
     let index = 0;
     const mydata: any[] = [];
     const mydataTransformed: any[] = [];
-    const geojson = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: { color: '#F7455D', width: 3 },
-          geometry: {
-            coordinates: [],
-            type: 'LineString',
-          },
-        },
-        {
-          type: 'Feature',
-          properties: { color: '#e3c412', width: 5 },
-          geometry: {
-            coordinates: [],
-            type: 'LineString',
-          },
-        },
-      ],
-    };
+    let lastLngLat = '';
     for (const data of mylandingData.data) {
       if (data.ts === mylandingData.touchDown) {
         touchDownIndex = index;
@@ -45,11 +29,23 @@ export function Stats(props: StatsProps) {
       data.vs = XPlaneData.dataRoundup(data.vs * -1);
       data.agl = XPlaneData.dataRoundup(data.agl * 3.28084);
       data.ts = new Date(data.ts).toISOString();
-      if (touchDownIndex === 0) {
-        geojson.features[0].geometry.coordinates.push([data.lng, data.lat]);
+
+      // draw line
+      if (`${data.lng}-${data.lat}` === lastLngLat) {
+        landingLine[landingLine.length - 1] = [data.lng, data.lat, data.agl];
+        helpLines[helpLines.length - 1] = [
+          [data.lng, data.lat, 0],
+          [data.lng, data.lat, data.agl],
+        ];
       } else {
-        geojson.features[1].geometry.coordinates.push([data.lng, data.lat]);
+        landingLine.push([data.lng, data.lat, data.agl]);
+        helpLines.push([
+          [data.lng, data.lat, 0],
+          [data.lng, data.lat, data.agl],
+        ]);
+        lastLngLat = `${data.lng}-${data.lat}`;
       }
+
       if (data.agl < 50) {
         mydata.push(data);
         mydataTransformed.push({
@@ -170,30 +166,69 @@ export function Stats(props: StatsProps) {
               zoom={[14.3]}
               pitch={[53]}
               bearing={[-23]}
-            >
-              <Source
-                id="mapbox-dem"
-                type="raster-dem"
-                url="mapbox://mapbox.mapbox-terrain-dem-v1"
-                tileSize={512}
-                maxzoom={14}
-              />
-              <GeoJSONLayer
-                data={geojson}
-                // linePaint={{
-                //   'line-color': 'red',
-                //   'line-width': 1,
-                // }}
-                lineLayout={{
-                  'line-cap': 'round',
-                  'line-join': 'round',
-                }}
-                linePaint={{
-                  'line-color': ['get', 'color'],
-                  'line-width': ['get', 'width'],
-                }}
-              />
-            </Map>
+              onStyleLoad={(map) => {
+                // map.addSource('mapbox-dem', {
+                //   type: 'raster-dem',
+                //   url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+                //   tileSize: 512,
+                //   maxzoom: 14,
+                // });
+                // // add the DEM source as a terrain layer with exaggerated height
+                // map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
+
+                // add a sky layer that will show when the map is highly pitched
+                map.addLayer({
+                  id: 'sky',
+                  type: 'sky',
+                  paint: {
+                    'sky-type': 'atmosphere',
+                    'sky-atmosphere-sun': [0.0, 0.0],
+                    'sky-atmosphere-sun-intensity': 15,
+                  },
+                });
+                map.addLayer({
+                  id: 'custom_layer',
+                  type: 'custom',
+                  renderingMode: '3d',
+                  onAdd: function (map, mbxContext) {
+                    // instantiate threebox
+                    window.tb = new Threebox(map, mbxContext, {
+                      realSunlight: true,
+                      sky: true,
+                      terrain: true,
+                      enableSelectingObjects: true,
+                      enableTooltips: true,
+                    });
+
+                    const lineOptions = {
+                      geometry: landingLine,
+                      color: '#DF1212',
+                      width: 4, // random width between 1 and 2
+                    };
+
+                    const lineMesh = window.tb.line(lineOptions);
+
+                    window.tb.add(lineMesh);
+
+                    for (const helpLine of helpLines) {
+                      const lineOptions = {
+                        geometry: helpLine,
+                        color: '#DF1212',
+                        width: 2, // random width between 1 and 2
+                      };
+
+                      const lineMesh = window.tb.line(lineOptions);
+
+                      window.tb.add(lineMesh);
+                    }
+                  },
+
+                  render: function (gl, matrix) {
+                    window.tb.update();
+                  },
+                });
+              }}
+            ></Map>
           </Col>
         </Row>
       </PageHeader>
