@@ -1,4 +1,8 @@
-#### 0.1.1-0 (2021-11-27)
+#### 0.1.1-1 (2021-11-27)
+
+##### Continuous Integration
+
+* **release:**  bump up version: 0.1.1-0 (8f6b4d8a)
 
 ##### New Features
 
