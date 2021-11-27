@@ -75,7 +75,7 @@ wss.on('connection', function connection(ws, request) {
           clearTimeout(timer);
         }
         console.log('X plane is closed');
-      }, 20000);
+      }, 60000);
     },
     debug: false,
   });

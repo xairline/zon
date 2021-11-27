@@ -1,11 +1,8 @@
 import styled from '@emotion/styled';
+import { Button, Modal, PageHeader, Row, Table } from 'antd';
 import { useLocalObservable, useObserver } from 'mobx-react-lite';
-import { runInAction } from 'mobx';
 import React, { useEffect } from 'react';
 import { useGlobalStores } from '../../stores';
-import { Table, message, Button, Modal, PageHeader, Row } from 'antd';
-import FlightDetails from '../flight-details/flight-details';
-import { XPlaneData } from '@zon/xplane-data';
 import { Stats } from './stats/stats';
 
 /* eslint-disable-next-line */
@@ -121,7 +118,7 @@ export function FlightLog(props: FlightLogProps) {
       key: 'totalFlightTime',
       sorter: (a: any, b: any) => a.totalFlightTime - b.totalFlightTime,
       render: (value: number) =>
-      `${Math.trunc(value)}h ${Math.round((value % 1) * 60)}m`,
+        `${Math.trunc(value)}h ${Math.round((value % 1) * 60)}m`,
     },
     {
       title: 'Time In',

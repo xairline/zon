@@ -45,7 +45,7 @@ class DatarefStore {
   constructor() {
     this.isXPlaneConnected = false;
     this?.ws?.close();
-    window.electron.logger.info('websocket closed');
+    window.electron.logger.info('websocket closed - constructor');
     this?.engine?.stop();
     window.electron.logger.info('rules engine stopped');
 
@@ -476,7 +476,7 @@ class DatarefStore {
     runInAction(() => {
       this.isXPlaneConnected = false;
       this?.ws?.close();
-      window.electron.logger.info('websocket closed');
+      window.electron.logger.info('websocket closed - reset func');
       this?.engine?.stop();
       window.electron.logger.info('rules engine stopped');
       this.flightData = XPlaneData.initFlightData();
