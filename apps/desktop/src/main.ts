@@ -1,6 +1,7 @@
 import SquirrelEvents from './app/events/squirrel.events';
 import ElectronEvents from './app/events/electron.events';
 import UpdateEvents from './app/events/update.events';
+import * as logger from 'electron-log';
 import { app, BrowserWindow } from 'electron';
 import App from './app/app';
 import { XPlaneClient } from './XPlaneClient';
@@ -69,12 +70,11 @@ wss.on('connection', function connection(ws, request) {
       }
       timer = setTimeout(() => {
         connected = false;
-        requestDataRef(0);
         ws.send('xplane closed');
         if (timer) {
           clearTimeout(timer);
         }
-        console.log('X plane is closed');
+        logger.info('X plane is closed');
       }, 60000);
     },
     debug: false,
@@ -84,7 +84,7 @@ wss.on('connection', function connection(ws, request) {
       xPlane.requestDataRef(DATAREF_STR[key], freq);
     });
     if (connected) {
-      console.log(`set dataref freq: ${freq}`);
+      logger.info(`set dataref freq: ${freq}`);
     }
   };
 
@@ -97,7 +97,7 @@ wss.on('connection', function connection(ws, request) {
       xPlane.initConnection();
       requestDataRef(0);
       requestDataRef(DATAREF_FEQ);
-      console.log('reconnect to xplane ...');
+      logger.info('reconnect to xplane ...');
     }
   }, 3000);
 
@@ -108,6 +108,7 @@ wss.on('connection', function connection(ws, request) {
   // What to do when client disconnect?
   ws.on('close', function (connection) {
     if (xPlane.client) {
+      logger.info('WS close, reset xplane UDP client');
       requestDataRef(0);
       xPlane.client.close();
       xPlane.client = null;
@@ -116,5 +117,5 @@ wss.on('connection', function connection(ws, request) {
 });
 //start our server
 server.listen(port, () => {
-  console.log(`Data stream server started on port ${port}`);
+  logger.info(`Data stream server started on port ${port}`);
 });
