@@ -2,11 +2,11 @@ import { RuleProperties } from 'json-rules-engine';
 import { FlightData } from '../xplane-data.interfaces';
 export interface IRules {
   defaultRules?: RuleProperties[];
-  taxiRules?: RuleProperties[];
-  takeoffRules?: RuleProperties[];
-  climbRules?: RuleProperties[];
-  cruiseRules?: RuleProperties[];
-  descendRules?: RuleProperties[];
+  TaxiRules?: RuleProperties[];
+  TakeoffRules?: RuleProperties[];
+  ClimbRules?: RuleProperties[];
+  CruiseRules?: RuleProperties[];
+  DescentRules?: RuleProperties[];
   landingRules?: RuleProperties[];
 }
 
@@ -25,12 +25,12 @@ export const DEFAULT_RULES = [
           fact: 'dataref',
           path: '$.state',
           operator: 'equal',
-          value: 'parked',
+          value: 'Parked',
         },
       ],
     },
     event: {
-      type: 'engine started',
+      type: 'Engine Started',
     },
   },
   {
@@ -53,12 +53,12 @@ export const DEFAULT_RULES = [
           fact: 'dataref',
           path: '$.state',
           operator: 'equal',
-          value: 'engine started',
+          value: 'Engine Started',
         },
       ],
     },
     event: {
-      type: 'taxi',
+      type: 'Taxi',
     },
   },
   {
@@ -81,12 +81,12 @@ export const DEFAULT_RULES = [
           fact: 'dataref',
           path: '$.state',
           operator: 'equal',
-          value: 'taxi',
+          value: 'Taxi',
         },
       ],
     },
     event: {
-      type: 'takeoff',
+      type: 'Takeoff',
     },
   },
   {
@@ -119,7 +119,7 @@ export const DEFAULT_RULES = [
           fact: 'dataref',
           path: '$.state',
           operator: 'equal',
-          value: 'takeoff',
+          value: 'Takeoff',
         },
       ],
     },
@@ -149,32 +149,32 @@ export const DEFAULT_RULES = [
               fact: 'dataref',
               path: '$.state',
               operator: 'equal',
-              value: 'takeoff',
+              value: 'Takeoff',
             },
             {
               fact: 'dataref',
               path: '$.state',
               operator: 'equal',
-              value: 'cruise',
+              value: 'Cruise',
             },
             {
               fact: 'dataref',
               path: '$.state',
               operator: 'equal',
-              value: 'climb',
+              value: 'Climb',
             },
             {
               fact: 'dataref',
               path: '$.state',
               operator: 'equal',
-              value: 'descend',
+              value: 'Descent',
             },
           ],
         },
       ],
     },
     event: {
-      type: 'climb',
+      type: 'Climb',
     },
   },
   {
@@ -205,20 +205,20 @@ export const DEFAULT_RULES = [
               fact: 'dataref',
               path: '$.state',
               operator: 'equal',
-              value: 'descend',
+              value: 'Descent',
             },
             {
               fact: 'dataref',
               path: '$.state',
               operator: 'equal',
-              value: 'climb',
+              value: 'Climb',
             },
           ],
         },
       ],
     },
     event: {
-      type: 'cruise',
+      type: 'Cruise',
     },
   },
   {
@@ -243,20 +243,20 @@ export const DEFAULT_RULES = [
               fact: 'dataref',
               path: '$.state',
               operator: 'equal',
-              value: 'climb',
+              value: 'Climb',
             },
             {
               fact: 'dataref',
               path: '$.state',
               operator: 'equal',
-              value: 'cruise',
+              value: 'Cruise',
             },
           ],
         },
       ],
     },
     event: {
-      type: 'descend',
+      type: 'Descent',
     },
   },
   {
@@ -287,20 +287,20 @@ export const DEFAULT_RULES = [
               fact: 'dataref',
               path: '$.state',
               operator: 'equal',
-              value: 'descend',
+              value: 'Descent',
             },
             {
               fact: 'dataref',
               path: '$.state',
               operator: 'equal',
-              value: 'cruise',
+              value: 'Cruise',
             },
           ],
         },
       ],
     },
     event: {
-      type: 'landing',
+      type: 'Landing',
     },
   },
   {
@@ -337,14 +337,14 @@ export const DEFAULT_RULES = [
               fact: 'dataref',
               path: '$.state',
               operator: 'equal',
-              value: 'landing',
+              value: 'Landing',
             },
           ],
         },
       ],
     },
     event: {
-      type: 'taxi',
+      type: 'Taxi',
     },
   },
   {
@@ -361,12 +361,12 @@ export const DEFAULT_RULES = [
           fact: 'dataref',
           path: '$.state',
           operator: 'equal',
-          value: 'taxi',
+          value: 'Taxi',
         },
       ],
     },
     event: {
-      type: 'engine stopped',
+      type: 'Engine Stopped',
     },
   },
 ];

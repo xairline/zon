@@ -1,4 +1,4 @@
-import { BrowserWindow, screen, shell } from 'electron';
+import { BrowserWindow, Menu, screen, shell } from 'electron';
 import { join } from 'path';
 import { format } from 'url';
 import { environment } from '../environments/environment';
@@ -75,6 +75,7 @@ export default class App {
       },
     });
     App.mainWindow.setMenu(null);
+    Menu.setApplicationMenu(Menu.buildFromTemplate([]))
     App.mainWindow.center();
 
     // if main window is ready to show, close the splash window and show the main window

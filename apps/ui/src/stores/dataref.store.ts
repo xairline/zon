@@ -15,10 +15,10 @@ import axios from 'axios';
 import runways from './runways.json';
 // const runwayData: any[] = runways as any[];
 // console.log(runwayData.filter((runway) => runway.airport_ident === 'CYOW'));
-let cruiseCounter = 0;
-let climbCounter = 0;
-let descendCounter = 0;
-let takeoffCounter = 0;
+let CruiseCounter = 0;
+let ClimbCounter = 0;
+let DescentCounter = 0;
+let TakeoffCounter = 0;
 let reportFiled = false;
 class DatarefStore {
   @observable
@@ -47,7 +47,7 @@ class DatarefStore {
     this?.ws?.close();
     window.electron.logger.info('websocket closed - constructor');
     this?.engine?.stop();
-    window.electron.logger.info('rules engine stopped');
+    window.electron.logger.info('rules Engine Stopped');
 
     this.trackingFlight = {
       flightNumber: 'ZE999',
@@ -92,7 +92,7 @@ class DatarefStore {
       runInAction(async () => {
         if (msg.data === 'xplane closed') {
           this.isXPlaneConnected = false;
-          if (this.flightData.state === 'parked') {
+          if (this.flightData.state === 'Parked') {
             this.resetTracking();
           }
           window.electron.logger.info('XPlane disconnected/closed');
@@ -115,7 +115,7 @@ class DatarefStore {
             lng,
             heading,
             paused,
-            zuluTimeSec,
+            zuluTimeSec: latestZuleTimeSec,
           } = flightDataArray[flightDataArray.length - 1];
           if (
             this.dataref.aircraftType !== '' &&
@@ -138,13 +138,13 @@ class DatarefStore {
             emptyWeight
           );
 
-          // intial state set to parked
+          // intial state set to Parked
           if (!this.flightData.state) {
             XPlaneData.changeStateTo(
               this.flightData,
-              'parked',
+              'Parked',
               Date.now(),
-              zuluTimeSec,
+              latestZuleTimeSec,
               Math.round(fuelWeight)
             );
             // get nearest airport
@@ -188,7 +188,7 @@ class DatarefStore {
               fuelWeight,
               elevation,
               paused,
-              zuluTimeSec,
+              zuluTimeSec: currentZuluTimeSec,
             } = flightDataArray[i];
             // make sure we ignore older data
             if (ts < lastRecvTs) {
@@ -223,9 +223,9 @@ class DatarefStore {
 
               // set poll freq to 5hz after landing phase
               if (
-                this.flightData.state === 'landing' &&
+                this.flightData.state === 'Landing' &&
                 !normalDataFeq &&
-                nextState === 'taxi'
+                nextState === 'Taxi'
               ) {
                 this.ws?.send(`${DATAREF_FEQ}`);
                 normalDataFeq = true;
@@ -233,7 +233,7 @@ class DatarefStore {
               const stateChanged = this.changeState(
                 nextState,
                 timestamp,
-                zuluTimeSec,
+                currentZuluTimeSec,
                 fuelWeight
               );
               this.posReport(
@@ -250,8 +250,8 @@ class DatarefStore {
                   `State change: ${util.inspect(datarefNow)}`
                 );
               }
-              //get takeoff airport
-              if (result.event.type === 'takeoff') {
+              //get Takeoff airport
+              if (result.event.type === 'Takeoff') {
                 axios
                   .get(
                     `https://ourairports.com/airports.json?min_lat=${
@@ -268,7 +268,7 @@ class DatarefStore {
               }
             });
 
-            if (this.flightData.state === 'landing') {
+            if (this.flightData.state === 'Landing') {
               if (!landingDataFeq) {
                 this.ws?.send(`${DATAREF_FEQ_LANDING}`);
                 landingDataFeq = true;
@@ -283,18 +283,18 @@ class DatarefStore {
                 pitch,
                 ias,
                 fuelWeight,
-                zuluTimeSec,
+                currentZuluTimeSec,
                 lat,
                 lng,
                 this.flightData
               );
             }
-            if (this.flightData.state === 'engine stopped') {
+            if (this.flightData.state === 'Engine Stopped') {
               XPlaneData.changeStateTo(
                 this.flightData,
-                'engine stopped',
+                'Engine Stopped',
                 timestamp,
-                zuluTimeSec,
+                currentZuluTimeSec,
                 Math.round(fuelWeight)
               );
               this.posReport(lat, lng, heading, elevation, gs, paused);
@@ -320,10 +320,10 @@ class DatarefStore {
   ): boolean {
     let res = false;
     if (
-      nextState !== 'climb' &&
-      nextState !== 'descend' &&
-      nextState !== 'cruise' &&
-      nextState !== 'takeoff'
+      nextState !== 'Climb' &&
+      nextState !== 'Descent' &&
+      nextState !== 'Cruise' &&
+      nextState !== 'Takeoff'
     ) {
       XPlaneData.changeStateTo(
         this.flightData,
@@ -334,66 +334,66 @@ class DatarefStore {
       );
       res = true;
     } else {
-      cruiseCounter = nextState === 'cruise' ? cruiseCounter + 1 : 0;
-      climbCounter = nextState === 'climb' ? climbCounter + 1 : 0;
-      descendCounter = nextState === 'descend' ? descendCounter + 1 : 0;
-      takeoffCounter = nextState === 'takeoff' ? takeoffCounter + 1 : 0;
+      CruiseCounter = nextState === 'Cruise' ? CruiseCounter + 1 : 0;
+      ClimbCounter = nextState === 'Climb' ? ClimbCounter + 1 : 0;
+      DescentCounter = nextState === 'Descent' ? DescentCounter + 1 : 0;
+      TakeoffCounter = nextState === 'Takeoff' ? TakeoffCounter + 1 : 0;
       if (
-        cruiseCounter > 20 * DATAREF_FEQ &&
+        CruiseCounter > 20 * DATAREF_FEQ &&
         this.flightData.state !== nextState
       ) {
         XPlaneData.changeStateTo(
           this.flightData,
-          'cruise',
+          'Cruise',
           timestamp,
           zuluTimeSec,
           Math.round(fuelWeight)
         );
         res = true;
-        cruiseCounter = 0;
+        CruiseCounter = 0;
       }
       if (
-        climbCounter > 10 * DATAREF_FEQ &&
+        ClimbCounter > 10 * DATAREF_FEQ &&
         this.flightData.state !== nextState
       ) {
         XPlaneData.changeStateTo(
           this.flightData,
-          'climb',
+          'Climb',
           timestamp,
           zuluTimeSec,
           Math.round(fuelWeight)
         );
         res = true;
-        climbCounter = 0;
+        ClimbCounter = 0;
       }
       if (
-        descendCounter > 20 * DATAREF_FEQ &&
+        DescentCounter > 20 * DATAREF_FEQ &&
         this.flightData.state !== nextState
       ) {
         XPlaneData.changeStateTo(
           this.flightData,
-          'descend',
+          'Descent',
           timestamp,
           zuluTimeSec,
           Math.round(fuelWeight)
         );
         res = true;
-        descendCounter = 0;
+        DescentCounter = 0;
       }
 
       if (
-        takeoffCounter > 8 * DATAREF_FEQ &&
+        TakeoffCounter > 8 * DATAREF_FEQ &&
         this.flightData.state !== nextState
       ) {
         XPlaneData.changeStateTo(
           this.flightData,
-          'takeoff',
+          'Takeoff',
           timestamp,
           zuluTimeSec,
           Math.round(fuelWeight)
         );
         res = true;
-        takeoffCounter = 0;
+        TakeoffCounter = 0;
       }
     }
 
@@ -486,13 +486,13 @@ class DatarefStore {
       this?.ws?.close();
       window.electron.logger.info('websocket closed - reset func');
       this?.engine?.stop();
-      window.electron.logger.info('rules engine stopped');
+      window.electron.logger.info('rules Engine Stopped');
       this.flightData = XPlaneData.initFlightData();
 
-      cruiseCounter = 0;
-      climbCounter = 0;
-      descendCounter = 0;
-      takeoffCounter = 0;
+      CruiseCounter = 0;
+      ClimbCounter = 0;
+      DescentCounter = 0;
+      TakeoffCounter = 0;
 
       reportFiled = false;
 
@@ -571,7 +571,7 @@ class DatarefStore {
         destination: this.trackingFlight.destination,
         route: this.trackingFlight.route,
         timeOut: this.toIsoStringWithOffset(timeOut), // engine start
-        timeOff: this.toIsoStringWithOffset(timeOff), // takeoff
+        timeOff: this.toIsoStringWithOffset(timeOff), // Takeoff
         timeOn: this.toIsoStringWithOffset(timeOn), // land
         timeIn: this.toIsoStringWithOffset(timeIn), // engine stop
         totalBlockTime: XPlaneData.dataRoundup(
@@ -579,7 +579,7 @@ class DatarefStore {
         ), // from engine start to engine stop 79572.2734375 77769.1015625
         totalFlightTime: XPlaneData.dataRoundup(
           (this.flightData.timeOn.sim - this.flightData.timeOff.sim) / 60 / 60
-        ), // from takeoff to land
+        ), // from Takeoff to land
         dryOperatingWeight: this.dataref.emptyWeight,
         payloadWeight: this.dataref.payloadWeight,
         pax: this.trackingFlight.passengers,

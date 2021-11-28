@@ -108,7 +108,7 @@ export class XPlaneData {
       return;
     }
 
-    if (state === 'engine started') {
+    if (state === 'Engine Started') {
       flightData.timeOut = { system: ts, sim: zuluTimeSec };
       flightData.fuelOut = fuel;
       window?.electron?.logger.info(
@@ -117,14 +117,14 @@ export class XPlaneData {
         }`
       );
     }
-    if (state === 'engine stopped') {
+    if (state === 'Engine Stopped') {
       flightData.timeIn = { system: ts, sim: zuluTimeSec };
       flightData.fuelIn = fuel;
       window?.electron?.logger.info(
         `${state}: ${JSON.stringify(flightData.timeIn)} | ${flightData.fuelIn}`
       );
     }
-    if (state === 'takeoff') {
+    if (state === 'Takeoff') {
       flightData.timeOff = { system: ts, sim: zuluTimeSec };
       flightData.fuelOff = fuel;
       window?.electron?.logger.info(
