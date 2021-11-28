@@ -25,25 +25,30 @@ export function Stats(props: StatsProps) {
     for (const data of mylandingData.data) {
       if (data.ts === mylandingData.touchDown) {
         touchDownIndex = index;
+        lastLngLat = '';
       }
       data.vs = XPlaneData.dataRoundup(data.vs * -1);
       data.agl = XPlaneData.dataRoundup(data.agl * 3.28084);
       data.ts = new Date(data.ts).toISOString();
 
       // draw line
-      if (`${data.lng}-${data.lat}` === lastLngLat) {
-        landingLine[landingLine.length - 1] = [data.lng, data.lat, data.agl];
-        helpLines[helpLines.length - 1] = [
-          [data.lng, data.lat, 0],
-          [data.lng, data.lat, data.agl],
-        ];
+      if (data.gearForce === 0) {
+        if (`${data.lng}-${data.lat}` === lastLngLat) {
+          landingLine[landingLine.length - 1] = [data.lng, data.lat, data.agl];
+          helpLines[helpLines.length - 1] = [
+            [data.lng, data.lat, 0],
+            [data.lng, data.lat, data.agl],
+          ];
+        } else {
+          landingLine.push([data.lng, data.lat, data.agl]);
+          helpLines.push([
+            [data.lng, data.lat, 0],
+            [data.lng, data.lat, data.agl],
+          ]);
+          lastLngLat = `${data.lng}-${data.lat}`;
+        }
       } else {
-        landingLine.push([data.lng, data.lat, data.agl]);
-        helpLines.push([
-          [data.lng, data.lat, 0],
-          [data.lng, data.lat, data.agl],
-        ]);
-        lastLngLat = `${data.lng}-${data.lat}`;
+        touchDownLine.push([data.lng, data.lat, 0]);
       }
 
       if (data.agl < 50) {
@@ -221,6 +226,16 @@ export function Stats(props: StatsProps) {
 
                       window.tb.add(lineMesh);
                     }
+
+                    const lineOptions2 = {
+                      geometry: touchDownLine,
+                      color: '#DFf212',
+                      width: 4, // random width between 1 and 2
+                    };
+
+                    const lineMesh2 = window.tb.line(lineOptions2);
+
+                    window.tb.add(lineMesh2);
                   },
 
                   render: function (gl, matrix) {
