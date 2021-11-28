@@ -108,10 +108,7 @@ wss.on('connection', function connection(ws, request) {
   // What to do when client disconnect?
   ws.on('close', function (connection) {
     if (xPlane.client) {
-      logger.info('WS close, reset xplane UDP client');
-      requestDataRef(0);
-      xPlane.client.close();
-      xPlane.client = null;
+      xPlane.initConnection();
     }
   });
 });

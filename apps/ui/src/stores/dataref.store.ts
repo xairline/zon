@@ -80,6 +80,14 @@ class DatarefStore {
     let normalDataFeq = false;
     let timeDelta = 0;
     let lastRecvTs = 0;
+    ws.onopen = (msg) => {
+      window.electron.logger.info(msg);
+      window.electron.logger.info('Connected to backend');
+    };
+    ws.onclose = (msg) => {
+      window.electron.logger.info(msg);
+      window.electron.logger.info('Backend closed');
+    };
     ws.onmessage = (msg) => {
       runInAction(async () => {
         if (msg.data === 'xplane closed') {
@@ -212,7 +220,7 @@ class DatarefStore {
             // eslint-disable-next-line no-loop-func
             results.forEach((result) => {
               const nextState = result.event.type as FlightState;
-              
+
               // set poll freq to 5hz after landing phase
               if (
                 this.flightData.state === 'landing' &&
