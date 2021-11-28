@@ -1,8 +1,9 @@
-#### 0.1.1-2 (2021-11-28)
+#### 0.1.1 (2021-11-28)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.1.1-2 (360b38f1)
   *  bump up version: 0.1.1-1 (3c0c51a9)
   *  bump up version: 0.1.1-0 (8f6b4d8a)
 
@@ -12,6 +13,7 @@
 
 ##### Bug Fixes
 
+*  #26 (019f7691)
 *  missing after touchdown line (93c4d20d)
 *  add more logging (f3c445dd)
 
