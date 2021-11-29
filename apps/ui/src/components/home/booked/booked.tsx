@@ -22,9 +22,9 @@ import util from 'util';
 export interface BookedProps {}
 
 const StyledBooked = styled.div`
-  height: 28vh;
-  max-height: 28vh;
-  min-height: 28vh;
+  height: 30vh;
+  max-height: 30vh;
+  min-height: 30vh;
   overflow-y: auto;
 `;
 

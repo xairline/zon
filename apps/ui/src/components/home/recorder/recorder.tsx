@@ -1,5 +1,13 @@
 import styled from '@emotion/styled';
-import { Badge, Col, PageHeader, Row, Timeline } from 'antd';
+import {
+  Badge,
+  Button,
+  Col,
+  PageHeader,
+  Popconfirm,
+  Row,
+  Timeline,
+} from 'antd';
 import { useObserver } from 'mobx-react-lite';
 import React from 'react';
 import TimeAgo from 'react-timeago';
@@ -40,11 +48,23 @@ export function Recorder(props: RecorderProps) {
         style={{
           width: '96%',
           marginLeft: '2%',
-          minHeight: '70vh',
-          maxHeight: '70vh',
-          height: '70vh',
+          minHeight: '60vh',
+          maxHeight: '60vh',
+          height: '60vh',
           overflowY: 'auto',
         }}
+        extra={[
+          <Popconfirm
+            title="Are sure you want to reset tracker? All data in progress will be lost!"
+            onConfirm={async () => {
+              DatarefStore.resetTracking();
+            }}
+          >
+            <Button danger key="2" type="primary" color="red">
+              Reset Tracking
+            </Button>
+          </Popconfirm>,
+        ]}
       >
         <Row
           style={{

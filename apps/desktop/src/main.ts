@@ -59,6 +59,7 @@ wss.on('connection', function connection(ws, request) {
   let connected = false;
   let results: any[] = [];
   let timer;
+
   const xPlane = new XPlaneClient({
     dataRefCallback: (result) => {
       clearTimeout(timer);
@@ -79,6 +80,9 @@ wss.on('connection', function connection(ws, request) {
     },
     debug: false,
   });
+  xPlane.initConnection();
+  logger.info('initialize connection to xplane');
+
   const requestDataRef = (freq: number) => {
     Object.keys(DATAREF_STR).forEach((key) => {
       xPlane.requestDataRef(DATAREF_STR[key], freq);
@@ -108,7 +112,12 @@ wss.on('connection', function connection(ws, request) {
   // What to do when client disconnect?
   ws.on('close', function (connection) {
     if (xPlane.client) {
-      xPlane.initConnection();
+      if (xPlane.client) {
+        requestDataRef(0);
+        xPlane.client.close();
+        xPlane.client = null;
+        logger.info(`backend: close udp client`);
+      }
     }
   });
 });
