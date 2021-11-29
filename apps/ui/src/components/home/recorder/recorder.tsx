@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import { XPlaneData } from '@zon/xplane-data';
-import { Badge, Col, Descriptions, PageHeader, Row, Timeline } from 'antd';
+import { Badge, Col, PageHeader, Row, Timeline } from 'antd';
 import { useObserver } from 'mobx-react-lite';
 import React from 'react';
+import TimeAgo from 'react-timeago';
 import { useGlobalStores } from '../../../stores';
 import FlightDetails from '../../flight-details/flight-details';
 
@@ -24,11 +24,17 @@ export function Recorder(props: RecorderProps) {
         subTitle={
           <>
             {DatarefStore.isXPlaneConnected ? (
-              <Badge status="success" />
+              <>
+                <Badge status="success" />
+                {'Connected: '}
+                <TimeAgo date={DatarefStore.lastDataref} />
+              </>
             ) : (
-              <Badge status="error" />
+              <>
+                <Badge status="error" />
+                {'Disconnected'}
+              </>
             )}{' '}
-            X Plane
           </>
         }
         style={{

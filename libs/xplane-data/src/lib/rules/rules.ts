@@ -354,9 +354,10 @@ export const DEFAULT_RULES = [
         {
           fact: 'dataref',
           path: '$.n1',
-          operator: 'equal',
-          value: 0,
+          operator: 'lessThan',
+          value: 10,
         },
+        { fact: 'dataref', path: '$.gs', operator: 'lessThan', value: 1 },
         {
           fact: 'dataref',
           path: '$.state',

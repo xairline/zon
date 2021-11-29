@@ -24,6 +24,8 @@ class DatarefStore {
   @observable
   public isXPlaneConnected: boolean;
   @observable
+  public lastDataref: number;
+  @observable
   public flightData!: FlightData;
   @observable
   public trackingFlight!: {
@@ -100,6 +102,7 @@ class DatarefStore {
         }
         try {
           this.isXPlaneConnected = true;
+          this.lastDataref = Date.now();
           const flightDataArray: any[] = XPlaneData.processRawData(msg.data);
 
           const {
