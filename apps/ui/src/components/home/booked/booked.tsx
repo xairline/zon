@@ -21,7 +21,12 @@ import util from 'util';
 /* eslint-disable-next-line */
 export interface BookedProps {}
 
-const StyledBooked = styled.div``;
+const StyledBooked = styled.div`
+  height: 28vh;
+  max-height: 28vh;
+  min-height: 28vh;
+  overflow-y: auto;
+`;
 
 export function Booked(props: BookedProps) {
   const { FlightStore, DatarefStore, PilotStore } = useGlobalStores();

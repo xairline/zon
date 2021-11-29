@@ -71,7 +71,8 @@ const StyledApp = styled.div`
     background: transparent;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow: hidden;
+    max-height: 100vh;
   }
 
   .ant-menu-title-content {

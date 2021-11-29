@@ -40,6 +40,10 @@ export function Recorder(props: RecorderProps) {
         style={{
           width: '96%',
           marginLeft: '2%',
+          minHeight: '70vh',
+          maxHeight: '70vh',
+          height: '70vh',
+          overflowY: 'auto',
         }}
       >
         <Row
