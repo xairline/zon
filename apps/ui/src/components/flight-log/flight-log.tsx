@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Button, Modal, PageHeader, Row, Table } from 'antd';
+import { Button, Divider, Modal, PageHeader, Row, Table } from 'antd';
 import { useLocalObservable, useObserver } from 'mobx-react-lite';
 import React, { useEffect } from 'react';
 import { useGlobalStores } from '../../stores';
@@ -135,7 +135,13 @@ export function FlightLog(props: FlightLogProps) {
   return useObserver(() => (
     <StyledFlightLog>
       {' '}
-      <Row>
+      <Row
+        style={{
+          height: 'calc(100vh-400-2vh);',
+          maxHeight: 'calc(100vh-400-2vh);',
+          overflow: 'auto',
+        }}
+      >
         <Table
           title={() => <h2>Logbook</h2>}
           rowSelection={{
@@ -159,7 +165,10 @@ export function FlightLog(props: FlightLogProps) {
           pagination={{ pageSize: 5, showSizeChanger: false }}
         />
       </Row>
-      <Row>{localStorage.getItem('lastFlightLandingData') && <Stats />}</Row>
+      <Divider />
+      <Row style={{ height: '400' }}>
+        {localStorage.getItem('lastFlightLandingData') && <Stats />}
+      </Row>
       <Modal
         title={null}
         visible={localStore.showModal}

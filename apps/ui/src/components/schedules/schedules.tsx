@@ -11,6 +11,8 @@ export interface SchedulesProps {}
 
 const StyledSchedules = styled.div`
   color: pink;
+  height: 100vh;
+  overflow: auto;
 `;
 
 export function Schedules(props: SchedulesProps) {
