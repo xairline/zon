@@ -156,7 +156,8 @@ export function Stats(props: StatsProps) {
           style={{
             width: '96%',
             marginLeft: '2%',
-            height: '100%',
+            height: 500,
+            minHeight: 400,
           }}
           backIcon={false}
         >
@@ -169,7 +170,7 @@ export function Stats(props: StatsProps) {
                 style="mapbox://styles/mapbox/satellite-v9"
                 containerStyle={{
                   marginLeft: '16px',
-                  height: '100%',
+                  height: 350,
                   width: '100%',
                 }}
                 center={[lng, lat]}

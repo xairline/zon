@@ -143,8 +143,8 @@ export function FlightLog(props: FlightLogProps) {
       {' '}
       <Row
         style={{
-          height: 'calc(100vh-400-2vh);',
-          maxHeight: 'calc(100vh-400-2vh);',
+          height: '40vh',
+          maxHeight: '40vh',
           overflow: 'auto',
         }}
       >
@@ -172,7 +172,13 @@ export function FlightLog(props: FlightLogProps) {
         />
       </Row>
       <Divider />
-      <Row style={{ height: '400' }}>
+      <Row
+        style={{
+          height: '40vh',
+          maxHeight: '40vh',
+          overflow: 'auto',
+        }}
+      >
         {localStorage.getItem('lastFlightLandingData') && <Stats />}
       </Row>
       <Modal
