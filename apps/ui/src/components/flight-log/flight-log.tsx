@@ -25,12 +25,14 @@ export function FlightLog(props: FlightLogProps) {
     {
       title: 'Flight #',
       key: 'flightNumber',
-      width: 100,
+      width: '60px',
+      ellipsis: true,
       dataIndex: 'number',
     },
     {
-      title: 'Departure',
-      width: 80,
+      title: 'DEP',
+      width: '50px',
+      ellipsis: true,
       dataIndex: 'departure',
       key: 'departure',
       filters: FlightStore.pastFlights
@@ -58,8 +60,9 @@ export function FlightLog(props: FlightLogProps) {
         record.departure.indexOf(value) === 0,
     },
     {
-      title: 'Destination',
-      width: 80,
+      title: 'ARR',
+      width: '50px',
+      ellipsis: true,
       dataIndex: 'destination',
       key: 'destination',
       filterSearch: true,
@@ -84,8 +87,9 @@ export function FlightLog(props: FlightLogProps) {
         record.destination.indexOf(value) === 0,
     },
     {
-      title: 'Aircraft Type',
-      width: 100,
+      title: 'Aircraft',
+      width: '60px',
+      ellipsis: true,
       dataIndex: 'aircraftType',
       key: 'aircraftType',
 
@@ -112,8 +116,9 @@ export function FlightLog(props: FlightLogProps) {
       filterSearch: true,
     },
     {
-      title: 'Total Flight Time',
-      width: 100,
+      title: 'Flight Time',
+      width: '60px',
+      ellipsis: true,
       dataIndex: 'totalFlightTime',
       key: 'totalFlightTime',
       sorter: (a: any, b: any) => a.totalFlightTime - b.totalFlightTime,
@@ -122,7 +127,8 @@ export function FlightLog(props: FlightLogProps) {
     },
     {
       title: 'Time In',
-      width: 100,
+      width: '120px',
+      ellipsis: true,
       dataIndex: 'timeIn',
       key: 'timeIn',
       sorter: (a: any, b: any) =>
