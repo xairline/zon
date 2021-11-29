@@ -166,7 +166,7 @@ export function FlightLog(props: FlightLogProps) {
             maxHeight: '95%',
             width: '96%',
             marginLeft: '2%',
-            marginTop: '4vh',
+            marginTop: '2vh',
           }}
           pagination={{ pageSize: 5, showSizeChanger: false }}
         />
