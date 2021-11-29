@@ -107,6 +107,10 @@ wss.on('connection', function connection(ws, request) {
 
   // Handle all messages from users.
   ws.on('message', function (msgStr) {
+    if (msgStr.toString() === 'ping') {
+      ws.send('pong');
+      return;
+    }
     requestDataRef(parseInt(msgStr));
   });
   // What to do when client disconnect?

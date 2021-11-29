@@ -22,9 +22,9 @@ let TakeoffCounter = 0;
 let reportFiled = false;
 class DatarefStore {
   @observable
-  public isXPlaneConnected: boolean;
-  @observable
   public lastDataref: number;
+  @observable
+  public lastWsPing: number;
   @observable
   public flightData!: FlightData;
   @observable
@@ -45,7 +45,6 @@ class DatarefStore {
   public rules!: Rules;
 
   constructor() {
-    this.isXPlaneConnected = false;
     this?.ws?.close();
     window.electron.logger.info('websocket closed - constructor');
     this?.engine?.stop();
@@ -74,6 +73,10 @@ class DatarefStore {
     makeObservable(this);
   }
 
+  public isXPlaneConnected() {
+    return Date.now() - this.lastDataref < 12 * 1000;
+  }
+
   private connect() {
     this.rules = new Rules(this.flightData);
     this.engine = new Engine(this.rules.getRules());
@@ -85,15 +88,23 @@ class DatarefStore {
     ws.onopen = (msg) => {
       window.electron.logger.info(msg);
       window.electron.logger.info('Connected to backend');
+      setInterval(function () {
+        ws.send('ping');
+      }, 5000);
     };
     ws.onclose = (msg) => {
       window.electron.logger.info(msg);
       window.electron.logger.info('Backend closed');
     };
     ws.onmessage = (msg) => {
+      if (msg.data === 'pong') {
+        runInAction(() => {
+          this.lastWsPing = Date.now();
+        });
+        return;
+      }
       runInAction(async () => {
         if (msg.data === 'xplane closed') {
-          this.isXPlaneConnected = false;
           if (this.flightData.state === 'Parked') {
             this.resetTracking();
           }
@@ -101,7 +112,6 @@ class DatarefStore {
           return;
         }
         try {
-          this.isXPlaneConnected = true;
           this.lastDataref = Date.now();
           const flightDataArray: any[] = XPlaneData.processRawData(msg.data);
 
@@ -485,7 +495,6 @@ class DatarefStore {
 
   public resetTracking() {
     runInAction(() => {
-      this.isXPlaneConnected = false;
       this?.ws?.close();
       window.electron.logger.info('websocket closed - reset func');
       this?.engine?.stop();

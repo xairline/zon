@@ -1,16 +1,7 @@
 import styled from '@emotion/styled';
-import {
-  Badge,
-  Button,
-  Col,
-  PageHeader,
-  Popconfirm,
-  Row,
-  Timeline,
-} from 'antd';
+import { Button, Col, PageHeader, Popconfirm, Row, Timeline } from 'antd';
 import { useObserver } from 'mobx-react-lite';
 import React from 'react';
-import TimeAgo from 'react-timeago';
 import { useGlobalStores } from '../../../stores';
 import FlightDetails from '../../flight-details/flight-details';
 
@@ -29,22 +20,6 @@ export function Recorder(props: RecorderProps) {
         ghost={false}
         backIcon={false}
         title="Recorder Status"
-        subTitle={
-          <>
-            {DatarefStore.isXPlaneConnected ? (
-              <>
-                <Badge status="success" />
-                {'Connected: '}
-                <TimeAgo date={DatarefStore.lastDataref} />
-              </>
-            ) : (
-              <>
-                <Badge status="error" />
-                {'Disconnected'}
-              </>
-            )}{' '}
-          </>
-        }
         style={{
           width: '96%',
           marginLeft: '2%',
@@ -78,7 +53,7 @@ export function Recorder(props: RecorderProps) {
           <Col span={10}>
             <Timeline
               pending={
-                DatarefStore.isXPlaneConnected
+                DatarefStore.isXPlaneConnected()
                   ? false
                   : 'Waiting for X Plane ...'
               }
