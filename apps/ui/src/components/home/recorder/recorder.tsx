@@ -59,6 +59,7 @@ export function Recorder(props: RecorderProps) {
             onConfirm={async () => {
               DatarefStore.resetTracking();
             }}
+            placement={'topRight'}
           >
             <Button danger key="2" type="primary" color="red">
               Reset Tracking
