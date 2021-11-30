@@ -1,8 +1,9 @@
-#### 0.1.2-rc.2 (2021-11-29)
+#### 0.1.2 (2021-11-30)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.1.2-rc.2 (64e8c6e2)
   *  bump up version: 0.1.2-rc.1 (d0fc4fc1)
   *  bump up version: 0.1.2-rc.0 (04358bea)
 
@@ -17,6 +18,7 @@
 
 ##### Bug Fixes
 
+*  UI improvements (9854b9b8)
 *  pop confirm location (d61b6d7b)
 *  minor UI changes (f513c29e)
 *  stat page could be blank (da778405)
