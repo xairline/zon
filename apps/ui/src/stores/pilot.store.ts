@@ -1,4 +1,5 @@
 import { notification } from 'antd';
+import { NotificationPlacement } from 'antd/lib/notification';
 import axios from 'axios';
 import { makeObservable, observable, runInAction } from 'mobx';
 import 'reflect-metadata';
@@ -8,6 +9,8 @@ export class PilotStore {
   public isLoggedIn: boolean;
   @observable
   public version: string;
+  @observable
+  public remoteVersion: string;
   @observable
   public offline: boolean;
 
@@ -19,6 +22,7 @@ export class PilotStore {
     this.username = localStorage.getItem('username') as string;
     window.electron.getAppVersion().then((res) => {
       this.version = res;
+      this.remoteVersion = this.version;
     });
     if (this.username?.length > 0) {
       this.login(this.username, localStorage.getItem('password') as string);
@@ -49,6 +53,23 @@ export class PilotStore {
           localStorage.setItem('username', username);
           localStorage.setItem('password', password);
         });
+        // get remote version
+        const remoteVersion = await axios.get(
+          'https://api.github.com/repos/xairline/zon/releases/latest'
+        );
+
+        runInAction(() => {
+          this.remoteVersion = remoteVersion.data.tag_name;
+          if (this.remoteVersion !== 'v' + this.version) {
+            const args = {
+              message: 'New version is available',
+              description: `${this.remoteVersion}`,
+              placement: 'bottomRight' as NotificationPlacement,
+            };
+            notification.info(args);
+          }
+        });
+
         const offlinePireps = await window.electron.loadOfflinePirep();
         if (offlinePireps.length > 0) {
           notification.success({

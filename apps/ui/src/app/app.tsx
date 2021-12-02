@@ -4,7 +4,7 @@ import {
   faTachometerAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, Button, Col, Form, Layout, Menu, Row } from 'antd';
+import { Avatar, Badge, Button, Col, Form, Layout, Menu, Row } from 'antd';
 import { useLocalObservable, useObserver } from 'mobx-react-lite';
 import React from 'react';
 import { Link, Route } from 'react-router-dom';
@@ -71,7 +71,8 @@ const StyledApp = styled.div`
     background: transparent;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow: hidden;
+    max-height: 100vh;
   }
 
   .ant-menu-title-content {
@@ -219,7 +220,16 @@ export function App() {
               }}
             >
               <Col span={12} offset={6}>
-                OpenFDR Client for ZonExecutive©2021 - {PilotStore.version}
+                OpenFDR Client for ZonExecutive©2021 - {PilotStore.version}{' '}
+                {PilotStore.remoteVersion !== 'v' + PilotStore.version ? (
+                  <Badge
+                    count={'New version available!'}
+                    title={PilotStore.remoteVersion}
+                    style={{ backgroundColor: '#b2b206' }}
+                  />
+                ) : (
+                  '(Latest Version)'
+                )}
               </Col>
             </Footer>
           </Layout>

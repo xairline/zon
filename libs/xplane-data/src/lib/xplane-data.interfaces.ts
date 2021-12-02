@@ -1,14 +1,14 @@
 export type FlightState =
-  | 'parked'
-  | 'engine started'
-  | 'taxi'
-  | 'takeoff'
-  | 'climb'
-  | 'cruise'
-  | 'descend'
-  | 'landing'
+  | 'Parked'
+  | 'Engine Started'
+  | 'Taxi'
+  | 'Takeoff'
+  | 'Climb'
+  | 'Cruise'
+  | 'Descent'
+  | 'Landing'
   | 'RTO'
-  | 'engine stopped'
+  | 'Engine Stopped'
   | undefined;
 
 export interface LandingData {
@@ -46,11 +46,11 @@ export interface IPirep {
   destination: string;
   route: string;
   timeOut: string; // engine start
-  timeOff: string; // takeoff
+  timeOff: string; // Takeoff
   timeOn: string; // land
   timeIn: string; // engine stop
   totalBlockTime: number;
-  totalFlightTime: number; // from takeoff to land
+  totalFlightTime: number; // from Takeoff to land
   dryOperatingWeight: number;
   payloadWeight: number;
   pax: number;

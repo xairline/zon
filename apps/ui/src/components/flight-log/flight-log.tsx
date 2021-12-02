@@ -1,11 +1,8 @@
 import styled from '@emotion/styled';
+import { Button, Divider, Modal, PageHeader, Row, Table } from 'antd';
 import { useLocalObservable, useObserver } from 'mobx-react-lite';
-import { runInAction } from 'mobx';
 import React, { useEffect } from 'react';
 import { useGlobalStores } from '../../stores';
-import { Table, message, Button, Modal, PageHeader, Row } from 'antd';
-import FlightDetails from '../flight-details/flight-details';
-import { XPlaneData } from '@zon/xplane-data';
 import { Stats } from './stats/stats';
 
 /* eslint-disable-next-line */
@@ -28,12 +25,14 @@ export function FlightLog(props: FlightLogProps) {
     {
       title: 'Flight #',
       key: 'flightNumber',
-      width: 100,
+      width: '60px',
+      ellipsis: true,
       dataIndex: 'number',
     },
     {
-      title: 'Departure',
-      width: 80,
+      title: 'DEP',
+      width: '50px',
+      ellipsis: true,
       dataIndex: 'departure',
       key: 'departure',
       filters: FlightStore.pastFlights
@@ -61,8 +60,9 @@ export function FlightLog(props: FlightLogProps) {
         record.departure.indexOf(value) === 0,
     },
     {
-      title: 'Destination',
-      width: 80,
+      title: 'ARR',
+      width: '50px',
+      ellipsis: true,
       dataIndex: 'destination',
       key: 'destination',
       filterSearch: true,
@@ -87,8 +87,9 @@ export function FlightLog(props: FlightLogProps) {
         record.destination.indexOf(value) === 0,
     },
     {
-      title: 'Aircraft Type',
-      width: 100,
+      title: 'Aircraft',
+      width: '60px',
+      ellipsis: true,
       dataIndex: 'aircraftType',
       key: 'aircraftType',
 
@@ -115,17 +116,19 @@ export function FlightLog(props: FlightLogProps) {
       filterSearch: true,
     },
     {
-      title: 'Total Flight Time',
-      width: 100,
+      title: 'Flight Time',
+      width: '60px',
+      ellipsis: true,
       dataIndex: 'totalFlightTime',
       key: 'totalFlightTime',
       sorter: (a: any, b: any) => a.totalFlightTime - b.totalFlightTime,
       render: (value: number) =>
-      `${Math.trunc(value)}h ${Math.round((value % 1) * 60)}m`,
+        `${Math.trunc(value)}h ${Math.round((value % 1) * 60)}m`,
     },
     {
       title: 'Time In',
-      width: 100,
+      width: '120px',
+      ellipsis: true,
       dataIndex: 'timeIn',
       key: 'timeIn',
       sorter: (a: any, b: any) =>
@@ -138,7 +141,13 @@ export function FlightLog(props: FlightLogProps) {
   return useObserver(() => (
     <StyledFlightLog>
       {' '}
-      <Row>
+      <Row
+        style={{
+          height: '40vh',
+          maxHeight: '40vh',
+          overflow: 'auto',
+        }}
+      >
         <Table
           title={() => <h2>Logbook</h2>}
           rowSelection={{
@@ -157,12 +166,21 @@ export function FlightLog(props: FlightLogProps) {
             maxHeight: '95%',
             width: '96%',
             marginLeft: '2%',
-            marginTop: '4vh',
+            marginTop: '2vh',
           }}
           pagination={{ pageSize: 5, showSizeChanger: false }}
         />
       </Row>
-      <Row>{localStorage.getItem('lastFlightLanding') && <Stats />}</Row>
+      <Divider />
+      <Row
+        style={{
+          height: '40vh',
+          maxHeight: '40vh',
+          overflow: 'auto',
+        }}
+      >
+        {localStorage.getItem('lastFlightLandingData') && <Stats />}
+      </Row>
       <Modal
         title={null}
         visible={localStore.showModal}

@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
 import { XPlaneData } from '@zon/xplane-data';
-import { Descriptions, Input } from 'antd';
+import { Badge, Descriptions, Input } from 'antd';
 import { runInAction } from 'mobx';
 import { useObserver } from 'mobx-react-lite';
 import React from 'react';
+import TimeAgo from 'react-timeago';
 import { useGlobalStores } from '../../stores';
 
 /* eslint-disable-next-line */
@@ -20,6 +21,26 @@ export function FlightDetails(props: FlightDetailsProps) {
   return useObserver(() => (
     <StyledFlightDetails>
       <Descriptions size={(props.size as any) || 'small'} bordered column={2}>
+        <Descriptions.Item label="X Plane UDP" style={{ width: '180px' }}>
+          <>
+            <Badge
+              status={DatarefStore.isXPlaneConnected() ? 'success' : 'error'}
+            />
+            <TimeAgo date={DatarefStore.lastDataref} />
+          </>
+        </Descriptions.Item>
+        <Descriptions.Item label="Backend" style={{ width: '180px' }}>
+          <>
+            <Badge
+              status={
+                Date.now() - DatarefStore.lastWsPing < 10000
+                  ? 'success'
+                  : 'error'
+              }
+            />
+            <TimeAgo date={DatarefStore.lastWsPing} />
+          </>
+        </Descriptions.Item>
         <Descriptions.Item label="Flight Number">
           <Input
             defaultValue={DatarefStore.trackingFlight.flightNumber}

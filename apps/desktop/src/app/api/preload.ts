@@ -37,6 +37,7 @@ contextBridge.exposeInMainWorld('electron', {
     const offlinePirepFiles = fs.readdirSync(pirepDirPath);
     const offlinePireps: any[] = [];
     offlinePirepFiles.forEach((offlinePirepFile) => {
+      if (offlinePirepFile.startsWith('.')) return;
       const tmpString = fs.readFileSync(
         path.join(pirepDirPath, offlinePirepFile),
         'utf8'
@@ -47,7 +48,7 @@ contextBridge.exposeInMainWorld('electron', {
           path: offlinePirepFile,
         });
       } catch (e) {
-        logger.info('Invalid PIREP');
+        logger.info(`Invalid PIREP: ${offlinePirepFile}`);
         logger.info(e);
       }
     });

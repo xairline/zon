@@ -12685,6 +12685,11 @@ react-router@5.2.0:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
+react-timeago@^6.2.1:
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/react-timeago/-/react-timeago-6.2.1.tgz#f19716811156617ceb9c9f9a44315d85197c7fba"
+  integrity sha512-b9EObWO8wy4qwfOzj+g/RQZRrPvtMv1Pz12FCdAWKWCXbDGt0rZLyiyTGEr0Lh1O8w5xa48CtRpl3LI+CtGCyw==
+
 react@17.0.1:
   version "17.0.1"
   resolved "https://registry.yarnpkg.com/react/-/react-17.0.1.tgz#6e0600416bd57574e3f86d92edba3d9008726127"
@@ -14560,6 +14565,11 @@ text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
+
+threebox-plugin@^2.2.5:
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/threebox-plugin/-/threebox-plugin-2.2.5.tgz#73fb84f74ed39ab172a0f2ef35d7a4b59a9caf79"
+  integrity sha512-YRgf+nVmE9vVz7x1WQ29uP/XnjdbT6VPTRpA18wmDGf+g6RvUTDutRyh1ISRfjP7XPuHU7/LEy6LohvzB1/F7A==
 
 throat@^5.0.0:
   version "5.0.0"

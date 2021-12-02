@@ -21,7 +21,12 @@ import util from 'util';
 /* eslint-disable-next-line */
 export interface BookedProps {}
 
-const StyledBooked = styled.div``;
+const StyledBooked = styled.div`
+  height: 30vh;
+  max-height: 30vh;
+  min-height: 30vh;
+  overflow-y: auto;
+`;
 
 export function Booked(props: BookedProps) {
   const { FlightStore, DatarefStore, PilotStore } = useGlobalStores();
@@ -180,7 +185,6 @@ export function Booked(props: BookedProps) {
                     simBriefResponse.data
                   );
                   runInAction(() => {
-                    DatarefStore.resetTracking();
                     localStore.dataBefore = DatarefStore.trackingFlight;
                     DatarefStore.trackingFlight = {
                       flightNumber: simBriefPlanObj.OFP.atc[0].callsign[0],
@@ -219,7 +223,6 @@ export function Booked(props: BookedProps) {
               type: 'radio',
               onSelect: (record, selected, rows, nativeEvent) => {
                 runInAction(() => {
-                  DatarefStore.resetTracking();
                   localStore.dataBefore = DatarefStore.trackingFlight;
                   DatarefStore.trackingFlight = {
                     flightNumber: record.flightNumber,

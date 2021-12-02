@@ -1,3 +1,4 @@
+import * as logger from 'electron-log';
 /* eslint-disable */
 const dgram = require('dgram');
 
@@ -54,14 +55,14 @@ export class XPlaneClient {
 
     // sending msg
     // eslint-disable-next-line no-unused-vars
-    // console.log('sending:', data);
+    // logger.info('sending:', data);
     this.client.send(data, this.port, this.host, function cb(
       error /* , bytes */
     ) {
       if (error) {
         this.client.close();
         this.client = null;
-        console.error(`XPlaneClient failed to send data X-Plane: ${error}`);
+        logger.error(`XPlaneClient failed to send data X-Plane: ${error}`);
       }
     });
   }
@@ -76,7 +77,7 @@ export class XPlaneClient {
       if (this.dataRefs[i - INDEX_OFFSET].dataRef === dataRef) {
         index = i;
         if (this.debug) {
-          console.log(
+          logger.info(
             `found and using existing dataref ${dataRef} on index ${index}`
           );
         }
@@ -136,14 +137,14 @@ export class XPlaneClient {
     this.client.on('listening', () => {
       const address = this.client.address();
       if (this.debug) {
-        console.log(
+        logger.info(
           `XPlaneClient listening on ${address.address}:${address.port}`
         );
       }
     });
 
     this.client.on('error', (err) => {
-      console.error(`XPlaneClient error:\n${err.stack}`);
+      logger.error(`XPlaneClient error:\n${err.stack}`);
       this.client.close();
       this.client = null;
     });
@@ -151,8 +152,8 @@ export class XPlaneClient {
     // eslint-disable-next-line no-unused-vars
     this.client.on('message', (msg, info) => {
       const command = msg.toString('utf8', 0, 4);
-      // console.log('Received %d bytes from %s:%d',msg.length, info.address, info.port);
-      // console.log('Data received from server : ', command, msg );//+ msg.toString());
+      // logger.info('Received %d bytes from %s:%d',msg.length, info.address, info.port);
+      // logger.info('Data received from server : ', command, msg );//+ msg.toString());
 
       if (command === 'RPOS') {
         // 69 bytes:
@@ -170,7 +171,7 @@ export class XPlaneClient {
         // let Prad        = command.readFloatLE( 57 );  // roll rate in radians per second
         // let Qrad        = command.readFloatLE( 61 );  // pitch rate in radians per second
         // let Rrad        = command.readFloatLE( 65 );  // yah rate in radians per second
-        // console.log( "dat_lon", dat_lon, "dat_lat", dat_lat, "dat_ele", dat_ele, "y_agl_mtr", y_agl_mtr );
+        // logger.info( "dat_lon", dat_lon, "dat_lat", dat_lat, "dat_ele", dat_ele, "y_agl_mtr", y_agl_mtr );
       } else if (command === 'RREF') {
         const numrefs = (msg.length - 5) / 8;
         let offset = 5;
@@ -190,7 +191,7 @@ export class XPlaneClient {
             // TODO: make it possible to request all events even if not changed (more overhead)
             if (dataRef.value !== drefFltValue) {
               if (this.debug) {
-                console.log(
+                logger.info(
                   `[${i + 1}/${numrefs}] new value for dataRef ${
                     dataRef.dataRef
                   } is ${drefFltValue}`

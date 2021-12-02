@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
-import { XPlaneData } from '@zon/xplane-data';
-import { Badge, Col, Descriptions, PageHeader, Row, Timeline } from 'antd';
+import { Button, Col, PageHeader, Popconfirm, Row, Timeline } from 'antd';
 import { useObserver } from 'mobx-react-lite';
 import React from 'react';
 import { useGlobalStores } from '../../../stores';
@@ -21,20 +20,27 @@ export function Recorder(props: RecorderProps) {
         ghost={false}
         backIcon={false}
         title="Recorder Status"
-        subTitle={
-          <>
-            {DatarefStore.isXPlaneConnected ? (
-              <Badge status="success" />
-            ) : (
-              <Badge status="error" />
-            )}{' '}
-            X Plane
-          </>
-        }
         style={{
           width: '96%',
           marginLeft: '2%',
+          minHeight: '60vh',
+          maxHeight: '60vh',
+          height: '60vh',
+          overflowY: 'auto',
         }}
+        extra={[
+          <Popconfirm
+            title="Are sure you want to reset tracker? All data in progress will be lost!"
+            onConfirm={async () => {
+              DatarefStore.resetTracking();
+            }}
+            placement={'topRight'}
+          >
+            <Button danger key="2" type="primary" color="red">
+              Reset Tracking
+            </Button>
+          </Popconfirm>,
+        ]}
       >
         <Row
           style={{
@@ -47,7 +53,7 @@ export function Recorder(props: RecorderProps) {
           <Col span={10}>
             <Timeline
               pending={
-                DatarefStore.isXPlaneConnected
+                DatarefStore.isXPlaneConnected()
                   ? false
                   : 'Waiting for X Plane ...'
               }

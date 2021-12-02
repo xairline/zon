@@ -2,6 +2,7 @@ import SquirrelEvents from './app/events/squirrel.events';
 import ElectronEvents from './app/events/electron.events';
 import UpdateEvents from './app/events/update.events';
 import * as fs from 'fs';
+import * as logger from 'electron-log';
 import { app, BrowserWindow } from 'electron';
 import App from './app/app';
 import { XPlaneClient } from './XPlaneClient';
@@ -101,22 +102,24 @@ wss.on('connection', function connection(ws, request) {
 
       timer = setTimeout(() => {
         connected = false;
-        requestDataRef(0);
         ws.send('xplane closed');
         if (timer) {
           clearTimeout(timer);
         }
-        console.log('X plane is closed');
-      }, 20000);
+        logger.info('X plane is closed');
+      }, 60000);
     },
     debug: false,
   });
+  xPlane.initConnection();
+  logger.info('initialize connection to xplane');
+
   const requestDataRef = (freq: number) => {
     Object.keys(DATAREF_STR).forEach((key) => {
       xPlane.requestDataRef(DATAREF_STR[key], freq);
     });
     if (connected) {
-      console.log(`set dataref freq: ${freq}`);
+      logger.info(`set dataref freq: ${freq}`);
     }
   };
 
@@ -129,13 +132,17 @@ wss.on('connection', function connection(ws, request) {
       xPlane.initConnection();
       requestDataRef(0);
       requestDataRef(DATAREF_FEQ);
-      console.log('reconnect to xplane ...');
+      logger.info('reconnect to xplane ...');
     }
   }, 3000);
 
   // Handle all messages from users.
   ws.on('message', function (msgStr) {
-    requestDataRef(DATAREF_FEQ_LANDING);
+    if (msgStr.toString() === 'ping') {
+      ws.send('pong');
+      return;
+    }
+    requestDataRef(parseInt(msgStr));
   });
   // What to do when client disconnect?
   ws.on('close', function (connection) {
@@ -148,12 +155,14 @@ wss.on('connection', function connection(ws, request) {
           if (err) console.error(err);
         }
       );
+      requestDataRef(0);
       xPlane.client.close();
       xPlane.client = null;
+      logger.info(`backend: close udp client`);
     }
   });
 });
 //start our server
 server.listen(port, () => {
-  console.log(`Data stream server started on port ${port}`);
+  logger.info(`Data stream server started on port ${port}`);
 });
