@@ -76,19 +76,23 @@ wss.on('connection', function connection(ws, request) {
   const fileName = `${Date.now()}`;
   const recordingPath = path.join(recordingDirPath, fileName);
   let recordingShard = 0;
+  let lastTs = 0;
 
   const xPlane = new XPlaneClient({
     dataRefCallback: (result) => {
       clearTimeout(timer);
       connected = true;
       results.push(result);
-      samples.push(result);
+      if (result['sim/network/misc/network_time_sec'] - lastTs >= 1) {
+        samples.push(result);
+        lastTs = result['sim/network/misc/network_time_sec'];
+      }
       if (results.length === DATAREF_BATCH_SIZE) {
         ws.send(JSON.stringify(results));
         results = [];
       }
 
-      if (samples.length === 10000) {
+      if (samples.length === 1000) {
         fs.appendFile(
           recordingPath + `- ${recordingShard}`,
           JSON.stringify(samples),
