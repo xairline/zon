@@ -132,7 +132,8 @@ class DatarefStore {
           } = flightDataArray[flightDataArray.length - 1];
           if (
             this.dataref.aircraftType !== '' &&
-            this.dataref.aircraftType !== aircraftType
+            this.dataref.aircraftType !== aircraftType &&
+            this.dataref.aircraftType !== 'A21N'
           ) {
             // switching aircraft, reset tracking
             window.electron.logger.info(`Load new plane: ${aircraftType}`);
@@ -427,7 +428,8 @@ class DatarefStore {
     this.dataref.gs = gs;
     this.dataref.ias = ias;
     this.dataref.elevation = elevation;
-    this.dataref.aircraftType = aircraftType;
+    this.dataref.aircraftType =
+      this.dataref.aircraftType !== 'A21N' ? aircraftType : 'A21N';
     this.dataref.fuelWeight = fuelWeight;
     this.dataref.payloadWeight = payloadWeight;
     this.dataref.emptyWeight = emptyWeight;
