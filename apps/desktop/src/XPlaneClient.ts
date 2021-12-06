@@ -125,11 +125,12 @@ export class XPlaneClient {
     this._sendBuffer(buffer);
   }
 
-  initConnection() {
+  initConnection(force: Boolean = false) {
     const self = this;
 
-    if (this.client === null) {
+    if (this.client === null || force) {
       this.client = dgram.createSocket('udp4');
+      logger.info(`Create new udp client`);
     } else {
       return;
     }
