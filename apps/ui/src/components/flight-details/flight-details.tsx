@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { XPlaneData } from '@zon/xplane-data';
-import { Badge, Descriptions, Input } from 'antd';
+import { Badge, Button, Descriptions, Input } from 'antd';
 import { runInAction } from 'mobx';
 import { useObserver } from 'mobx-react-lite';
 import React from 'react';
@@ -21,7 +21,7 @@ export function FlightDetails(props: FlightDetailsProps) {
   return useObserver(() => (
     <StyledFlightDetails>
       <Descriptions size={(props.size as any) || 'small'} bordered column={2}>
-        <Descriptions.Item label="X Plane UDP" style={{ width: '180px' }}>
+        <Descriptions.Item label="X Plane UDP" style={{ width: '200px' }}>
           <>
             <Badge
               status={DatarefStore.isXPlaneConnected() ? 'success' : 'error'}
@@ -96,7 +96,22 @@ export function FlightDetails(props: FlightDetailsProps) {
           />
         </Descriptions.Item>
         <Descriptions.Item label="Aircraft Type">
-          {DatarefStore?.dataref?.aircraftType || ''}
+          <>
+            {DatarefStore?.dataref?.aircraftType || ''}
+            {DatarefStore?.dataref?.aircraftType === 'A321' && (
+              <Button
+                type="primary"
+                danger
+                size="small"
+                style={{ marginLeft: '8px' }}
+                onClick={() => {
+                  DatarefStore.dataref.aircraftType = 'A21N';
+                }}
+              >
+                NEO
+              </Button>
+            )}
+          </>
         </Descriptions.Item>
         <Descriptions.Item label="Pax">
           <Input
