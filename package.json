@@ -84,6 +84,7 @@
     "axios": "^0.24.0",
     "babel-jest": "26.2.2",
     "babel-plugin-styled-components": "1.10.7",
+    "comlink-loader": "^2.0.0",
     "cypress": "^6.0.1",
     "dotenv": "8.2.0",
     "electron": "^11.3.0",
