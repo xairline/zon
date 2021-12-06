@@ -130,15 +130,20 @@ wss.on('connection', function connection(ws, request) {
   setInterval(function () {
     if (!connected) {
       if (xPlane.client) {
+        try {
+          xPlane.client.disconnect();
+        } catch (e) {
+          logger.error(e);
+        }
         xPlane.client.close();
         xPlane.client = null;
       }
-      xPlane.initConnection();
+      xPlane.initConnection(true);
       requestDataRef(0);
       requestDataRef(DATAREF_FEQ);
       logger.info('reconnect to xplane ...');
     }
-  }, 3000);
+  }, 5000);
 
   // Handle all messages from users.
   ws.on('message', function (msgStr) {
