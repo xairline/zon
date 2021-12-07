@@ -76,11 +76,9 @@ export class XPlaneClient {
     for (let i = INDEX_OFFSET; i < this.dataRefs.length; i += 1) {
       if (this.dataRefs[i - INDEX_OFFSET].dataRef === dataRef) {
         index = i;
-        if (this.debug) {
-          logger.info(
-            `found and using existing dataref ${dataRef} on index ${index}`
-          );
-        }
+        logger.info(
+          `found and using existing dataref ${dataRef} on index ${index}`
+        );
       }
     }
 
@@ -129,7 +127,7 @@ export class XPlaneClient {
     const self = this;
 
     if (this.client === null || force) {
-      this.client = dgram.createSocket('udp4');
+      this.client = dgram.createSocket({ type: 'udp4', reuseAddr: true });
       logger.info(`Create new udp client`);
     } else {
       return;
@@ -137,11 +135,9 @@ export class XPlaneClient {
 
     this.client.on('listening', () => {
       const address = this.client.address();
-      if (this.debug) {
-        logger.info(
-          `XPlaneClient listening on ${address.address}:${address.port}`
-        );
-      }
+      logger.info(
+        `XPlaneClient listening on ${address.address}:${address.port}`
+      );
     });
 
     this.client.on('error', (err) => {
