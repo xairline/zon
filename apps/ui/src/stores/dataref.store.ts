@@ -12,9 +12,13 @@ import {
 import { notification } from 'antd';
 import util from 'util';
 import axios from 'axios';
-import runways from './runways.json';
+import Worker from '../worker';
+// import runways from './runways.json';
 // const runwayData: any[] = runways as any[];
 // console.log(runwayData.filter((runway) => runway.airport_ident === 'CYOW'));
+
+const worker = new Worker();
+
 let CruiseCounter = 0;
 let ClimbCounter = 0;
 let DescentCounter = 0;
@@ -114,6 +118,11 @@ class DatarefStore {
         try {
           this.lastDataref = Date.now();
           const flightDataArray: any[] = XPlaneData.processRawData(msg.data);
+          worker.processData(
+            msg.data,
+            localStorage.getItem('username') as string,
+            localStorage.getItem('password') as string
+          );
 
           const {
             aircraftType,

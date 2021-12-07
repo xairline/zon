@@ -1,4 +1,5 @@
 export const DATAREF_STR = {
+  TAS: 'sim/cockpit2/gauges/indicators/true_airspeed_kts_pilot',
   VS: 'sim/flightmodel/position/vh_ind_fpm',
   GEAR_FORCE: 'sim/flightmodel/forces/fnrml_gear',
   G_FORCE: 'sim/flightmodel2/misc/gforce_normal',

@@ -1,19 +1,11 @@
-import SquirrelEvents from './app/events/squirrel.events';
-import ElectronEvents from './app/events/electron.events';
-import UpdateEvents from './app/events/update.events';
-import * as fs from 'fs';
-import * as logger from 'electron-log';
+import { DATAREF_BATCH_SIZE, DATAREF_FEQ, DATAREF_STR } from '@zon/xplane-data';
 import { app, BrowserWindow } from 'electron';
-import App from './app/app';
-import { XPlaneClient } from './XPlaneClient';
-import {
-  DATAREF_BATCH_SIZE,
-  DATAREF_FEQ,
-  DATAREF_FEQ_LANDING,
-  DATAREF_STR,
-} from '@zon/xplane-data';
+import * as logger from 'electron-log';
 import * as http from 'http';
-import * as path from 'path';
+import App from './app/app';
+import ElectronEvents from './app/events/electron.events';
+import SquirrelEvents from './app/events/squirrel.events';
+import { XPlaneClient } from './XPlaneClient';
 
 const port = 4444;
 const server = http.createServer();
@@ -60,48 +52,16 @@ wss.on('connection', function connection(ws, request) {
   // xplane
   let connected = false;
   let results: any[] = [];
-  let samples: any[] = [];
   let timer;
-
-  // create recording folder
-  const dataPath = app.getPath('documents');
-  if (!fs.existsSync(dataPath)) {
-    fs.mkdirSync(dataPath);
-  }
-  const recordingDirPath = path.join(dataPath, 'openFDR', 'recording');
-  if (!fs.existsSync(recordingDirPath)) {
-    fs.mkdirSync(recordingDirPath);
-  }
-
-  const fileName = `${Date.now()}`;
-  const recordingPath = path.join(recordingDirPath, fileName);
-  let recordingShard = 0;
-  let lastTs = 0;
 
   const xPlane = new XPlaneClient({
     dataRefCallback: (result) => {
       clearTimeout(timer);
       connected = true;
       results.push(result);
-      if (result['sim/network/misc/network_time_sec'] - lastTs >= 1) {
-        samples.push(result);
-        lastTs = result['sim/network/misc/network_time_sec'];
-      }
       if (results.length === DATAREF_BATCH_SIZE) {
         ws.send(JSON.stringify(results));
         results = [];
-      }
-
-      if (samples.length === 1000) {
-        fs.appendFile(
-          recordingPath + `- ${recordingShard}`,
-          JSON.stringify(samples),
-          (err) => {
-            if (err) console.error(err);
-          }
-        );
-        recordingShard++;
-        samples = [];
       }
 
       timer = setTimeout(() => {
@@ -157,13 +117,6 @@ wss.on('connection', function connection(ws, request) {
   ws.on('close', function (connection) {
     if (xPlane.client) {
       requestDataRef(0);
-      fs.appendFile(
-        recordingPath + `- ${recordingShard}`,
-        JSON.stringify(samples),
-        (err) => {
-          if (err) console.error(err);
-        }
-      );
       requestDataRef(0);
       xPlane.client.close();
       xPlane.client = null;
