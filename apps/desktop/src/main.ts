@@ -108,7 +108,6 @@ wss.on('connection', function connection(ws, request) {
   ws.on('close', function (connection) {
     if (xPlane.client) {
       requestDataRef(0);
-      requestDataRef(0);
       xPlane.client.close();
       xPlane.client = null;
       logger.info(`backend: close udp client`);
