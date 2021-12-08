@@ -85,6 +85,7 @@ class DatarefStore {
     this.rules = new Rules(this.flightData);
     this.engine = new Engine(this.rules.getRules());
     const ws = new WebSocket('ws://localhost:4444');
+    const recordingId = Date.now();
     let landingDataFeq = false;
     let normalDataFeq = false;
     let timeDelta = 0;
@@ -121,7 +122,8 @@ class DatarefStore {
           worker.processData(
             msg.data,
             localStorage.getItem('username') as string,
-            localStorage.getItem('password') as string
+            localStorage.getItem('password') as string,
+            `${recordingId}`
           );
 
           const {
@@ -322,6 +324,11 @@ class DatarefStore {
               );
               this.posReport(lat, lng, heading, elevation, gs, paused);
               await this.createReport(lat, lng);
+              await worker.sendFinalBatch(
+                localStorage.getItem('username') as string,
+                localStorage.getItem('password') as string,
+                `${recordingId}`
+              );
             }
           }
         } catch (e) {
