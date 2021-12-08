@@ -2,8 +2,7 @@ import { XPlaneData } from '@zon/xplane-data';
 import axios from 'axios';
 import pako from 'pako';
 let dataBuffer = [];
-const BATCH_SIZE = 1000;
-export let lastTs = 0;
+const BATCH_SIZE = 100000;
 export async function processData(
   data,
   username,
@@ -12,12 +11,7 @@ export async function processData(
 ): Promise<string> {
   // Process the data without stalling the UI
   const results = XPlaneData.processRawDataToOpenFDR(data);
-  results.forEach((result) => {
-    if (result.ts - 1000 > lastTs) {
-      dataBuffer.push(result);
-      lastTs = result.ts;
-    }
-  });
+  dataBuffer = dataBuffer.concat(results);
   if (dataBuffer.length >= BATCH_SIZE) {
     //todo post batch
     /**
