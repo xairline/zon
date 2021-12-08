@@ -323,12 +323,7 @@ class DatarefStore {
                 Math.round(fuelWeight)
               );
               this.posReport(lat, lng, heading, elevation, gs, paused);
-              await this.createReport(lat, lng);
-              await worker.sendFinalBatch(
-                localStorage.getItem('username') as string,
-                localStorage.getItem('password') as string,
-                `${recordingId}`
-              );
+              await this.createReport(lat, lng, recordingId);
             }
           }
         } catch (e) {
@@ -548,7 +543,7 @@ class DatarefStore {
     });
   }
 
-  private async createReport(lat, lng: number) {
+  private async createReport(lat, lng, recordingId: number) {
     if (reportFiled) {
       return this;
     }
@@ -634,6 +629,11 @@ class DatarefStore {
         duration: 0,
         description: `${flightReqTemplate.number}: ${flightReqTemplate.departure} - ${flightReqTemplate.destination}`,
       });
+      await worker.sendFinalBatch(
+        localStorage.getItem('username') as string,
+        localStorage.getItem('password') as string,
+        `${recordingId}`
+      );
     } catch (error) {
       window.electron.logger.error('Failed to file final report');
       window.electron.logger.error(util.inspect(error));
