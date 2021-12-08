@@ -9,6 +9,7 @@ import { XPlaneClient } from './XPlaneClient';
 
 const port = 4444;
 const server = http.createServer();
+let myInterval;
 
 export default class Main {
   static initialize() {
@@ -87,19 +88,9 @@ wss.on('connection', function connection(ws, request) {
     }
   };
 
-  setInterval(function () {
+  clearInterval(myInterval);
+  myInterval = setInterval(function () {
     if (!connected) {
-      if (xPlane.client) {
-        try {
-          xPlane.client.disconnect();
-        } catch (e) {
-          logger.error(e);
-        }
-        xPlane.client.close();
-        xPlane.client = null;
-      }
-      xPlane.initConnection(true);
-      requestDataRef(0);
       requestDataRef(DATAREF_FEQ);
       logger.info('reconnect to xplane ...');
     }
