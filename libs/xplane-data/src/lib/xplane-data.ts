@@ -118,10 +118,8 @@ export class XPlaneData {
           //ELAPSED_FLIGHT_TIME,
 
           ts,
-          TOTAL_FLIGHT_TIME: Math.round(
-            flightDataRaw[DATAREF_STR.TOTAL_FLIGHT_TIME]
-          ),
-          FLIGHT_TIME_STAMP: Math.round(flightDataRaw[DATAREF_STR.ZULU_TIME]),
+          TOTAL_FLIGHT_TIME: flightDataRaw[DATAREF_STR.TOTAL_FLIGHT_TIME],
+          FLIGHT_TIME_STAMP: flightDataRaw[DATAREF_STR.ZULU_TIME],
           MAG_HEADING: Math.round(flightDataRaw[DATAREF_STR.HEADING_DEG]),
           HEIGHT: Math.round(flightDataRaw[DATAREF_STR.HEIGHT_FT]),
           ALTITUDE: Math.round(flightDataRaw[DATAREF_STR.ALTITUDE_FT]),
