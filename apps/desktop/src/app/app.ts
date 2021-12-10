@@ -76,7 +76,45 @@ export default class App {
     });
     App.mainWindow.setMenu(null);
     environment.production &&
-      Menu.setApplicationMenu(Menu.buildFromTemplate([]));
+      Menu.setApplicationMenu(
+        Menu.buildFromTemplate([
+          {
+            label: 'Edit',
+            submenu: [
+              {
+                label: 'Undo',
+                accelerator: 'CmdOrCtrl+Z',
+                role: 'undo',
+              },
+              {
+                label: 'Redo',
+                accelerator: 'Shift+CmdOrCtrl+Z',
+                role: 'redo',
+              },
+              {
+                label: 'Cut',
+                accelerator: 'CmdOrCtrl+X',
+                role: 'cut',
+              },
+              {
+                label: 'Copy',
+                accelerator: 'CmdOrCtrl+C',
+                role: 'copy',
+              },
+              {
+                label: 'Paste',
+                accelerator: 'CmdOrCtrl+V',
+                role: 'paste',
+              },
+              {
+                label: 'Select All',
+                accelerator: 'CmdOrCtrl+A',
+                role: 'selectAll',
+              },
+            ],
+          },
+        ])
+      );
     App.mainWindow.center();
 
     // if main window is ready to show, close the splash window and show the main window
