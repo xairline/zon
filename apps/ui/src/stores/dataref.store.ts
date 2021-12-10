@@ -133,8 +133,8 @@ class DatarefStore {
           if (
             this.dataref.aircraftType !== '' &&
             this.dataref.aircraftType !== aircraftType &&
-            (this.dataref.aircraftType !== 'A21N' ||
-              this.dataref.aircraftType !== 'B77F')
+            this.dataref.aircraftType !== 'A21N' &&
+            this.dataref.aircraftType !== 'B77F'
           ) {
             // switching aircraft, reset tracking
             window.electron.logger.info(`Load new plane: ${aircraftType}`);
@@ -430,7 +430,7 @@ class DatarefStore {
     this.dataref.ias = ias;
     this.dataref.elevation = elevation;
     this.dataref.aircraftType =
-      this.dataref.aircraftType !== 'A21N' ||
+      this.dataref.aircraftType !== 'A21N' &&
       this.dataref.aircraftType !== 'B77F'
         ? aircraftType
         : this.dataref.aircraftType;
