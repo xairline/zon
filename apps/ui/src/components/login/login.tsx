@@ -10,7 +10,10 @@ import { runInAction } from 'mobx';
 export interface LoginProps {}
 
 const StyledLogin = styled.div`
-  color: pink;
+  .ant-layout {
+    background: url('assets/login_bg.jpeg');
+    background-size: 100%;
+  }
 `;
 
 export function Login(props: LoginProps) {
@@ -25,7 +28,10 @@ export function Login(props: LoginProps) {
         >
           <Row align="bottom">
             <Col flex="1 0 10%">
-              <Card title="Login" style={{ width: '100%' }}>
+              <Card
+                title="Login"
+                style={{ width: '100%', backgroundColor: 'rgb(37, 37, 38)' }}
+              >
                 <Form
                   name="basic"
                   labelCol={{ span: 6 }}
@@ -40,7 +46,7 @@ export function Login(props: LoginProps) {
                     });
                   }}
                   autoComplete="off"
-                  style={{ margin: '5vh' }}
+                  style={{ margin: '5vh'}}
                 >
                   <Form.Item
                     label="Username"

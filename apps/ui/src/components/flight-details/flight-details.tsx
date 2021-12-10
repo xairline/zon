@@ -111,6 +111,19 @@ export function FlightDetails(props: FlightDetailsProps) {
                 NEO
               </Button>
             )}
+            {DatarefStore?.dataref?.aircraftType === 'B77L' && (
+              <Button
+                type="primary"
+                danger
+                size="small"
+                style={{ marginLeft: '8px' }}
+                onClick={() => {
+                  DatarefStore.dataref.aircraftType = 'B77F';
+                }}
+              >
+                B77F
+              </Button>
+            )}
           </>
         </Descriptions.Item>
         <Descriptions.Item label="Pax">
