@@ -85,7 +85,7 @@ class DatarefStore {
     this.rules = new Rules(this.flightData);
     this.engine = new Engine(this.rules.getRules());
     const ws = new WebSocket('ws://localhost:4444');
-    const recordingId = Date.now();
+    const recordingId = Math.round(Date.now() / 1000);
     let landingDataFeq = false;
     let normalDataFeq = false;
     let timeDelta = 0;
