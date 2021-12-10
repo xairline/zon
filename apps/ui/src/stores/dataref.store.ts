@@ -133,6 +133,7 @@ class DatarefStore {
           if (
             this.dataref.aircraftType !== '' &&
             this.dataref.aircraftType !== aircraftType &&
+            aircraftType.length > 0 &&
             this.dataref.aircraftType !== 'A21N' &&
             this.dataref.aircraftType !== 'B77F'
           ) {
