@@ -1,4 +1,8 @@
-#### 0.2.0-recordings.0 (2021-12-08)
+#### 0.2.0-recordings.1 (2021-12-14)
+
+##### Continuous Integration
+
+* **release:**  bump up version: 0.2.0-recordings.0 (12d19688)
 
 ##### New Features
 
@@ -7,23 +11,16 @@
 
 ##### Bug Fixes
 
+*  deduplicate ws ping (c3d74d27)
 *  avoid dup final batch (f2f97416)
 
 ##### Other Changes
 
+* //github.com/xairline/zon into openfdr (90dc8aa1)
+* //github.com/xairline/zon into openfdr (bdd25088)
 * //github.com/xairline/zon into openfdr (3c09e042)
 * //github.com/xairline/zon into openfdr (aeedd4d5)
 * //github.com/xairline/zon into openfdr (c3fce1e2)
 * //github.com/xairline/zon into openfdr (32ddc7fa)
-#### 0.1.6 (2021-12-10)
-#### 0.1.7 (2021-12-10)
-
-##### New Features
-
-*  bg pic for login (714238ab)
-
-##### Other Changes
-
-* //github.com/xairline/zon (2c9a44e4)
 
 
