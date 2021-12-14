@@ -16,10 +16,14 @@
 * //github.com/xairline/zon into openfdr (c3fce1e2)
 * //github.com/xairline/zon into openfdr (32ddc7fa)
 #### 0.1.6 (2021-12-10)
+#### 0.1.7 (2021-12-10)
 
-##### Bug Fixes
+##### New Features
 
-*  B77F gets reset to B77L (ccca3464)
-*  #31 and copy/paste is disabled (e3aed1e7)
+*  bg pic for login (714238ab)
+
+##### Other Changes
+
+* //github.com/xairline/zon (2c9a44e4)
 
 

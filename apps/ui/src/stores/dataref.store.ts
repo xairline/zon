@@ -24,6 +24,7 @@ let ClimbCounter = 0;
 let DescentCounter = 0;
 let TakeoffCounter = 0;
 let reportFiled = false;
+let myInterval;
 class DatarefStore {
   @observable
   public lastDataref: number;
@@ -93,7 +94,11 @@ class DatarefStore {
     ws.onopen = (msg) => {
       window.electron.logger.info(msg);
       window.electron.logger.info('Connected to backend');
-      setInterval(function () {
+      if (myInterval) {
+        clearInterval(myInterval);
+        window.electron.logger.info('Remove existing ws ping interval');
+      }
+      myInterval = setInterval(function () {
         ws.send('ping');
       }, 5000);
     };

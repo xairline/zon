@@ -171,6 +171,11 @@ export class XPlaneClient {
         // logger.info( "dat_lon", dat_lon, "dat_lat", dat_lat, "dat_ele", dat_ele, "y_agl_mtr", y_agl_mtr );
       } else if (command === 'RREF') {
         const numrefs = (msg.length - 5) / 8;
+        if (this.dataRefs.length != numrefs) {
+          logger.info(
+            `get: ${numrefs} from Xplane, requested: ${this.dataRefs.length}`
+          );
+        }
         let offset = 5;
         const result = {};
         for (let i = 0; i < numrefs; i += 1) {
