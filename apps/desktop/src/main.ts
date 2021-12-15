@@ -80,11 +80,14 @@ wss.on('connection', function connection(ws, request) {
   logger.info('initialize connection to xplane');
 
   const requestDataRef = (freq: number) => {
-    Object.keys(DATAREF_STR).forEach((key) => {
-      xPlane.requestDataRef(DATAREF_STR[key], freq);
-    });
-    if (connected) {
-      logger.info(`set dataref freq: ${freq}`);
+    if (xPlane.freq !== freq) {
+      xPlane.freq = freq;
+      Object.keys(DATAREF_STR).forEach((key) => {
+        xPlane.requestDataRef(DATAREF_STR[key], freq);
+      });
+      if (connected) {
+        logger.info(`set dataref freq: ${freq}`);
+      }
     }
   };
 
