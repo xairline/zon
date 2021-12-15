@@ -1,13 +1,15 @@
-#### 0.2.0-recordings.1 (2021-12-14)
+#### 0.2.0-alpha.0 (2021-12-15)
 
 ##### Continuous Integration
 
-* **release:**  bump up version: 0.2.0-recordings.0 (12d19688)
+* **release:**
+  *  bump up version: 0.2.0-recordings.1 (0389decc)
+  *  bump up version: 0.2.0-recordings.0 (12d19688)
 
 ##### New Features
 
 *  gzip batch data (d10005a5)
-*  save openFDR data to disk (d6cf44e8)
+*  send recordings to ZE server
 
 ##### Bug Fixes
 
