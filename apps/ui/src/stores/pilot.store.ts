@@ -1,4 +1,4 @@
-import { message, notification } from 'antd';
+import { notification } from 'antd';
 import { NotificationPlacement } from 'antd/lib/notification';
 import axios from 'axios';
 import { makeObservable, observable, runInAction } from 'mobx';

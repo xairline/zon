@@ -1,17 +1,11 @@
-import SquirrelEvents from './app/events/squirrel.events';
-import ElectronEvents from './app/events/electron.events';
-import UpdateEvents from './app/events/update.events';
-import * as logger from 'electron-log';
+import { DATAREF_BATCH_SIZE, DATAREF_FEQ, DATAREF_STR } from '@zon/xplane-data';
 import { app, BrowserWindow } from 'electron';
-import App from './app/app';
-import { XPlaneClient } from './XPlaneClient';
-import {
-  DATAREF_BATCH_SIZE,
-  DATAREF_FEQ,
-  DATAREF_FEQ_LANDING,
-  DATAREF_STR,
-} from '@zon/xplane-data';
+import * as logger from 'electron-log';
 import * as http from 'http';
+import App from './app/app';
+import ElectronEvents from './app/events/electron.events';
+import SquirrelEvents from './app/events/squirrel.events';
+import { XPlaneClient } from './XPlaneClient';
 
 const port = 4444;
 const server = http.createServer();
@@ -70,6 +64,7 @@ wss.on('connection', function connection(ws, request) {
         ws.send(JSON.stringify(results));
         results = [];
       }
+
       timer = setTimeout(() => {
         connected = false;
         ws.send('xplane closed');
@@ -85,11 +80,14 @@ wss.on('connection', function connection(ws, request) {
   logger.info('initialize connection to xplane');
 
   const requestDataRef = (freq: number) => {
-    Object.keys(DATAREF_STR).forEach((key) => {
-      xPlane.requestDataRef(DATAREF_STR[key], freq);
-    });
-    if (connected) {
-      logger.info(`set dataref freq: ${freq}`);
+    if (xPlane.freq !== freq) {
+      xPlane.freq = freq;
+      Object.keys(DATAREF_STR).forEach((key) => {
+        xPlane.requestDataRef(DATAREF_STR[key], freq);
+      });
+      if (connected) {
+        logger.info(`set dataref freq: ${freq}`);
+      }
     }
   };
 
@@ -112,12 +110,10 @@ wss.on('connection', function connection(ws, request) {
   // What to do when client disconnect?
   ws.on('close', function (connection) {
     if (xPlane.client) {
-      if (xPlane.client) {
-        requestDataRef(0);
-        xPlane.client.close();
-        xPlane.client = null;
-        logger.info(`backend: close udp client`);
-      }
+      requestDataRef(0);
+      xPlane.client.close();
+      xPlane.client = null;
+      logger.info(`backend: close udp client`);
     }
   });
 });

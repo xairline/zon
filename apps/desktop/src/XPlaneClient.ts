@@ -26,6 +26,7 @@ export class XPlaneClient {
   debug: any;
   dataRefs: any[];
   index: number;
+  freq: number;
   initialized: boolean;
   checkConnection: () => void;
   isConnected: () => any;
@@ -42,6 +43,7 @@ export class XPlaneClient {
     this.dataRefCallback = settings.dataRefCallback;
     this.index = INDEX_OFFSET;
     this.initialized = false;
+    this.freq = 0;
 
     this.client = null;
 
@@ -67,35 +69,28 @@ export class XPlaneClient {
     });
   }
 
-  requestDataRef(dataRef, timesPerSecond, callback = undefined) {
-    let index = this.dataRefs.length + INDEX_OFFSET;
-
-    // TODO: This prototype needs more work to better maintain
-    // what datarefs are being monitored, but the basics work.
-
-    for (let i = INDEX_OFFSET; i < this.dataRefs.length; i += 1) {
-      if (this.dataRefs[i - INDEX_OFFSET].dataRef === dataRef) {
+  requestDataRef(dataRef, timesPerSecond) {
+    let index = -1;
+    for (let i = 0; i < this.dataRefs.length; i++) {
+      if (this.dataRefs[i].dataRef === dataRef) {
         index = i;
-        logger.info(
-          `found and using existing dataref ${dataRef} on index ${index}`
-        );
+        break;
       }
     }
-
-    this.dataRefs[index - INDEX_OFFSET] = {
-      dataRef,
-      timesPerSecond,
-      value: null,
-    };
+    if (index === -1) {
+      this.dataRefs.push({ dataRef, value: null });
+      index = this.dataRefs.length - 1;
+      logger.info(`adding dataref: ${dataRef} on index ${index}`);
+    }
 
     const buffer = Buffer.alloc(5 + 4 + 4 + 400);
     buffer.write('RREF', 0, 4);
     if (BIG_ENDIAN) {
       buffer.writeInt32BE(timesPerSecond, 5); // dref_freq
-      buffer.writeInt32BE(index, 9); // drefSenderIndex
+      buffer.writeInt32BE(index + INDEX_OFFSET, 9); // drefSenderIndex
     } else {
       buffer.writeInt32LE(timesPerSecond, 5); // dref_freq
-      buffer.writeInt32LE(index, 9); // drefSenderIndex
+      buffer.writeInt32LE(index + INDEX_OFFSET, 9); // drefSenderIndex
     }
     buffer.write(dataRef, 13);
 
@@ -128,6 +123,7 @@ export class XPlaneClient {
 
     if (this.client === null || force) {
       this.client = dgram.createSocket({ type: 'udp4', reuseAddr: true });
+      this.client.bind(62326);
       logger.info(`Create new udp client`);
     } else {
       return;
@@ -175,6 +171,7 @@ export class XPlaneClient {
           logger.info(
             `get: ${numrefs} from Xplane, requested: ${this.dataRefs.length}`
           );
+          return;
         }
         let offset = 5;
         const result = {};
@@ -182,7 +179,6 @@ export class XPlaneClient {
           const drefSenderIndex = BIG_ENDIAN
             ? msg.readInt32BE(offset)
             : msg.readInt32LE(offset);
-
           // eslint-disable-next-line no-prototype-builtins
           if (self.dataRefs.hasOwnProperty(drefSenderIndex - INDEX_OFFSET)) {
             const dataRef = self.dataRefs[drefSenderIndex - INDEX_OFFSET];

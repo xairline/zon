@@ -12,9 +12,13 @@ import {
 import { notification } from 'antd';
 import util from 'util';
 import axios from 'axios';
-import runways from './runways.json';
+import Worker from '../worker';
+// import runways from './runways.json';
 // const runwayData: any[] = runways as any[];
 // console.log(runwayData.filter((runway) => runway.airport_ident === 'CYOW'));
+
+const worker = new Worker();
+
 let CruiseCounter = 0;
 let ClimbCounter = 0;
 let DescentCounter = 0;
@@ -82,6 +86,7 @@ class DatarefStore {
     this.rules = new Rules(this.flightData);
     this.engine = new Engine(this.rules.getRules());
     const ws = new WebSocket('ws://localhost:4444');
+    const recordingId = Math.round(Date.now() / 1000);
     let landingDataFeq = false;
     let normalDataFeq = false;
     let timeDelta = 0;
@@ -119,6 +124,12 @@ class DatarefStore {
         try {
           this.lastDataref = Date.now();
           const flightDataArray: any[] = XPlaneData.processRawData(msg.data);
+          worker.processData(
+            msg.data,
+            localStorage.getItem('username') as string,
+            localStorage.getItem('password') as string,
+            `${recordingId}`
+          );
 
           const {
             aircraftType,
@@ -319,7 +330,7 @@ class DatarefStore {
                 Math.round(fuelWeight)
               );
               this.posReport(lat, lng, heading, elevation, gs, paused);
-              await this.createReport(lat, lng);
+              await this.createReport(lat, lng, recordingId);
             }
           }
         } catch (e) {
@@ -542,7 +553,7 @@ class DatarefStore {
     });
   }
 
-  private async createReport(lat, lng: number) {
+  private async createReport(lat, lng, recordingId: number) {
     if (reportFiled) {
       return this;
     }
@@ -628,6 +639,11 @@ class DatarefStore {
         duration: 0,
         description: `${flightReqTemplate.number}: ${flightReqTemplate.departure} - ${flightReqTemplate.destination}`,
       });
+      await worker.sendFinalBatch(
+        localStorage.getItem('username') as string,
+        localStorage.getItem('password') as string,
+        `${recordingId}`
+      );
     } catch (error) {
       window.electron.logger.error('Failed to file final report');
       window.electron.logger.error(util.inspect(error));

@@ -19,12 +19,20 @@ describe('XPlaneData tests', () => {
         'sim/flightmodel/position/groundspeed': 3.0556638108691914e-8,
         'sim/flightmodel/position/y_agl': 0.08873935043811798,
         'sim/flightmodel2/misc/gforce_normal': 0.9996433854103088,
-        'sim/flightmodel/position/local_vy': -4.366387251764081e-9,
+        'sim/flightmodel/position/vh_ind_fpm': -4.366387251764081e-9,
         'sim/flightmodel/forces/fnrml_gear': 1.00000000000123,
+        'sim/operation/prefs/replay_mode': 0,
       },
     ]);
-    const { gs, vs, gForce, agl, elevation, n1, gearForce } =
-      XPlaneData.processRawData(rawData)[0];
+    const {
+      gs,
+      vs,
+      gForce,
+      agl,
+      elevation,
+      n1,
+      gearForce,
+    } = XPlaneData.processRawData(rawData)[0];
     expect(gs).toEqual(0);
     expect(vs).toEqual(-4.366387251764081e-9);
     expect(gForce).toEqual(1);
