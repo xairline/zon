@@ -122,6 +122,6 @@ wss.on('connection', function connection(ws, request) {
   });
 });
 //start our server
-server.listen(port, () => {
+server.listen(port, '0.0.0.0', () => {
   logger.info(`Data stream server started on port ${port}`);
 });
