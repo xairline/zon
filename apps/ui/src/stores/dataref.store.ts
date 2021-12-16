@@ -144,7 +144,7 @@ class DatarefStore {
             lng,
             heading,
             paused,
-            zuluTimeSec: latestZuleTimeSec,
+            simTimeSec: latestSimTimeSec,
           } = flightDataArray[flightDataArray.length - 1];
           if (
             this.dataref.aircraftType !== '' &&
@@ -176,7 +176,7 @@ class DatarefStore {
               this.flightData,
               'Parked',
               Date.now(),
-              latestZuleTimeSec,
+              latestSimTimeSec,
               Math.round(fuelWeight)
             );
             // get nearest airport
@@ -220,7 +220,7 @@ class DatarefStore {
               fuelWeight,
               elevation,
               paused,
-              zuluTimeSec: currentZuluTimeSec,
+              simTimeSec: currentSimTimeSec,
             } = flightDataArray[i];
             // make sure we ignore older data
             if (ts < lastRecvTs) {
@@ -265,7 +265,7 @@ class DatarefStore {
               const stateChanged = this.changeState(
                 nextState,
                 timestamp,
-                currentZuluTimeSec,
+                currentSimTimeSec,
                 fuelWeight
               );
               this.posReport(
@@ -315,7 +315,7 @@ class DatarefStore {
                 pitch,
                 ias,
                 fuelWeight,
-                currentZuluTimeSec,
+                currentSimTimeSec,
                 lat,
                 lng,
                 this.flightData
@@ -326,7 +326,7 @@ class DatarefStore {
                 this.flightData,
                 'Engine Stopped',
                 timestamp,
-                currentZuluTimeSec,
+                currentSimTimeSec,
                 Math.round(fuelWeight)
               );
               this.posReport(lat, lng, heading, elevation, gs, paused);
@@ -347,7 +347,7 @@ class DatarefStore {
   private changeState(
     nextState: FlightState,
     timestamp: number,
-    zuluTimeSec: number,
+    simTimeSec: number,
     fuelWeight: number
   ): boolean {
     let res = false;
@@ -361,7 +361,7 @@ class DatarefStore {
         this.flightData,
         nextState as FlightState,
         timestamp,
-        zuluTimeSec,
+        simTimeSec,
         Math.round(fuelWeight)
       );
       res = true;
@@ -378,7 +378,7 @@ class DatarefStore {
           this.flightData,
           'Cruise',
           timestamp,
-          zuluTimeSec,
+          simTimeSec,
           Math.round(fuelWeight)
         );
         res = true;
@@ -392,7 +392,7 @@ class DatarefStore {
           this.flightData,
           'Climb',
           timestamp,
-          zuluTimeSec,
+          simTimeSec,
           Math.round(fuelWeight)
         );
         res = true;
@@ -406,7 +406,7 @@ class DatarefStore {
           this.flightData,
           'Descent',
           timestamp,
-          zuluTimeSec,
+          simTimeSec,
           Math.round(fuelWeight)
         );
         res = true;
@@ -421,7 +421,7 @@ class DatarefStore {
           this.flightData,
           'Takeoff',
           timestamp,
-          zuluTimeSec,
+          simTimeSec,
           Math.round(fuelWeight)
         );
         res = true;
@@ -583,20 +583,6 @@ class DatarefStore {
           })) || null;
       this.trackingFlight.destination =
         response?.data[0]?.ident || this.trackingFlight.destination;
-
-      /**
-       * xplane zule time sec is sec of the day
-       * so we need to hanld the case where a flight
-       * landed "UTC next day"
-       */
-      this.flightData.timeIn.sim =
-        this.flightData.timeIn.sim < this.flightData.timeOut.sim
-          ? this.flightData.timeIn.sim + 24 * 60 * 60
-          : this.flightData.timeIn.sim;
-      this.flightData.timeOn.sim =
-        this.flightData.timeOn.sim < this.flightData.timeOff.sim
-          ? this.flightData.timeOn.sim + 24 * 60 * 60
-          : this.flightData.timeOn.sim;
 
       flightReqTemplate = {
         number: this.trackingFlight.flightNumber,

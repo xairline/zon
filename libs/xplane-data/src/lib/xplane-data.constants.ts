@@ -31,7 +31,7 @@ export const DATAREF_STR = {
   EMPTY_WEIGHT: 'sim/aircraft/weight/acf_m_empty',
   HEADING: 'sim/flightmodel/position/mag_psi',
   PAUSED: 'sim/time/paused',
-  ZULU_TIME: 'sim/time/zulu_time_sec',
+  SIM_TIME: 'sim/time/total_running_time_sec',
   REPLAY_MODE: 'sim/operation/prefs/replay_mode',
   // openFDR datarefs
   NUM_OF_ENGINE: 'sim/aircraft/engine/acf_num_engines',

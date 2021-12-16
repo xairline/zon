@@ -58,7 +58,7 @@ export class XPlaneData {
       const emptyWeight = flightDataRaw[DATAREF_STR.EMPTY_WEIGHT];
       const heading = flightDataRaw[DATAREF_STR.HEADING];
       const paused = flightDataRaw[DATAREF_STR.PAUSED];
-      const zuluTimeSec = flightDataRaw[DATAREF_STR.ZULU_TIME];
+      const simTimeSec = flightDataRaw[DATAREF_STR.SIM_TIME];
       const replayMode = flightDataRaw[DATAREF_STR.REPLAY_MODE];
 
       let ICAO = '';
@@ -73,7 +73,7 @@ export class XPlaneData {
       if (replayMode === 0) {
         result.push({
           paused,
-          zuluTimeSec,
+          simTimeSec,
           fuelWeight,
           totalWeight,
           emptyWeight,
@@ -119,7 +119,7 @@ export class XPlaneData {
 
           ts,
           TOTAL_FLIGHT_TIME: flightDataRaw[DATAREF_STR.TOTAL_FLIGHT_TIME],
-          FLIGHT_TIME_STAMP: flightDataRaw[DATAREF_STR.ZULU_TIME],
+          FLIGHT_TIME_STAMP: flightDataRaw[DATAREF_STR.SIM_TIME],
           MAG_HEADING: Math.round(flightDataRaw[DATAREF_STR.HEADING_DEG]),
           HEIGHT: Math.round(flightDataRaw[DATAREF_STR.HEIGHT_FT]),
           ALTITUDE: Math.round(flightDataRaw[DATAREF_STR.ALTITUDE_FT]),
@@ -212,7 +212,7 @@ export class XPlaneData {
     flightData: FlightData,
     state: FlightState,
     ts: number,
-    zuluTimeSec: number,
+    simTimeSec: number,
     fuel: number
   ) {
     if (flightData.state === state) {
@@ -220,7 +220,7 @@ export class XPlaneData {
     }
 
     if (state === 'Engine Started') {
-      flightData.timeOut = { system: ts, sim: zuluTimeSec };
+      flightData.timeOut = { system: ts, sim: simTimeSec };
       flightData.fuelOut = fuel;
       window?.electron?.logger.info(
         `${state}: ${JSON.stringify(flightData.timeOut)} | ${
@@ -229,14 +229,14 @@ export class XPlaneData {
       );
     }
     if (state === 'Engine Stopped') {
-      flightData.timeIn = { system: ts, sim: zuluTimeSec };
+      flightData.timeIn = { system: ts, sim: simTimeSec };
       flightData.fuelIn = fuel;
       window?.electron?.logger.info(
         `${state}: ${JSON.stringify(flightData.timeIn)} | ${flightData.fuelIn}`
       );
     }
     if (state === 'Takeoff') {
-      flightData.timeOff = { system: ts, sim: zuluTimeSec };
+      flightData.timeOff = { system: ts, sim: simTimeSec };
       flightData.fuelOff = fuel;
       window?.electron?.logger.info(
         `${state}: ${JSON.stringify(flightData.timeOff)} | ${
