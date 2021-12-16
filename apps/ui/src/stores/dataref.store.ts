@@ -13,6 +13,7 @@ import { notification } from 'antd';
 import util from 'util';
 import axios from 'axios';
 import Worker from '../worker';
+import { v4 as uuidv4 } from 'uuid';
 // import runways from './runways.json';
 // const runwayData: any[] = runways as any[];
 // console.log(runwayData.filter((runway) => runway.airport_ident === 'CYOW'));
@@ -86,9 +87,7 @@ class DatarefStore {
     this.rules = new Rules(this.flightData);
     this.engine = new Engine(this.rules.getRules());
     const ws = new WebSocket('ws://localhost:4444');
-    const recordingId =
-      (localStorage.getItem('username') as string) +
-      `${Math.round(Date.now() / 1000)}`;
+    const recordingId = `${uuidv4()}`;
     let landingDataFeq = false;
     let normalDataFeq = false;
     let timeDelta = 0;
