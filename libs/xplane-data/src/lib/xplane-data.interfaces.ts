@@ -59,4 +59,5 @@ export interface IPirep {
   fuelOn: number;
   fuelIn: number;
   landingRate: number;
+  recordingId: string;
 }
