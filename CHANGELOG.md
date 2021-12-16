@@ -1,8 +1,9 @@
-#### 0.2.0-alpha.2 (2021-12-16)
+#### 0.2.0-alpha.3 (2021-12-16)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.2.0-alpha.2 (03d47007)
   *  bump up version: 0.2.0-alpha.1 (0e5ea131)
   *  bump up version: 0.2.0-alpha.0 (28e81f7e)
   *  bump up version: 0.2.0-recordings.1 (0389decc)
@@ -16,6 +17,7 @@
 
 ##### Bug Fixes
 
+*  use uuid as recording Id (2cbe7270)
 *  total time is wrong (47585994)
 *  deduplicate ws ping (c3d74d27)
 *  avoid dup final batch (f2f97416)
