@@ -1,14 +1,16 @@
-#### 0.2.0-alpha.1 (2021-12-16)
+#### 0.2.0-alpha.2 (2021-12-16)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.2.0-alpha.1 (0e5ea131)
   *  bump up version: 0.2.0-alpha.0 (28e81f7e)
   *  bump up version: 0.2.0-recordings.1 (0389decc)
   *  bump up version: 0.2.0-recordings.0 (12d19688)
 
 ##### New Features
 
+*  add unique recording id to final pirep (0fc2aa58)
 *  gzip batch data (d10005a5)
 *  save openFDR data to disk (d6cf44e8)
 
