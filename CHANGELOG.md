@@ -1,8 +1,9 @@
-#### 0.2.0-alpha.3 (2021-12-16)
+#### 0.2.0 (2021-12-22)
 
 ##### Continuous Integration
 
 * **release:**
+  *  bump up version: 0.2.0-alpha.3 (fdb16e07)
   *  bump up version: 0.2.0-alpha.2 (03d47007)
   *  bump up version: 0.2.0-alpha.1 (0e5ea131)
   *  bump up version: 0.2.0-alpha.0 (28e81f7e)
@@ -24,6 +25,7 @@
 
 ##### Other Changes
 
+*  change color from yellow to blue (ec38a254)
 * //github.com/xairline/zon into openfdr (90dc8aa1)
 * //github.com/xairline/zon into openfdr (bdd25088)
 * //github.com/xairline/zon into openfdr (3c09e042)
