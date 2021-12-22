@@ -174,8 +174,8 @@ export function FlightLog(props: FlightLogProps) {
       <Divider />
       <Row
         style={{
-          height: '40vh',
-          maxHeight: '40vh',
+          height: '50vh',
+          maxHeight: '50vh',
           overflow: 'auto',
         }}
       >

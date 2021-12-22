@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { XPlaneData } from '@zon/xplane-data';
-import { Badge, Button, Descriptions, Input } from 'antd';
+import { Badge, Button, Descriptions, Divider, Input } from 'antd';
 import { runInAction } from 'mobx';
 import { useObserver } from 'mobx-react-lite';
 import React from 'react';
@@ -141,11 +141,20 @@ export function FlightDetails(props: FlightDetailsProps) {
           />
         </Descriptions.Item>
         <Descriptions.Item label="Fuel">
-          {XPlaneData.dataRoundup(DatarefStore?.dataref?.fuelWeight || '')} kg
+          {XPlaneData.dataRoundup(DatarefStore?.dataref?.fuelWeight || 0)} kg{' '}
+          <br />
+          {XPlaneData.dataRoundup(
+            DatarefStore?.dataref?.fuelWeight * 2.20462 || 0
+          )}{' '}
+          lbs
         </Descriptions.Item>
         <Descriptions.Item label="Payload">
-          {XPlaneData.dataRoundup(DatarefStore?.dataref?.payloadWeight || '')}{' '}
-          kg
+          {XPlaneData.dataRoundup(DatarefStore?.dataref?.payloadWeight || 0)} kg
+          <br />
+          {XPlaneData.dataRoundup(
+            DatarefStore?.dataref?.payloadWeight * 2.20462 || 0
+          )}{' '}
+          lbs
         </Descriptions.Item>
         <Descriptions.Item label="Route">
           <Input.TextArea

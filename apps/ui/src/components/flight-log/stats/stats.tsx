@@ -174,7 +174,7 @@ export function Stats(props: StatsProps) {
                   width: '100%',
                 }}
                 center={[lng, lat]}
-                zoom={[14.3]}
+                zoom={[15.3]}
                 pitch={[53]}
                 bearing={[-23]}
                 onStyleLoad={(map) => {
@@ -214,7 +214,7 @@ export function Stats(props: StatsProps) {
                       const lineOptions = {
                         geometry: landingLine,
                         color: '#DF1212',
-                        width: 4, // random width between 1 and 2
+                        width: 8, 
                       };
 
                       const lineMesh = window.tb.line(lineOptions);
@@ -225,7 +225,7 @@ export function Stats(props: StatsProps) {
                         const lineOptions = {
                           geometry: helpLine,
                           color: '#DF1212',
-                          width: 2, // random width between 1 and 2
+                          width: 4, 
                         };
 
                         const lineMesh = window.tb.line(lineOptions);
@@ -235,8 +235,8 @@ export function Stats(props: StatsProps) {
 
                       const lineOptions2 = {
                         geometry: touchDownLine,
-                        color: '#DFf212',
-                        width: 4, // random width between 1 and 2
+                        color: '#12c1f2',
+                        width: 8, 
                       };
 
                       const lineMesh2 = window.tb.line(lineOptions2);
