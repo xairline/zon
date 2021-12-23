@@ -518,6 +518,13 @@ class DatarefStore {
   }
 
   public resetTracking() {
+    if (this.dataref) {
+      window.electron.logger.info(
+        'Snapshot dataref in case we need to recover'
+      );
+      window.electron.logger.info(JSON.stringify(this.dataref));
+      window.electron.logger.info(JSON.stringify(this.trackingFlight));
+    }
     runInAction(() => {
       this?.ws?.close();
       window.electron.logger.info('websocket closed - reset func');
@@ -632,6 +639,15 @@ class DatarefStore {
         localStorage.getItem('password') as string,
         `${recordingId}`
       );
+      
+      // TODO !!!!!
+      // send data for future analysis
+      // const zeFlightId = res.data.data.id;
+      // const payload = {
+      //   flightId: zeFlightId,
+      //   landingData: this.flightData.landingData,
+      // };
+
     } catch (error) {
       window.electron.logger.error('Failed to file final report');
       window.electron.logger.error(util.inspect(error));

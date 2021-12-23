@@ -15,6 +15,7 @@ export function Stats(props: StatsProps) {
       const mylandingData: LandingData = JSON.parse(
         localStorage.getItem('lastFlightLandingData') || '{}'
       );
+      mylandingData.data = mylandingData.data.sort((a, b) => a.ts - b.ts);
       const landingLine = [];
       const touchDownLine = [];
       const helpLines = [];
@@ -23,6 +24,7 @@ export function Stats(props: StatsProps) {
       const mydata: any[] = [];
       const mydataTransformed: any[] = [];
       let lastLngLat = '';
+      let forceLandingLine = false;
       for (const data of mylandingData.data) {
         if (data.ts === mylandingData.touchDown) {
           touchDownIndex = index;
@@ -33,7 +35,7 @@ export function Stats(props: StatsProps) {
         data.ts = new Date(data.ts).toISOString();
 
         // draw line
-        if (data.gearForce === 0) {
+        if (data.gearForce === 0 && !forceLandingLine) {
           if (`${data.lng}-${data.lat}` === lastLngLat) {
             landingLine[landingLine.length - 1] = [
               data.lng,
@@ -53,6 +55,7 @@ export function Stats(props: StatsProps) {
             lastLngLat = `${data.lng}-${data.lat}`;
           }
         } else {
+          forceLandingLine = true;
           touchDownLine.push([data.lng, data.lat, 0]);
         }
 
@@ -178,15 +181,6 @@ export function Stats(props: StatsProps) {
                 pitch={[53]}
                 bearing={[-23]}
                 onStyleLoad={(map) => {
-                  // map.addSource('mapbox-dem', {
-                  //   type: 'raster-dem',
-                  //   url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
-                  //   tileSize: 512,
-                  //   maxzoom: 14,
-                  // });
-                  // // add the DEM source as a terrain layer with exaggerated height
-                  // map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
-
                   // add a sky layer that will show when the map is highly pitched
                   map.addLayer({
                     id: 'sky',
@@ -214,7 +208,7 @@ export function Stats(props: StatsProps) {
                       const lineOptions = {
                         geometry: landingLine,
                         color: '#DF1212',
-                        width: 8, 
+                        width: 8,
                       };
 
                       const lineMesh = window.tb.line(lineOptions);
@@ -225,7 +219,7 @@ export function Stats(props: StatsProps) {
                         const lineOptions = {
                           geometry: helpLine,
                           color: '#DF1212',
-                          width: 4, 
+                          width: 4,
                         };
 
                         const lineMesh = window.tb.line(lineOptions);
@@ -233,10 +227,17 @@ export function Stats(props: StatsProps) {
                         window.tb.add(lineMesh);
                       }
 
+                      // const tooltip = window.tb
+                      //   .tooltip({
+                      //     text: 'touch down',
+                      //   })
+                      //   .setCoords(helpLines[helpLines.length - 1][1]);
+                      // window.tb.add(tooltip);
+
                       const lineOptions2 = {
                         geometry: touchDownLine,
                         color: '#12c1f2',
-                        width: 8, 
+                        width: 8,
                       };
 
                       const lineMesh2 = window.tb.line(lineOptions2);
