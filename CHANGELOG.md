@@ -1,7 +1,7 @@
-#### 0.2.1 (2021-12-23)
+#### 0.2.2 (2022-01-02)
 
-##### New Features
+##### Bug Fixes
 
-*  snapshot pirep in case client crash (a7e2a106)
+*  simbrief airline code is broken (afa1b144)
 
 
