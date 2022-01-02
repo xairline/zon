@@ -191,6 +191,14 @@ export function Stats(props: StatsProps) {
                       'sky-atmosphere-sun-intensity': 15,
                     },
                   });
+                  map.addSource('mapbox-dem', {
+                    type: 'raster-dem',
+                    url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+                    tileSize: 512,
+                    maxzoom: 22,
+                  });
+                  // add the DEM source as a terrain layer with exaggerated height
+                  map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
                   map.addLayer({
                     id: 'custom_layer',
                     type: 'custom',

@@ -187,7 +187,7 @@ export function Booked(props: BookedProps) {
                   runInAction(() => {
                     localStore.dataBefore = DatarefStore.trackingFlight;
                     DatarefStore.trackingFlight = {
-                      flightNumber: simBriefPlanObj.OFP.atc[0].callsign[0],
+                      flightNumber: simBriefPlanObj.OFP.general[0].icao_airline[0]+simBriefPlanObj.OFP.general[0].flight_number[0],
                       departure: simBriefPlanObj.OFP.origin[0].icao_code[0],
                       destination:
                         simBriefPlanObj.OFP.destination[0].icao_code[0],
