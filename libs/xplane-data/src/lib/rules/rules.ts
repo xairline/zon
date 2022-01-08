@@ -320,6 +320,18 @@ export const DEFAULT_RULES = [
           value: 2,
         },
         {
+          fact: 'dataref',
+          path: '$.gs',
+          operator: 'lessThan',
+          value: 40,
+        },
+        {
+          fact: 'dataref',
+          path: '$.gearForce',
+          operator: 'greaterThan',
+          value: 5,
+        },
+        {
           any: [
             {
               fact: 'dataref',
