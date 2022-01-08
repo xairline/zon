@@ -320,12 +320,6 @@ export const DEFAULT_RULES = [
           value: 2,
         },
         {
-          fact: 'dataref',
-          path: '$.ias',
-          operator: 'lessThan',
-          value: 40,
-        },
-        {
           any: [
             {
               fact: 'dataref',
