@@ -1,7 +1,7 @@
-#### 0.2.2 (2022-01-02)
+#### 0.2.3 (2022-01-08)
 
 ##### Bug Fixes
 
-*  simbrief airline code is broken (afa1b144)
+*  taxi is not detected in windy conditions (6e05765d)
 
 
