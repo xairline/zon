@@ -416,7 +416,10 @@ class DatarefStore {
 
       if (
         TakeoffCounter > 8 * DATAREF_FEQ &&
-        this.flightData.state !== nextState
+        this.flightData.state !== nextState &&
+        this.flightData.events.find((event) => {
+          return event.includes('Landing');
+        }) === undefined
       ) {
         XPlaneData.changeStateTo(
           this.flightData,
@@ -639,7 +642,7 @@ class DatarefStore {
         localStorage.getItem('password') as string,
         `${recordingId}`
       );
-      
+
       // TODO !!!!!
       // send data for future analysis
       // const zeFlightId = res.data.data.id;
@@ -647,7 +650,6 @@ class DatarefStore {
       //   flightId: zeFlightId,
       //   landingData: this.flightData.landingData,
       // };
-
     } catch (error) {
       window.electron.logger.error('Failed to file final report');
       window.electron.logger.error(util.inspect(error));
