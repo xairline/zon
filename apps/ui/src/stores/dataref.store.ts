@@ -331,7 +331,13 @@ class DatarefStore {
                 Math.round(fuelWeight)
               );
               this.posReport(lat, lng, heading, elevation, gs, paused);
-              await this.createReport(lat, lng, recordingId);
+              await this.createReport(
+                lat,
+                lng,
+                recordingId,
+                JSON.parse(JSON.stringify(this.flightData)),
+                JSON.parse(JSON.stringify(this.trackingFlight))
+              );
             }
           }
         } catch (e) {
@@ -564,21 +570,27 @@ class DatarefStore {
     });
   }
 
-  private async createReport(lat, lng: number, recordingId: string) {
+  private async createReport(
+    lat,
+    lng: number,
+    recordingId: string,
+    flightData: FlightData,
+    trackingFlight: any
+  ) {
     if (reportFiled) {
       return this;
     }
     reportFiled = true;
     let flightReqTemplate: IPirep;
     try {
-      const timeOut = this.flightData.timeOut.system;
-      const timeOff = this.flightData.timeOff.system;
-      const timeOn = this.flightData.timeOn.system;
-      const timeIn = this.flightData.timeIn.system;
-      const fuelOut = this.flightData.fuelOut;
-      const fuelOff = this.flightData.fuelOff;
-      const fuelOn = this.flightData.fuelOn;
-      const fuelIn = this.flightData.fuelIn;
+      const timeOut = flightData.timeOut.system;
+      const timeOff = flightData.timeOff.system;
+      const timeOn = flightData.timeOn.system;
+      const timeIn = flightData.timeIn.system;
+      const fuelOut = flightData.fuelOut;
+      const fuelOff = flightData.fuelOff;
+      const fuelOn = flightData.fuelOn;
+      const fuelIn = flightData.fuelIn;
 
       const response =
         (await axios
@@ -592,35 +604,35 @@ class DatarefStore {
           .catch((e) => {
             window.electron.logger.info(`Failed to get nearest airport`);
           })) || null;
-      this.trackingFlight.destination =
-        response?.data[0]?.ident || this.trackingFlight.destination;
+      trackingFlight.destination =
+        response?.data[0]?.ident || trackingFlight.destination;
 
       flightReqTemplate = {
-        number: this.trackingFlight.flightNumber,
+        number: trackingFlight.flightNumber,
         aircraftType: this.dataref.aircraftType,
         //aircraftRegistration: this.dataref.aircraftRegistration,
-        departure: this.trackingFlight.departure,
-        destination: this.trackingFlight.destination,
-        route: this.trackingFlight.route,
+        departure: trackingFlight.departure,
+        destination: trackingFlight.destination,
+        route: trackingFlight.route,
         timeOut: this.toIsoStringWithOffset(timeOut), // engine start
         timeOff: this.toIsoStringWithOffset(timeOff), // Takeoff
         timeOn: this.toIsoStringWithOffset(timeOn), // land
         timeIn: this.toIsoStringWithOffset(timeIn), // engine stop
         totalBlockTime: XPlaneData.dataRoundup(
-          (this.flightData.timeIn.sim - this.flightData.timeOut.sim) / 60 / 60
+          (flightData.timeIn.sim - flightData.timeOut.sim) / 60 / 60
         ), // from engine start to engine stop 79572.2734375 77769.1015625
         totalFlightTime: XPlaneData.dataRoundup(
-          (this.flightData.timeOn.sim - this.flightData.timeOff.sim) / 60 / 60
+          (flightData.timeOn.sim - flightData.timeOff.sim) / 60 / 60
         ), // from Takeoff to land
         dryOperatingWeight: this.dataref.emptyWeight,
         payloadWeight: this.dataref.payloadWeight,
-        pax: this.trackingFlight.passengers,
+        pax: trackingFlight.passengers,
         fuelOut,
         fuelOff,
         fuelOn,
         fuelIn,
         recordingId,
-        landingRate: Math.round(this.flightData.landingData.vs),
+        landingRate: Math.round(flightData.landingData.vs),
       };
 
       const res = await axios
@@ -648,7 +660,7 @@ class DatarefStore {
       // const zeFlightId = res.data.data.id;
       // const payload = {
       //   flightId: zeFlightId,
-      //   landingData: this.flightData.landingData,
+      //   landingData: flightData.landingData,
       // };
     } catch (error) {
       window.electron.logger.error('Failed to file final report');
@@ -667,7 +679,7 @@ class DatarefStore {
       // store landing data
       localStorage.setItem(
         'lastFlightLandingData',
-        JSON.stringify(this.flightData.landingData)
+        JSON.stringify(flightData.landingData)
       );
       this.resetTracking();
     }
