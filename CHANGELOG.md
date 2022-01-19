@@ -1,7 +1,7 @@
-#### 0.2.7 (2022-01-16)
+#### 0.2.8 (2022-01-19)
 
 ##### Bug Fixes
 
-*  departure airport get reset after landing (00515a73)
+*   do not change dep airport after we took off (36fffe22)
 
 
