@@ -191,7 +191,7 @@ class DatarefStore {
               )
               .then((res) => {
                 runInAction(() => {
-                  this.trackingFlight.departure = res?.data[0]?.ident;
+                  this.trackingFlight.departure = this.trackingFlight.departure || res?.data[0]?.ident;
                   window.electron.logger.info(
                     `Nearest Airport: ${res?.data[0]?.ident}`
                   );
@@ -295,7 +295,7 @@ class DatarefStore {
                   )
                   .then((res) => {
                     runInAction(() => {
-                      this.trackingFlight.departure = res.data[0].ident;
+                      this.trackingFlight.departure = this.trackingFlight.departure || res.data[0].ident;
                     });
                   });
               }
