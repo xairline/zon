@@ -44,7 +44,7 @@
     "react-is": "17.0.1",
     "react-router-dom": "5.2.0",
     "regenerator-runtime": "0.13.7",
-    "styled-components": "5.2.1",
+    "styled-components": "5.3.6",
     "tslib": "^2.0.0",
     "ws": "^8.2.3"
   },
@@ -78,7 +78,7 @@
     "@types/react-dom": "16.9.9",
     "@types/react-is": "16.7.1",
     "@types/react-router-dom": "5.1.6",
-    "@types/styled-components": "5.1.4",
+    "@types/styled-components": "5.1.26",
     "@typescript-eslint/eslint-plugin": "4.3.0",
     "@typescript-eslint/parser": "4.3.0",
     "axios": "^0.24.0",
