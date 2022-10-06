@@ -87,7 +87,7 @@
     "comlink-loader": "^2.0.0",
     "cypress": "^6.0.1",
     "dotenv": "8.2.0",
-    "electron": "^11.3.0",
+    "electron": "^21.1.0",
     "eslint": "7.10.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-cypress": "^2.10.3",
